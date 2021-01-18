@@ -1,4 +1,6 @@
 import styles from './sidebar.module.css'
+import Link from "next/link"
+
 /**
  * 
  * @param {Object} props props for sidebar components
@@ -19,9 +21,9 @@ export function Sidebar(props) {
  * @param {React.Component} icon
  * @param {string} text
  */
-export function SidebarElement({icon, text}) {
-   return ( <div style={{display: "flex", flexDirection:"column", alignItems:"center"}}>
-       {icon}
-       {text}
-   </div>  );
+export function SidebarElement({ iconClassName, text, href }) {
+    return (<Link href={href}><div style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <i style={{ fontSize: "24px" }} className={iconClassName}></i>
+        {text}
+    </div></Link>);
 }
