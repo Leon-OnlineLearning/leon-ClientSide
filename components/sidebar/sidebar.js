@@ -22,8 +22,8 @@ export function Sidebar(props) {
  * @param {string} text
  */
 export function SidebarElement({ iconClassName, text, href }) {
-    return (<Link href={href}><div style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center" }}>
+    return (<Link href={href}><div style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center" }} className="py-1">
         <i style={{ fontSize: "24px" }} className={iconClassName}></i>
-        {text}
+        <span >{text}</span>
     </div></Link>);
 }

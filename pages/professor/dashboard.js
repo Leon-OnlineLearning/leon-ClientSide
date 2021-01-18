@@ -1,23 +1,21 @@
-import { Sidebar, SidebarElement } from "../../components/sidebar/sidebar"
-import Head from "next/head"
-import styles from "./dashboard.module.css"
+import DashboardLayout from "../../components/dashboard-layout/dashboard-layout";
+import { SidebarElement } from "../../components/sidebar/sidebar"
+
 export default function Dashboard() {
     return (
         <>
-            <Head>
-                <title>Dashboard</title>
-            </Head>
-            <div className={`${styles["dashboard-container"]}`}>
-                <Sidebar>
-                    <SidebarElement href="/professor/dashboard" iconClassName={"bi-house-fill"
-                    } text={"Home"}></SidebarElement>
+            <DashboardLayout SidebarElements={
+                <><SidebarElement href="/professor/dashboard" iconClassName={"bi-house-fill"
+                } text={"Home"}></SidebarElement>
                     <SidebarElement href="/professor/dashboard" iconClassName={"bi-play-fill"
                     } text={"Lectures"}></SidebarElement>
-                </Sidebar>
-                <main className={`${styles["content"]}`}>
-                    Main stuff
-                    </main>
-            </div>
+                    <SidebarElement href="/professor/dashboard" iconClassName={"bi-clipboard-check"
+                    } text={"Attendance"}></SidebarElement>
+                    <SidebarElement href="/professor/dashboard" iconClassName={"bi-chat-text-fill"
+                    } text={"Chat"}></SidebarElement>
+                    <SidebarElement href="/professor/dashboard" iconClassName={"bi-card-checklist"
+                    } text={"Exams"}></SidebarElement></>
+            }></DashboardLayout>
         </>
     )
 }
