@@ -21,9 +21,16 @@ export function Sidebar(props) {
  * @param {React.Component} icon
  * @param {string} text
  */
-export function SidebarElement({ iconClassName, text, href }) {
-    return (<Link href={href}><div style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center" }} className="py-1">
-        <i style={{ fontSize: "24px" }} className={iconClassName}></i>
-        <span >{text}</span>
-    </div></Link>);
+export function SidebarElement({ iconClassName, text, href, selected }) {
+    if (selected) {
+        return (<Link href={href}><div style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center" }} className="py-1">
+            <i style={{ fontSize: "24px"}} className={`${iconClassName} text-primary`}></i>
+            <span className="text-primary">{text}</span>
+        </div></Link>);
+    } else {
+        return (<Link href={href}><div style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center" }} className="py-1">
+            <i style={{ fontSize: "24px" }} className={iconClassName}></i>
+            <span >{text}</span>
+        </div></Link>);
+    }
 }
