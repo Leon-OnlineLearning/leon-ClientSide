@@ -12,7 +12,7 @@ export default function DashboardLayout({SidebarElements, children}) {
                     {SidebarElements}
 
                 </Sidebar>
-                <main className={`${styles["content"]}`}>
+                <main className={`${styles["content"]} p-2`}>
                     {children}
                     </main>
             </div>

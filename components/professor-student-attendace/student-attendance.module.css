@@ -3,3 +3,24 @@
     flex-direction: row;
     width: 100%;
 }
+
+.dropdown-area {
+    flex-grow: 1;
+    margin: 8px;
+}
+
+.dropdown-btn {
+    width: 100%;
+}
+
+.dropdown-item{
+    width: 100%;
+}
+
+.container {
+    padding : 8px
+}
+
+.attendance-table{
+    margin: 8px
+}
