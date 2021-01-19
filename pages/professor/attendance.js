@@ -1,4 +1,5 @@
 import DashboardLayout from "../../components/dashboard-layout/dashboard-layout";
+import ProfessorStudentAttendance from "../../components/professor-student-attendace/professor-student-attendance";
 import { SidebarElement } from "../../components/sidebar/sidebar";
 
 export default function Dashboard() {
@@ -15,7 +16,9 @@ export default function Dashboard() {
                     } text={"Chat"}></SidebarElement>
                     <SidebarElement href="/professor/exams" iconClassName={"bi-card-checklist"
                     } text={"Exams"}></SidebarElement></>
-            }></DashboardLayout>
+            }>
+                {<ProfessorStudentAttendance></ProfessorStudentAttendance>}
+            </DashboardLayout>
         </>
     )
 }
