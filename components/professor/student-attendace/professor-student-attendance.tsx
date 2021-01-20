@@ -20,7 +20,7 @@ export default function ProfessorStudentAttendance() {
     }
     return (
         <>
-            <div className={`${styles["dropdown-container"]}`}>
+            <span className={`${styles["dropdown-container"]}`}>
                 <Dropdown onSelect={onYearsSelected} className={`${styles["dropdown-area"]}`}>
                     <Dropdown.Toggle variant="primary" id="years" className={`${styles["dropdown-btn"]}`}>
                         {yearName}
@@ -48,7 +48,7 @@ export default function ProfessorStudentAttendance() {
                         <Dropdown.Item eventKey="Lecture 2" >Lecture 2</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
-            </div>
+            </span>
             <Table hover bordered className={`${styles["attendance-table"]}`}>
                 <thead>
                     <tr>
@@ -67,12 +67,12 @@ export default function ProfessorStudentAttendance() {
                     </tr>
                 </tbody>
             </Table>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <span style={{ display: "flex", justifyContent: "center" }}>
                 <ButtonGroup aria-label="Pages" className="mx-2">
                     <Button>1</Button> <Button variant="secondary">2</Button> <Button variant="secondary">3</Button> <Button variant="secondary">4</Button>
                 </ButtonGroup>
                 <Button>{">"}</Button>
-            </div>
+            </span>
         </>
     );
 }

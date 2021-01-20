@@ -1,5 +1,5 @@
-import DashboardLayout from "../dashboard-layout/dashboard-layout";
-import { SidebarElement } from "../sidebar/sidebar";
+import DashboardLayout from "../../dashboard-layout/dashboard-layout";
+import { SidebarElement } from "../../sidebar/sidebar";
 
 export enum ProfessorDashboardSelectedPage {
     home,

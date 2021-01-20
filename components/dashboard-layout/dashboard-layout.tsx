@@ -1,7 +1,7 @@
 import { Sidebar, SidebarElement } from "../sidebar/sidebar"
 import Head from "next/head"
 import styles from "./dashboard.module.css"
-export default function DashboardLayout({SidebarElements, children}) {
+export default function DashboardLayout({ SidebarElements, children }) {
     return (
         <>
             <Head>
@@ -14,7 +14,7 @@ export default function DashboardLayout({SidebarElements, children}) {
                 </Sidebar>
                 <main className={`${styles["content"]} p-2`}>
                     {children}
-                    </main>
+                </main>
             </div>
         </>
     )

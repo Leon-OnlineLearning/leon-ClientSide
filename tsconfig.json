@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/professor/lectures/lectures.jsx"  ],
   "exclude": [
     "node_modules"
   ]
