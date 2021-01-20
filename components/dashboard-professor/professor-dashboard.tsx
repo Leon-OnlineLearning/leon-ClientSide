@@ -30,6 +30,8 @@ export function ProfessorDashboard({ selectedPage, children }: ProfessorDashboar
                     } text={"Chat"} selected={selectedPage === ProfessorDashboardSelectedPage.chat}></SidebarElement>
                     <SidebarElement href="/professor/exams" iconClassName={"bi-card-checklist"
                     } text={"Exams"} selected={selectedPage === ProfessorDashboardSelectedPage.exams}></SidebarElement>
+                    <SidebarElement href="/professor/grades" iconClassName={"bi-percent"
+                    } text={"Grades"} selected={selectedPage === ProfessorDashboardSelectedPage.grads}></SidebarElement>
                 </>
             }>
                 {children}
