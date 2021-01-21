@@ -15,8 +15,8 @@ export default function LectureCard({ lectureTitle, lectureDate }: LectureCardPr
             <Card.Text>
                 {lectureDate.toString()} <br></br>
                 <div className={styles["buttons-container"]}>
-                    <Button className="m-2" style={{ width: "100%" }}>Edit</Button>
-                    <Button variant="danger" className="m-2" style={{ width: "100%" }}>Delete</Button>
+                    <Button className="m-2" style={{ width: "100%" }}><i className="bi bi-pencil-fill"></i> Edit</Button>
+                    <Button variant="danger" className="m-2" style={{ width: "100%" }}><i className="bi bi-trash-fill"></i> Delete</Button>
                 </div>
             </Card.Text>
         </Card>
