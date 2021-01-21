@@ -5,7 +5,7 @@ import MultiChoice from "./answer_area/multi_choice"
 function AnswerArea({question}:{question:QuestionInterface}){
     switch (question.questionType) {
         case Q_type.MultiChoice:
-            return <MultiChoice question={question} />
+            return <MultiChoice question={question} onChange={console.log}/>
         case Q_type.ShortAnswer:
             return <input type="text" />
         default:
