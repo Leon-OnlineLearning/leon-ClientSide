@@ -1,6 +1,5 @@
 
 export function getEvents(year, month) {
-    console.log("getting events for", year, month);
     if (year === 2021 && month === 1) {
         return [
             {

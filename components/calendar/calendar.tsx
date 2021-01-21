@@ -18,7 +18,7 @@ type CalenderProps = {
 export default function Calendar({ getEvents }: CalenderProps): JSX.Element {
     const today = new Date()
     const [year, setYear] = useState(today.getFullYear())
-    const [month, setMonth] = useState(today.getMonth()+1)
+    const [month, setMonth] = useState(today.getMonth() + 1)
     const [events, setEvents] = useState([])
 
     useEffect(() => {
@@ -42,9 +42,7 @@ export default function Calendar({ getEvents }: CalenderProps): JSX.Element {
         } else {
             m = newMonth
         }
-        console.log(getEvents(y,m));
-        
-        setEvents(getEvents(y,m))
+        setEvents(getEvents(y, m))
         setYear(y)
         setMonth(m)
     }
@@ -53,17 +51,20 @@ export default function Calendar({ getEvents }: CalenderProps): JSX.Element {
 
     return (
         <>
-            <i className="bi bi-caret-left-fill" onClick={downYear}></i> {year} <i className="bi bi-caret-right-fill" onClick={upYear}></i>
-            <i className="bi bi-caret-left-fill" onClick={downMonth}></i> {month} <i className="bi bi-caret-right-fill" onClick={upMonth}></i>
+            <div className={`${styles["calendar-header"]} bg-primary p-3 m-3 text-light`}>
+                <i className="bi bi-caret-left-fill" onClick={downYear}></i> {year} <i className="bi bi-caret-right-fill" onClick={upYear}></i>
+                <i className="bi bi-caret-left-fill" onClick={downMonth}></i> {month} <i className="bi bi-caret-right-fill" onClick={upMonth}></i>
+            </div>
             <CalendarDays year={year} month={month} events={events}></CalendarDays>
         </>
     )
 }
 
 function CalendarDays({ year, month, events }: CalenderDaysProps) {
+    // a wrapper around calender days to add it in grid layout
     return (
         <div className={`${styles["calender-layout"]} m-3`}>
-            {_Calendar({ year: year, month: month, events: events })}
+            {_CalendarDays({ year: year, month: month, events: events })}
         </div>
     )
 }
@@ -75,8 +76,7 @@ function CalendarDays({ year, month, events }: CalenderDaysProps) {
  * @param firstDay 
  */
 function indexDateMapper(week: number, day: number, firstDayIndex: number, firstDay: Date) {
-    console.log("first day", firstDay);
-    
+
     let res = new Date(firstDay)
     res.setDate(firstDay.getDate() + (day + 7 * week) - firstDayIndex)
     return res
@@ -86,11 +86,9 @@ function indexDateMapper(week: number, day: number, firstDayIndex: number, first
  * 
  * @param param0 
  */
-function _Calendar({ year, month, events }: CalenderDaysProps): Array<React.Component> {
+function _CalendarDays({ year, month, events }: CalenderDaysProps): Array<React.Component> {
     // assuming events are mapped to a month makes sense from having year and month
-    console.log("year", year, "month", month, "events", events);
-    
-    let firstDay = new Date(year, month-1, 1);
+    let firstDay = new Date(year, month - 1, 1);
     let numberOfDays = new Date(year, month, 0).getDate();
     let dayNames = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
     let firstDayIndex = 0
@@ -102,8 +100,6 @@ function _Calendar({ year, month, events }: CalenderDaysProps): Array<React.Comp
         }
     }
     let lastDayIndex = firstDayIndex + numberOfDays - 1;
-    console.log("# days",numberOfDays);
-    
     let res = []
     res[0] = dayNames.map(name => <DayName dayName={name}></DayName>)
     let counter = 0
@@ -114,17 +110,14 @@ function _Calendar({ year, month, events }: CalenderDaysProps): Array<React.Comp
             if (counter >= firstDayIndex && counter <= lastDayIndex) {
                 let eves = new Array<EventProp>()
                 let counterDate = indexDateMapper(i - 1, j, firstDayIndex, firstDay)
-                console.log("counter date", counterDate);
-                
                 for (let e of events) {
                     if (e.date.getFullYear() === counterDate.getFullYear() && e.date.getMonth() === counterDate.getMonth() && e.date.getDate() === counterDate.getDate()) {
-                        console.log("found!");
                         eves.push(e)
                     }
                 }
-                res[i][j] = <Slot dayInMonthIndex={counter - firstDayIndex + 1} active events={eves} ></Slot>
+                res[i][j] = <Slot dayInMonthIndex={counter - firstDayIndex + 1} active events={eves} numberOfDaysInMonth={numberOfDays}></Slot>
             } else {
-                res[i][j] = <Slot dayInMonthIndex={counter - firstDayIndex + 1} ></Slot>
+                res[i][j] = <Slot dayInMonthIndex={counter - firstDayIndex + 1} numberOfDaysInMonth={numberOfDays}></Slot>
             }
             counter++;
         }
