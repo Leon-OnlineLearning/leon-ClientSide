@@ -1,4 +1,5 @@
-import { Event, EventProp } from "./event"
+import { CalendarEvent, EventProp } from "./event"
+import styles from "./utils.module.css"
 type SlotProperties = {
     dayInMonthIndex: number,
     active?: boolean,
@@ -6,17 +7,14 @@ type SlotProperties = {
 }
 
 export default function Slot({ dayInMonthIndex, active, events }: SlotProperties) {
-    const color = active ? "#ffff00" : "#eeeeee";
+    const color = active ? "active" : "inactive"
     return (
         <>
-            <div style={{ backgroundColor: color }} >
-                {dayInMonthIndex}
+            <div className={`${styles[`slot-${color}`]} p-3`} >
+                {dayInMonthIndex > 0 ? dayInMonthIndex : ""}
                 {
-                    events ?
-                        events.map(event => {
-                            console.log("event is", event);
-                            return <Event key={event.title} title={event.title} description={event.description} date={event.date}></Event>
-                        }) : ""}
+                    events ? events.length ?
+                        <CalendarEvent events={events} /> : "" : ""}
             </div>
         </>
     );

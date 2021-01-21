@@ -1,4 +1,7 @@
 .calender-layout {
     display: grid;
     grid-template-columns: repeat(7,auto);
+    gap: 1px;
+    box-sizing: border-box;
+    box-shadow:0 0 0 1px #444444;
 }
