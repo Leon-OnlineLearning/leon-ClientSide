@@ -9,7 +9,6 @@ type SlotProperties = {
 
 export default function Slot({ dayInMonthIndex, numberOfDaysInMonth, active, events }: SlotProperties) {
     const color = active ? "active" : "inactive"
-    console.log(numberOfDaysInMonth);
     
     return (
         <>

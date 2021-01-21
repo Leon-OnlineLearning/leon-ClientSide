@@ -2,7 +2,7 @@ import Slot from "./utils/slot";
 import styles from "./calender.module.css";
 import { EventProp } from "./utils/event";
 import DayName from "./utils/dayname";
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 
 type CalenderDaysProps = {
     year: number,
@@ -11,11 +11,12 @@ type CalenderDaysProps = {
 }
 
 type CalenderProps = {
-    getEvents: (year: number, month: number) => Array<EventProp>
+    getEvents: (year: number, month: number) => Array<EventProp>,
+    style?: CSSProperties
 }
 
 
-export default function Calendar({ getEvents }: CalenderProps): JSX.Element {
+export default function Calendar({ getEvents, style }: CalenderProps): JSX.Element {
     const today = new Date()
     const [year, setYear] = useState(today.getFullYear())
     const [month, setMonth] = useState(today.getMonth() + 1)
@@ -51,11 +52,13 @@ export default function Calendar({ getEvents }: CalenderProps): JSX.Element {
 
     return (
         <>
-            <div className={`${styles["calendar-header"]} bg-primary p-3 m-3 text-light`}>
-                <i className="bi bi-caret-left-fill" onClick={downYear}></i> {year} <i className="bi bi-caret-right-fill" onClick={upYear}></i>
-                <i className="bi bi-caret-left-fill" onClick={downMonth}></i> {month} <i className="bi bi-caret-right-fill" onClick={upMonth}></i>
+            <div style={style}>
+                <div className={`${styles["calendar-header"]} bg-primary p-3 m-3 text-light`}>
+                    <i className="bi bi-caret-left-fill" onClick={downYear}></i> {year} <i className="bi bi-caret-right-fill" onClick={upYear}></i>
+                    <i className="bi bi-caret-left-fill" onClick={downMonth}></i> {month} <i className="bi bi-caret-right-fill" onClick={upMonth}></i>
+                </div>
+                <CalendarDays year={year} month={month} events={events}></CalendarDays>
             </div>
-            <CalendarDays year={year} month={month} events={events}></CalendarDays>
         </>
     )
 }

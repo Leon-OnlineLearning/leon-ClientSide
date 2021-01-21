@@ -1,0 +1,13 @@
+.calendar-layout {
+  position: relative;
+  height: 100%;
+}
+
+.notifications-pane {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 30%;
+  height: 95%;
+  overflow-y: scroll;
+}
