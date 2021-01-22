@@ -12,7 +12,7 @@ export default function Notifications({notifications}: NotificationsProps) : JSX
         <>
             {
                 notifications.map(noti => {
-                    return (<Card className="m-2">
+                    return (<Card key={noti.title + noti.date.toString()} className="m-2">
                         <Card.Body>
                             <Card.Text>
                                 {noti.title} <b>{noti.date}</b>

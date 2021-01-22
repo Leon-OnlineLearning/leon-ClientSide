@@ -53,7 +53,7 @@ export default function Chat({ messages, senderName, professorPrefix }: ChatProp
                     <div className={`${styles["chat-container"]}`}>
                         {messages.map(msg => {
                             return (
-                                <Message message={msg.message} sender={msg.sender} time={msg.date} professorSenderPrefix={professorPrefix} senderName={senderName} ></Message>
+                                <Message key={`${msg.date.toString()}`} message={msg.message} sender={msg.sender} time={msg.date} professorSenderPrefix={professorPrefix} senderName={senderName} ></Message>
                             )
                         })}
                     </div>

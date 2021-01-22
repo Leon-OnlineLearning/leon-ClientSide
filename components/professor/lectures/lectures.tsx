@@ -17,7 +17,7 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                 <div className={styles["professor-current-lectures"]}>
                     {
                         lectures.map(lec => {
-                            return <LectureCard key={lec.lectureTitle} lectureDate={lec.lectureDate} lectureTitle={lec.lectureTitle} />
+                            return <LectureCard key={lec.lectureTitle + lec.lectureDate.toString()} lectureDate={lec.lectureDate} lectureTitle={lec.lectureTitle} />
                         })
                     }
                 </div>

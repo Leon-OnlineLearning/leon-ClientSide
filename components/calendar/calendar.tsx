@@ -103,23 +103,23 @@ function _CalendarDays({ year, month, events }: CalenderDaysProps): Array<React.
     }
     let lastDayIndex = firstDayIndex + numberOfDays - 1;
     let res = []
-    res[0] = dayNames.map(name => <DayName dayName={name}></DayName>)
+    res[0] = dayNames.map(name => <DayName key={name} dayName={name}></DayName>)
     let counter = 0
     for (let i = 1; i <= 6; i++) {
         res[i] = []
         for (let j = 0; j < 7; j++) {
 
             if (counter >= firstDayIndex && counter <= lastDayIndex) {
-                let eves = new Array<EventProp>()
+                let eves = new Array<Event>()
                 let counterDate = indexDateMapper(i - 1, j, firstDayIndex, firstDay)
                 for (let e of events) {
                     if (e.date.getFullYear() === counterDate.getFullYear() && e.date.getMonth() === counterDate.getMonth() && e.date.getDate() === counterDate.getDate()) {
                         eves.push(e)
                     }
                 }
-                res[i][j] = <Slot dayInMonthIndex={counter - firstDayIndex + 1} active events={eves} numberOfDaysInMonth={numberOfDays}></Slot>
+                res[i][j] = <Slot key={`${i}${j} ${firstDay.toDateString()}`} dayInMonthIndex={counter - firstDayIndex + 1} active events={eves} numberOfDaysInMonth={numberOfDays}></Slot>
             } else {
-                res[i][j] = <Slot dayInMonthIndex={counter - firstDayIndex + 1} numberOfDaysInMonth={numberOfDays}></Slot>
+                res[i][j] = <Slot key={`${i}${j} ${firstDay.toDateString()}`} dayInMonthIndex={counter - firstDayIndex + 1} numberOfDaysInMonth={numberOfDays}></Slot>
             }
             counter++;
         }

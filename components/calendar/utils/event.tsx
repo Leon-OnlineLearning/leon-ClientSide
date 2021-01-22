@@ -27,7 +27,7 @@ export function CalendarEvent({ events }: CalendarEventProps) {
                     {
                         events.map(
                             e => {
-                                return (<Card className="m-2">
+                                return (<Card key={e.title + e.description} className="m-2">
                                     <Card.Body>
                                         <Card.Title>
                                             {e.title}

@@ -7,15 +7,15 @@ import Notifications from "../../components/notifications/notifications"
 export default function Dashboard() {
     //TODO for testing only
     const notifications = [
-        { title: "someone did something", date: new Date().toDateString() },
-        { title: "someone did other thing", date: new Date(2021, 0, 15).toDateString() },
-        { title: "someone did other thing", date: new Date(2021, 0, 4).toDateString() },
-        { title: "someone did something", date: new Date().toDateString() },
-        { title: "someone did other thing", date: new Date(2021, 0, 15).toDateString() },
-        { title: "someone did other thing", date: new Date(2021, 0, 4).toDateString() },
-        { title: "someone did something", date: new Date().toDateString() },
-        { title: "someone did other thing", date: new Date(2021, 0, 15).toDateString() },
-        { title: "someone did other thing", date: new Date(2021, 0, 4).toDateString() },
+        { title: "someone did sosmething", date: new Date().toDateString() },
+        { title: "someone did oather thing", date: new Date(2021, 0, 15).toDateString() },
+        { title: "someone did otheddr thing", date: new Date(2021, 0, 4).toDateString() },
+        { title: "someone did somsadething", date: new Date().toDateString() },
+        { title: "someone did otddher thing", date: new Date(2021, 0, 15).toDateString() },
+        { title: "someone did othser thing", date: new Date(2021, 0, 4).toDateString() },
+        { title: "someone did somesthing", date: new Date().toDateString() },
+        { title: "someone did otherasdasd thing", date: new Date(2021, 0, 15).toDateString() },
+        { title: "someone did wother thing", date: new Date(2021, 0, 4).toDateString() },
     ]
     return (
         <>
