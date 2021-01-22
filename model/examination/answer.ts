@@ -7,7 +7,9 @@ export interface AnswerInterface {
 
 export class TextAnswer implements AnswerInterface{
     public questionType : Q_type;
-    constructor(question : QuestionInterface,public answerText: String){
-        this.questionType = question.questionType
+    public answerText: String
+    constructor(question : QuestionInterface,answerText: String){
+        this.questionType = question.questionType;
+        this.answerText = answerText;
     }
 }
