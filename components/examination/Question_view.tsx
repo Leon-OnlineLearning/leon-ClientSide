@@ -1,17 +1,8 @@
 import React from "react"
-import {QuestionInterface,Q_type} from "../../model/examination/question"
-import MultiChoice from "./answer_area/multi_choice"
+import {QuestionInterface} from "../../model/examination/question"
+import AnswerArea from './answer_area/Answer_area';
 
-function AnswerArea({question}:{question:QuestionInterface}){
-    switch (question.questionType) {
-        case Q_type.MultiChoice:
-            return <MultiChoice question={question} onChange={console.log}/>
-        case Q_type.ShortAnswer:
-            return <input type="text" />
-        default:
-            <p>invalid answer type </p>
-    }
-}
+
 export default function Question_view({
     question,
   }: {
@@ -22,7 +13,7 @@ export default function Question_view({
         <>
         {question.hasOwnProperty('fig_url') && <img src={question.fig_url} />}
         <h1>{question.questionText}</h1>
-        <AnswerArea question={question} />
+        <AnswerArea question={question} onChange={console.log}/>
         </>
     )
 }
