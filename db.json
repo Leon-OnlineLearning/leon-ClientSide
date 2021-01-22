@@ -1,0 +1,52 @@
+{
+  "exams": [
+    {
+      "id": 1,
+      "questions": [
+        {
+          "questionId": 123,
+          "questionText": "question text need to choose many",
+          "questionType": "MultiChoice",
+          "choices": ["choice one", "choice two", "choice three", "choice four"]
+        },
+        {
+          "questionId": 124,
+          "questionText": "question text needs short answer",
+          "questionType": "ShortAnswer"
+        },
+        {
+          "questionId": 1241,
+          "questionText": "question text needs long answer",
+          "questionType": "LongAnswer"
+        },
+        {
+          "questionId": 1234,
+          "questionText": "question text needs code as answer",
+          "questionType": "Code"
+        },
+        {
+          "questionId": 1234,
+          "questionText": "question text needs single choice ",
+          "questionType": "SingleChoice",
+          "choices": ["choice one", "choice two", "choice three", "choice four"]
+        },
+        {
+          "questionId": 1234,
+          "questionText": "question text needs single choice ",
+          "questionType": "Image"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "questions": [
+        {
+          "questionId": 123,
+          "questionText": "question text need to choose many",
+          "questionType": "MultiChoice",
+          "choices": ["choice one", "choice two", "choice three", "choice four"]
+        }
+      ]
+    }
+  ]
+}
