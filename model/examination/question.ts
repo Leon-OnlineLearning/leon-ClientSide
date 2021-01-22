@@ -1,10 +1,10 @@
 export enum Q_type {
-    MultiChoice,
-    SingleChoice,
-    ShortAnswer,
-    LongAnswer,
-    Image,
-    Code,
+    MultiChoice = "MultiChoice" ,
+    SingleChoice = "SingleChoice" ,
+    ShortAnswer = "ShortAnswer" ,
+    LongAnswer = "LongAnswer" ,
+    Image = "Image" ,
+    Code = "Code" ,
 }
 
 export interface QuestionInterface {
