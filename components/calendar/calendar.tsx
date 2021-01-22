@@ -113,7 +113,7 @@ function _CalendarDays({ year, month, events }: CalenderDaysProps): Array<React.
                 let eves = new Array<Event>()
                 let counterDate = indexDateMapper(i - 1, j, firstDayIndex, firstDay)
                 for (let e of events) {
-                    if (e.date.getFullYear() === counterDate.getFullYear() && e.date.getMonth() === counterDate.getMonth() && e.date.getDate() === counterDate.getDate()) {
+                    if (e.startDate.getFullYear() === counterDate.getFullYear() && e.startDate.getMonth() === counterDate.getMonth() && e.startDate.getDate() === counterDate.getDate()) {
                         eves.push(e)
                     }
                 }
