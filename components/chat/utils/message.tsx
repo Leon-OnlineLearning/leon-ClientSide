@@ -1,4 +1,4 @@
-import styles from "./message.module.css"
+import styles from "./chat-utils.module.css"
 
 export type MessageData = {
     message: string,
