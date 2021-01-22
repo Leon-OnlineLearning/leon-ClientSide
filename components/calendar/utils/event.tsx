@@ -1,14 +1,9 @@
 import { useState } from "react";
 import { Card, Modal } from "react-bootstrap";
-
-export type EventProp = {
-    title: string,
-    description: string,
-    date: Date
-}
+import {Event} from "../../../model/event";
 
 type CalendarEventProps = {
-    events?: Array<EventProp>
+    events?: Array<Event>
 }
 
 export function CalendarEvent({ events }: CalendarEventProps) {

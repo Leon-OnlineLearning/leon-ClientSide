@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react"
 import { Card } from "react-bootstrap"
+import { Notification } from "../../model/notification"
 
-export type Notification = {
-    title: string, 
-    date: Date
-}
 
 type NotificationsProps = {
     notifications: Array<Notification>

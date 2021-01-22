@@ -1,17 +1,17 @@
 import Slot from "./utils/slot";
 import styles from "./calender.module.css";
-import { EventProp } from "./utils/event";
+import { Event } from "../../model/event";
 import DayName from "./utils/dayname";
 import { CSSProperties, useEffect, useState } from "react";
 
 type CalenderDaysProps = {
     year: number,
     month: number,
-    events?: Array<EventProp>
+    events?: Array<Event>
 }
 
 type CalenderProps = {
-    getEvents: (year: number, month: number) => Array<EventProp>,
+    getEvents: (year: number, month: number) => Array<Event>,
     style?: CSSProperties
 }
 
