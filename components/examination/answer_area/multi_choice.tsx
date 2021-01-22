@@ -35,9 +35,8 @@ let MultiChoice: AnswerAreaInterface = ({ question, onChange }) => {
         <div key={choice}>
           <input
             type="checkbox"
-            name={choice}
             value={choice}
-            onChange={(e) => handleChange(e)}
+            onChange={handleChange}
           />
           <label htmlFor={choice}>{choice}</label>
         </div>
