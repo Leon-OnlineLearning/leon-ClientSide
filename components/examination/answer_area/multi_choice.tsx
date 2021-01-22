@@ -32,14 +32,15 @@ let MultiChoice: AnswerAreaInterface = ({ question, onChange }) => {
   return (
     <>
       {question.choices.map((choice) => (
-        <div key={choice}>
+        <>
           <input
+            key={choice}
             type="checkbox"
             value={choice}
             onChange={handleChange}
           />
           <label htmlFor={choice}>{choice}</label>
-        </div>
+        </>
       ))}
     </>
   );
