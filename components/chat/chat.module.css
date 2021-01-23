@@ -14,6 +14,6 @@
 .chat-rooms-container {
     display: flex;
     overflow: auto;
-    height: 95vh;
+    height: 87vh;
     flex-direction: column;
 }
