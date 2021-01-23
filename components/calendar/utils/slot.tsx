@@ -1,10 +1,12 @@
-import { CalendarEvent, EventProp } from "./event"
+import { CalendarEvent } from "./event"
 import styles from "./utils.module.css"
+import {Event} from "../../../model/event"
+
 type SlotProperties = {
     dayInMonthIndex: number,
     numberOfDaysInMonth: number,
     active?: boolean,
-    events?: Array<EventProp>
+    events?: Array<Event>
 }
 
 export default function Slot({ dayInMonthIndex, numberOfDaysInMonth, active, events }: SlotProperties) {
