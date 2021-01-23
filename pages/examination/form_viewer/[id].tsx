@@ -1,3 +1,4 @@
+import ExamContainer from '../../../components/examination/exam_container/ExamContainer';
 import Question_view from '../../../components/examination/Question_view';
 import { QuestionInterface } from '../../../model/examination/question';
 export default function Form_viewer({id,questions}:{id:number,questions:Array<QuestionInterface>}) {
@@ -6,7 +7,8 @@ export default function Form_viewer({id,questions}:{id:number,questions:Array<Qu
     return <Question_view question={question} key={question.questionId}/>
     })
   
-  return questions_comp;
+  return   <ExamContainer>{questions_comp}</ExamContainer>;
+
 }
 
 // This function gets called at build time

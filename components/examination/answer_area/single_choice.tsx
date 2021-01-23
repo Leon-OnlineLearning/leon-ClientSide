@@ -4,7 +4,7 @@ import { AnswerAreaInterface } from '../../../../../../dev/test/leon-ClientSide/
 
 
 let Option =({question, choice,handleChange})=>(
-  <>
+  <div>
   <input
   type="radio"
   name={String(question.questionId)}
@@ -12,7 +12,7 @@ let Option =({question, choice,handleChange})=>(
   onChange={handleChange}
 />
 <label htmlFor={choice}>{choice}</label>
-</>
+</div>
 )
 
 

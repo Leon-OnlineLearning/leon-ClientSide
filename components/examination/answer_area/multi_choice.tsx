@@ -5,14 +5,15 @@ import { AnswerAreaInterface } from './AnswerAreaInterface';
 
 
 let Option =({choice,handleChange})=>(
-  <>
+  <div className="form-check">
   <input
+  className="form-check-input"
   type="checkbox"
   value={choice}
   onChange={handleChange}
 />
-<label htmlFor={choice}>{choice}</label>
-</>
+<label htmlFor={choice} className="form-check-label">{choice}</label>
+</div>
 )
 
 let MultiChoice: AnswerAreaInterface = ({ question, onChange }) => {
