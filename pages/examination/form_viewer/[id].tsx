@@ -9,7 +9,7 @@ export default function Form_viewer({id,questions}:{id:number,questions:Array<Qu
   
   return  (
   <>
-  <div className="position-sticky bg-primary d-flex justify-content-center" style={{top:0}}>
+  <div className="position-sticky bg-primary d-flex justify-content-center" style={{top:0,zIndex:1000}}>
     <h1 style={{color:'white'}}>00:14</h1>
   </div>
   
