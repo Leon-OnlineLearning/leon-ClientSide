@@ -4,7 +4,8 @@ import { QuestionInterface } from '../../../model/examination/question';
 export default function Form_viewer({id,questions}:{id:number,questions:Array<QuestionInterface>}) {
   
   let questions_comp= questions.map((question)=>{
-    return <Question_view question={question} key={question.questionId}/>
+    // TODO save the sate of the answers here
+    return <Question_view question={question} key={question.questionId} onChange={console.log}/>
     })
   
   return  (
