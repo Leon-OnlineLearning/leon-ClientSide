@@ -1,4 +1,5 @@
 import { QuestionInterface } from "../../../model/examination/question";
+import { AnswerInterface } from '../../../model/examination/answer';
 
 /**
  * Answer area interface
@@ -18,5 +19,5 @@ export interface AnswerAreaInterface {
  */
 interface AnswerAreaPropsInterface { 
     question: QuestionInterface;
-    onChange(AnswerInterface): void;
+    onChange(answer :AnswerInterface): void;
   }
