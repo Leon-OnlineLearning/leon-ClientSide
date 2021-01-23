@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "debug":"$NODE_OPTIONS='--inspect'; next dev",
+    "debug-win": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build && next export",
     "start": "next start",
     "storybook": "start-storybook -p 6006",
@@ -26,6 +26,7 @@
     "@types/node": "^14.14.21",
     "@types/react": "^17.0.0",
     "babel-loader": "^8.2.2",
+    "cross-env": "^7.0.3",
     "json-server": "^0.16.3",
     "typescript": "^4.1.3"
   }
