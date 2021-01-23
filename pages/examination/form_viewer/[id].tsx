@@ -2,13 +2,20 @@ import ExamContainer from '../../../components/examination/exam_container/ExamCo
 import Question_view from '../../../components/examination/Question_view';
 import { QuestionInterface } from '../../../model/examination/question';
 export default function Form_viewer({id,questions}:{id:number,questions:Array<QuestionInterface>}) {
-  // console.log(questions)  
+  
   let questions_comp= questions.map((question)=>{
     return <Question_view question={question} key={question.questionId}/>
     })
   
-  return   <ExamContainer>{questions_comp}</ExamContainer>;
-
+  return  (
+  <>
+  <div className="position-sticky bg-primary d-flex justify-content-center" style={{top:0}}>
+    <h1 style={{color:'white'}}>00:14</h1>
+  </div>
+  
+  <ExamContainer>{questions_comp}</ExamContainer>
+  </>
+  )
 }
 
 // This function gets called at build time
