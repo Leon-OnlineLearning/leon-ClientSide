@@ -4,14 +4,15 @@ import { AnswerAreaInterface } from '../../../../../../dev/test/leon-ClientSide/
 
 
 let Option =({question, choice,handleChange})=>(
-  <div>
+  <div  className="form-check">
   <input
+  className="form-check-input"
   type="radio"
   name={String(question.questionId)}
   value={choice}
   onChange={handleChange}
 />
-<label htmlFor={choice}>{choice}</label>
+<label htmlFor={choice} className="form-check-label">{choice}</label>
 </div>
 )
 
