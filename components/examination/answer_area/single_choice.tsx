@@ -3,6 +3,19 @@ import { TextAnswer } from '../../../../../../dev/test/leon-ClientSide/model/exa
 import { AnswerAreaInterface } from '../../../../../../dev/test/leon-ClientSide/components/examination/answer_area/AnswerAreaInterface';
 
 
+let Option =({question, choice,handleChange})=>(
+  <>
+  <input
+  type="radio"
+  name={String(question.questionId)}
+  value={choice}
+  onChange={handleChange}
+/>
+<label htmlFor={choice}>{choice}</label>
+</>
+)
+
+
 let SingleChoice: AnswerAreaInterface = ({ question, onChange }) => {
   const [selected_answer, setSelectedAnswer] = useState(new String);
   
@@ -21,16 +34,7 @@ let SingleChoice: AnswerAreaInterface = ({ question, onChange }) => {
   return (
     <>
       {question.choices.map((choice) => (
-          <>
-          <input
-            key={choice}
-            type="radio"
-            name={String(question.questionId)}
-            value={choice}
-            onChange={(e) => handleChange(e)}
-          />
-          <label htmlFor={choice}>{choice}</label>
-        </>
+        <Option key={choice} question={question} choice={choice} handleChange={handleChange} />
       ))}
     </>
   );

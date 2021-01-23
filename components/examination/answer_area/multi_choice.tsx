@@ -4,6 +4,17 @@ import { QuestionInterface, Q_type } from "../../../model/examination/question";
 import { AnswerAreaInterface } from './AnswerAreaInterface';
 
 
+let Option =({choice,handleChange})=>(
+  <>
+  <input
+  type="checkbox"
+  value={choice}
+  onChange={handleChange}
+/>
+<label htmlFor={choice}>{choice}</label>
+</>
+)
+
 let MultiChoice: AnswerAreaInterface = ({ question, onChange }) => {
   const [selected_answers, setSelectedAnswers] = useState(new Set<String>());
   
@@ -32,15 +43,9 @@ let MultiChoice: AnswerAreaInterface = ({ question, onChange }) => {
   return (
     <>
       {question.choices.map((choice) => (
-        <>
-          <input
-            key={choice}
-            type="checkbox"
-            value={choice}
-            onChange={handleChange}
-          />
-          <label htmlFor={choice}>{choice}</label>
-        </>
+        
+     <Option key={choice} choice={choice} handleChange={handleChange} />
+        
       ))}
     </>
   );

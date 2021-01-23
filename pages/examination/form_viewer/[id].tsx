@@ -3,7 +3,7 @@ import { QuestionInterface } from '../../../model/examination/question';
 export default function Form_viewer({id,questions}:{id:number,questions:Array<QuestionInterface>}) {
   // console.log(questions)  
   let questions_comp= questions.map((question)=>{
-    return <Question_view question={question} />
+    return <Question_view question={question} key={question.questionId}/>
     })
   
   return questions_comp;
