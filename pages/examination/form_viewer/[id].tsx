@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ExamContainer from '../../../components/examination/exam_container/ExamContainer';
 import Question_view from '../../../components/examination/Question_view';
+import Timer from '../../../components/examination/timer/timer';
 import { QuestionInterface } from '../../../model/examination/question';
 export default function Form_viewer({id,questions}:{id:number,questions:Array<QuestionInterface>}) {
   const [answers,setAnswers] = useState(Array(questions.length).fill(null));
@@ -15,10 +16,11 @@ export default function Form_viewer({id,questions}:{id:number,questions:Array<Qu
     return <Question_view question={question} key={question.questionId} onChange={(answer)=>handleChange(index,answer)}/>
     })
   
+  // TODO get test length
   return  (
   <>
   <div className="position-sticky bg-primary d-flex justify-content-center" style={{top:0,zIndex:1000}}>
-    <h1 style={{color:'white'}}>00:14</h1>
+    <Timer test_length={500}/>
   </div>
   
   <ExamContainer>{questions_comp}</ExamContainer>
