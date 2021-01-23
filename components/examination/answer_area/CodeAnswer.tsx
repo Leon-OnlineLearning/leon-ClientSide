@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-const CodeMirror = dynamic(() => {
+const CodeMirror:any = dynamic(() => {
   require("codemirror/lib/codemirror.css");
   require("codemirror/theme/neat.css");
   // require("codemirror/mode/xml/xml.js");
