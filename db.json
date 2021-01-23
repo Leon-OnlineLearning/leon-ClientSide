@@ -22,7 +22,8 @@
         {
           "questionId": 1234,
           "questionText": "question text needs code as answer",
-          "questionType": "Code"
+          "questionType": "Code",
+          "code_lang": "javascript"
         },
         {
           "questionId": 12345,
@@ -45,6 +46,17 @@
           "questionText": "question text need to choose many",
           "questionType": "MultiChoice",
           "choices": ["choice one", "choice two", "choice three", "choice four"]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "questions": [
+        {
+          "questionId": 1234,
+          "questionText": "question text needs code as answer",
+          "questionType": "Code",
+          "code_lang": "javascript"
         }
       ]
     }
