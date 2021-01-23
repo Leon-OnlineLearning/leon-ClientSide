@@ -4,6 +4,7 @@ import { AnswerAreaInterface } from "./AnswerAreaInterface";
 import MultiChoice from "./multi_choice";
 import SingleChoice from './single_choice';
 import MultipleChoiceContainer from './MutibleChoiceContainer';
+import CodeAnswer from "./CodeAnswer";
 
 let AnswerArea: AnswerAreaInterface = ({ question, onChange }) => {
   return (
@@ -33,9 +34,10 @@ let AnswerAreaSwitch = ({ question, onChange }) => {
     case Q_type.ShortAnswer:
       return <input type="text" className="ml-3 d-block w-75" onChange={handleChange} />;
     case Q_type.LongAnswer:
-    case Q_type.Code: //TODO use a code highlight
       return <textarea  className="ml-3 d-block w-75" onChange={handleChange} />;
-    case Q_type.Image:
+    case Q_type.Code:
+      return <CodeAnswer question={question} onChange={onChange}/>
+      case Q_type.Image:
       // TODO upload the file and add its link
       return <input
         type="file"
