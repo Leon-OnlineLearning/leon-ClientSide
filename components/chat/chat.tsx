@@ -1,7 +1,8 @@
-import { Form } from "react-bootstrap"
+import { Dropdown, DropdownButton, Form } from "react-bootstrap"
 import styles from "./chat.module.css"
 import Message, { MessageData } from "./utils/message"
 import ChatRoom from "./utils/chat-room"
+import { useEffect, useState } from "react"
 
 type MessageContent = {
     message: string,
@@ -26,14 +27,36 @@ type ChatRoomDate = {
  */
 export default function Chat({ messages, senderName, professorPrefix }: ChatProps) {
     // NOTE: here i made chat room as a derived value we may need to change that later
+
+    const [yearName, setYearName] = useState("Select year")
+
+    useEffect(() => {
+        const firstYear = "Year 1"
+        setYearName(firstYear)
+    }, [])
+
     let chatRooms: Array<ChatRoomDate> = [
         { id: "12345679", name: "room1" },
         { id: "12345680", name: "room2" },
     ]
+
+    const onYearsSelected = (eventKey: string) => {
+        setYearName(eventKey)
+    }
+
     return (
         <>
             <div className={`${styles["chat-layout"]}`}>
-                <div >
+                <div>
+                    <Dropdown onSelect={onYearsSelected} className={`${styles["dropdown-area"]}`}>
+                        <Dropdown.Toggle style={{ width: "95%", margin:"8px" }} variant="primary" id="years" className={`${styles["dropdown-btn"]} bg-secondary`}>
+                            {yearName}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu style={{ width: "95%" }} className={`${styles["dropdown-item"]}`}>
+                            <Dropdown.Item eventKey="Year 1" >Year 1</Dropdown.Item>
+                            <Dropdown.Item eventKey="Year 2" >Year 2</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                     <div className={`${styles["chat-rooms-container"]}`}>
                         {chatRooms.map(room => {
                             return (
