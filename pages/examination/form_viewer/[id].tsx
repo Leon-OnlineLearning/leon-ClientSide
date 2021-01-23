@@ -1,11 +1,18 @@
+import { useState } from 'react';
 import ExamContainer from '../../../components/examination/exam_container/ExamContainer';
 import Question_view from '../../../components/examination/Question_view';
 import { QuestionInterface } from '../../../model/examination/question';
 export default function Form_viewer({id,questions}:{id:number,questions:Array<QuestionInterface>}) {
-  
-  let questions_comp= questions.map((question)=>{
-    // TODO save the sate of the answers here
-    return <Question_view question={question} key={question.questionId} onChange={console.log}/>
+  const [answers,setAnswers] = useState(Array(questions.length).fill(null));
+  function handleChange(index,user_answer){
+    let new_answers = answers.slice();
+    new_answers[index] = user_answer
+    setAnswers(new_answers)
+    console.log(new_answers)
+  }
+  let questions_comp= questions.map((question,index) =>{
+    
+    return <Question_view question={question} key={question.questionId} onChange={(answer)=>handleChange(index,answer)}/>
     })
   
   return  (
