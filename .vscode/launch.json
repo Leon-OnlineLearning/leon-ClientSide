@@ -22,7 +22,7 @@
     {
       "type": "node",
       "request": "attach",
-      "name": "Launch Program",
+      "name": "next debug",
       "skipFiles": ["<node_internals>/**"],
       "port": 9229
     }

@@ -17,6 +17,9 @@ export default function Form_viewer({id,questions}:{id:number,questions:Array<Qu
     })
   
   // TODO get test length
+  // TODO auto submit when times up
+  // TODO add submit button
+
   return  (
   <>
   <div className="position-sticky bg-primary d-flex justify-content-center" style={{top:0,zIndex:1000}}>
