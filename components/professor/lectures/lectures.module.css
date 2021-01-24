@@ -1,0 +1,8 @@
+.professor-lecture-layout {
+    display: flex;
+    flex: 1;
+}
+
+.professor-lecture-layout{
+    overflow: hidden;
+}
