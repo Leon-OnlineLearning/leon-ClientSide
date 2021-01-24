@@ -10,7 +10,8 @@ export default function Dashboard() {
                             {
                                 id:"Not very random id",
                                 lectureTitle: "Lect 2",
-                                lectureDate: new Date(2019, 2, 4)
+                                lectureDate: new Date(2019, 2, 4),
+                                course: "course1"
                             },
                             {
                                 lectureTitle: "Lect 1",

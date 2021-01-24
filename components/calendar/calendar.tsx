@@ -89,7 +89,7 @@ function indexDateMapper(week: number, day: number, firstDayIndex: number, first
  * 
  * @param param0 
  */
-function _CalendarDays({ year, month, events }: CalenderDaysProps): Array<React.Component> {
+function _CalendarDays({ year, month, events }: CalenderDaysProps): Array<JSX.Element> {
     let firstDay = new Date(year, month - 1, 1);
     let numberOfDays = new Date(year, month, 0).getDate();
     let dayNames = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]

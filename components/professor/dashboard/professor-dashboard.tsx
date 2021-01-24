@@ -12,7 +12,7 @@ export enum ProfessorDashboardSelectedPage {
 
 export type ProfessorDashboardProps = {
     selectedPage: ProfessorDashboardSelectedPage,
-    children: React.Component
+    children?: JSX.Element
 }
 
 export function ProfessorDashboard({ selectedPage, children }: ProfessorDashboardProps) {
