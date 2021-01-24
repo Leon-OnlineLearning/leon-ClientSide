@@ -1,51 +1,68 @@
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
+import { dateToInputDateStringValue, dateToInputTimeStringValue } from "../../../utils/formatter";
 import LectureCard from "../../lecture-card/lecture-card";
 import styles from "./lectures.module.css";
-type LectureInfo = {
-    lectureTitle: string,
-    lectureDate: Date
-}
+import { Lecture } from "../../../model/lecture"
 
 type ProfessorLecturesProps = {
-    lectures: [LectureInfo]
+    lectures: [Lecture]
 }
 
 export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) {
-    const [lectureName, setLectureName] = useState()
-    const [selectedCourse, setSelectedCourse] = useState()
+    const [lectureName, setLectureName] = useState("")
+    const [selectedCourse, setSelectedCourse] = useState("Select a course")
     const today = new Date()
-    const [courseDate, setCourseDate] = useState(`${today.getFullYear()}-${("0"+(today.getMonth()+1)).slice(-2)}-${("0"+today.getDate()).slice(-2)}`)
-    console.log('date is:',courseDate);
-    
-    const [courseTime, setCourseTime] = useState(``)
+    const [lectureDate, setLectureDate] = useState(dateToInputDateStringValue(today))
+    const [lectureTime, setLectureTime] = useState(dateToInputTimeStringValue(today))
+    const [deleteDialogShown, setDeleteDialogShown] = useState(false)
+    const [deletionMessage, setDeletionMessage] = useState("")
+    const [lectureIdDelete, setLectureIdDelete] = useState("")
+
+    const editLectureHandler = ({ lectureTitle, lectureDate, course }: Lecture) => {
+        console.log(lectureDate);
+
+        setLectureName(lectureTitle)
+        setLectureDate(dateToInputDateStringValue(lectureDate))
+        setLectureTime(dateToInputTimeStringValue(lectureDate))
+        setSelectedCourse(course)
+    }
+
+    const deleteLectureHandler = ({ lectureTitle, id }: Lecture) => {
+        setDeletionMessage(`Are you sure you want to delete ${lectureTitle}?`)
+        setDeleteDialogShown(true)
+        setLectureIdDelete(id)
+    }
+
+    const deleteLecture = () => {
+        console.log("deleting lecture", lectureIdDelete, "...");
+    }
 
     const onLectureNameChange = (e) => {
         const newValue = e.target.value;
-        
-        console.log("new lecture name",newValue);
+
+        console.log("new lecture name", newValue);
         setLectureName(newValue)
     }
 
     const onSelectedCourseChange = (e) => {
         const newValue = e.target.value;
-        console.log("new selected course",newValue);
         setSelectedCourse(newValue)
     }
 
     const onCourseTimeChange = (e) => {
-        const newValue = e.target.value;
-        console.log("new selected course",newValue);
-        // setSelectedCourse(newValue)
+        const newValue: string = e.target.value;
+        setLectureTime(newValue)
     }
 
     const onCourseDateChange = (e) => {
-        console.log("value is: ",e.target.value);
-        
-        const newValue = new Date(e.target.value);
-        console.log(newValue.getDate());
-         
-        setCourseDate(`${newValue.getFullYear()}-${("0"+(newValue.getMonth()+1)).slice(-2)}-${("0"+newValue.getDate()).slice(-2)}`)
+        console.log("value is: ", e.target.value);
+
+        setLectureDate(e.target.value)
+        // const newValue = new Date(e.target.value);
+        // console.log(newValue.getDate());
+
+        // setLectureDate(`${newValue.getFullYear()}-${("0"+(newValue.getMonth()+1)).slice(-2)}-${("0"+newValue.getDate()).slice(-2)}`)
     }
 
     return (
@@ -54,9 +71,18 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                 <div className={styles["professor-current-lectures"]}>
                     {
                         lectures.map(lec => {
-                            return <LectureCard key={lec.lectureTitle + lec.lectureDate.toString()} lectureDate={lec.lectureDate} lectureTitle={lec.lectureTitle} />
+                            return <LectureCard key={lec.lectureTitle + lec.lectureDate.toString()} lectureDate={lec.lectureDate} lectureTitle={lec.lectureTitle} onEditHandler={() => editLectureHandler(lec)} onDeleteHandler={() => deleteLectureHandler(lec)} />
                         })
                     }
+                    <Modal show={deleteDialogShown} onHide={() => setDeleteDialogShown(false)}>
+                        <Modal.Body>
+                            {deletionMessage}
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="danger" onClick={() => deleteLecture()}>Yes</Button>
+                            <Button onClick={() => setDeleteDialogShown(false)}>No</Button>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
                 <div className={`p-3 m-3`}>
                     <h2>Create or edit lecture</h2>
@@ -75,12 +101,12 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                         </Form.Group>
                         <Form.Group controlId="formCourseDate">
                             <Form.Label>Course date</Form.Label>
-                            <Form.Control type="date" value={courseDate} onChange={onCourseDateChange}>
+                            <Form.Control type="date" value={lectureDate} onChange={onCourseDateChange}>
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId="formCourseDate">
                             <Form.Label>Course time</Form.Label>
-                            <Form.Control type="time" value={courseTime} onChange={onCourseTimeChange}>
+                            <Form.Control type="time" value={lectureTime} onChange={onCourseTimeChange}>
                             </Form.Control>
                         </Form.Group>
                         <Button type="submit">
