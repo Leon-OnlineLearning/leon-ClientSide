@@ -8,6 +8,7 @@ export default function Dashboard() {
                     <ProfessorLectures lectures={
                         [
                             {
+                                id:"Not very random id",
                                 lectureTitle: "Lect 2",
                                 lectureDate: new Date(2019, 2, 4)
                             },
