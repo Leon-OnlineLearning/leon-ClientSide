@@ -8,7 +8,6 @@ interface FabProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export default function Fab(props: FabProps): JSX.Element {
-    console.log(props.children);
 
     let result = React.createElement(Button,
         {

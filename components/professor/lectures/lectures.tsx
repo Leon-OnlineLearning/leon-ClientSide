@@ -20,7 +20,6 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
     const [lectureIdDelete, setLectureIdDelete] = useState("")
 
     const editLectureHandler = ({ lectureTitle, lectureDate, course }: Lecture) => {
-        console.log(lectureDate);
 
         setLectureName(lectureTitle)
         setLectureDate(dateToInputDateStringValue(lectureDate))
@@ -59,10 +58,6 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
         console.log("value is: ", e.target.value);
 
         setLectureDate(e.target.value)
-        // const newValue = new Date(e.target.value);
-        // console.log(newValue.getDate());
-
-        // setLectureDate(`${newValue.getFullYear()}-${("0"+(newValue.getMonth()+1)).slice(-2)}-${("0"+newValue.getDate()).slice(-2)}`)
     }
 
     return (
