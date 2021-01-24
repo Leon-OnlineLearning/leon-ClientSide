@@ -3,8 +3,13 @@ import Calendar from "../../components/calendar/calendar"
 import { getEvents } from "../../controller/getEvent"
 import styles from "../../styles/home.module.css"
 import Notifications from "../../components/notifications/notifications"
+import Fab from "../../components/fab/fab"
+import { useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import CreateEventCard from "../../components/calendar/utils/create-event-card"
 
 export default function Dashboard() {
+    const [showAddEvent, setShowAddEvent] = useState(false)
     //TODO for testing only
     const notifications = [
         { title: "someone did sosmething", date: new Date().toDateString() },
@@ -26,6 +31,11 @@ export default function Dashboard() {
                         <Notifications notifications={notifications}></Notifications>
                     </div>
                 </div>
+                <Fab onClick={() => setShowAddEvent(true)}><span style={{fontSize:"24px", fontWeight:"700"}}>+</span></Fab>
+                <Modal show={showAddEvent} onHide={() => setShowAddEvent(false)}>
+                    <Modal.Title className="m-3">Create new event</Modal.Title>
+                    <CreateEventCard></CreateEventCard>
+                </Modal>
             </ProfessorDashboard>
         </>
     )
