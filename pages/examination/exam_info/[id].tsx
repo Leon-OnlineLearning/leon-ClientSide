@@ -7,7 +7,7 @@ export default function ExamInfo() {
         className="position-sticky bg-primary d-flex justify-content-center"
         style={{ top: 0, zIndex: 1000 }}
       >
-        <h1 style={{ color: "white" }}>authenticate</h1>
+        <h1 style={{ color: "white" }}>exam info</h1>
       </div>
       <div
         className="d-flex justify-content-center my-5"
