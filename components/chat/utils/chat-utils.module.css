@@ -1,0 +1,13 @@
+.message-me {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-end;
+}
+
+.message-general, .message-prof {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-start;
+}
