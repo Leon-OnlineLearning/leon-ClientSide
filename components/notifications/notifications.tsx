@@ -15,7 +15,7 @@ export default function Notifications({notifications}: NotificationsProps) : JSX
                     return (<Card key={noti.title + noti.date.toString()} className="m-2">
                         <Card.Body>
                             <Card.Text>
-                                {noti.title} <b>{noti.date}</b>
+                                {noti.title} <b>{noti.date.toDateString()}</b>
                             </Card.Text>
                         </Card.Body>
                     </Card>);

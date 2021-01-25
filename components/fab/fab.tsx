@@ -4,7 +4,7 @@ import { ButtonVariant } from "react-bootstrap/types"
 import styles from "./fab.module.css"
 
 interface FabProps extends React.HTMLAttributes<HTMLElement> {
-    variant: ButtonVariant;
+    variant?: ButtonVariant;
 }
 
 export default function Fab(props: FabProps): JSX.Element {

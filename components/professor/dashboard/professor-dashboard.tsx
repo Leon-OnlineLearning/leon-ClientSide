@@ -10,9 +10,9 @@ export enum ProfessorDashboardSelectedPage {
     grads
 }
 
-export type ProfessorDashboardProps = {
+export interface ProfessorDashboardProps extends React.HTMLAttributes<HTMLElement> {
     selectedPage: ProfessorDashboardSelectedPage,
-    children?: JSX.Element
+    
 }
 
 export function ProfessorDashboard({ selectedPage, children }: ProfessorDashboardProps) {
