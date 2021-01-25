@@ -29,15 +29,18 @@ export default function StudentGrades() {
                         <tr>
                             <th>Exam</th>
                             <th>Grade</th>
+                            <th>FullMark</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th>Exam number one</th>
                             <th>10</th>
+                            <th>10</th>
                         </tr>
                         <tr>
                             <th>Exam number two</th>
+                            <th>10</th>
                             <th>10</th>
                         </tr>
                     </tbody>
