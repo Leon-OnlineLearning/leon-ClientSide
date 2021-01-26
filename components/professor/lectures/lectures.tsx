@@ -11,6 +11,8 @@ type ProfessorLecturesProps = {
     lectures: [Lecture]
 }
 
+
+
 export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) {
     const [lectureName, setLectureName] = useState("")
     const [selectedCourse, setSelectedCourse] = useState("Select a course")
@@ -147,7 +149,7 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                             </Form.Control>
                         </Form.Group>
                         <input type="file" onChange={onFileUploadChange} accept=".pdf" aria-label="upload file"/>
-                        <ProgressBar now={progress}></ProgressBar>
+                        <ProgressBar now={progress} className={`${styles['progress-bar']}`}></ProgressBar>
                         <Button onClick={submitLecturesForm}>
                             <i className="bi bi-save-fill"></i> Save changes</Button>
                     </Form>
