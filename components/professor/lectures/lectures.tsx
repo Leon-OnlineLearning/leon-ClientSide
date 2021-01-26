@@ -18,6 +18,7 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
     const [deleteDialogShown, setDeleteDialogShown] = useState(false)
     const [deletionMessage, setDeletionMessage] = useState("")
     const [lectureIdDelete, setLectureIdDelete] = useState("")
+    const [selectedFile, setSelectedFile] = useState();
 
     const editLectureHandler = ({ lectureTitle, lectureDate, course }: Lecture) => {
 
@@ -58,6 +59,10 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
         console.log("value is: ", e.target.value);
 
         setLectureDate(e.target.value)
+    }
+
+    const onFileUploadChange = (e) => {
+        
     }
 
     return (
