@@ -4,6 +4,8 @@ import { dateToInputDateStringValue, dateToInputTimeStringValue } from "../../..
 import LectureCard from "../../lecture-card/lecture-card";
 import styles from "./lectures.module.css";
 import { Lecture } from "../../../model/lecture"
+import ProgressBar from "react-bootstrap/ProgressBar"
+import { createNewLecture, editLecture } from "../../../controller/upload-lectures"
 
 type ProfessorLecturesProps = {
     lectures: [Lecture]
@@ -18,13 +20,19 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
     const [deleteDialogShown, setDeleteDialogShown] = useState(false)
     const [deletionMessage, setDeletionMessage] = useState("")
     const [lectureIdDelete, setLectureIdDelete] = useState("")
+    const [selectedFile, setSelectedFile] = useState()
+    const [progress, setProgress] = useState(0)
+    const [lectureID, setLectureId] = useState("")
+    let edit = false;
 
-    const editLectureHandler = ({ lectureTitle, lectureDate, course }: Lecture) => {
+    const editLectureHandler = ({ lectureTitle, lectureDate, course, id }: Lecture) => {
 
         setLectureName(lectureTitle)
         setLectureDate(dateToInputDateStringValue(lectureDate))
         setLectureTime(dateToInputTimeStringValue(lectureDate))
         setSelectedCourse(course)
+        setLectureId(id)
+        edit = true
     }
 
     const deleteLectureHandler = ({ lectureTitle, id }: Lecture) => {
@@ -60,6 +68,40 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
         setLectureDate(e.target.value)
     }
 
+    const onFileUploadChange = (e) => {
+        setSelectedFile(e.target.files[0])
+    }
+
+    const progressUpdate = (event) => {
+        console.log('loaded stuff?',event);
+        
+        setProgress(Math.round((100 * event.loaded) / event.total));
+    }
+
+
+    const submitLecturesForm = () => {
+        const formDate = new FormData()
+        formDate.append('lectureName', lectureName)
+        formDate.append('lectureDate', lectureDate)
+        formDate.append('lectureTime', lectureTime)
+        formDate.append('lectureCourse', selectedCourse)
+        formDate.append('lectureFile', selectedFile)
+
+        if (edit) {
+            // edit lecture
+            if (!lectureID.length) {
+                throw new ReferenceError("Lecture id wasn't provided")
+            }
+            editLecture(formDate, lectureID, progressUpdate)
+                .then((result) => result.data)
+                .catch((err) => console.error(err))
+        } else {
+            // create new lecture
+            createNewLecture(formDate, progressUpdate)
+                .then((result) => result.data)
+                .catch((err) => console.error(err))
+        }
+    }
     return (
         <>
             <div className={styles["professor-lecture-layout"]}>
@@ -104,7 +146,9 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                             <Form.Control type="time" value={lectureTime} onChange={onCourseTimeChange}>
                             </Form.Control>
                         </Form.Group>
-                        <Button type="submit">
+                        <input type="file" onChange={onFileUploadChange} accept=".pdf" aria-label="upload file"/>
+                        <ProgressBar now={progress}></ProgressBar>
+                        <Button onClick={submitLecturesForm}>
                             <i className="bi bi-save-fill"></i> Save changes</Button>
                     </Form>
                 </div>
