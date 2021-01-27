@@ -18,6 +18,7 @@
     "react": "17.0.1",
     "react-codemirror2": "^7.2.1",
     "react-bootstrap": "^1.4.3",
+    "webrtc-adapter": "6.4.0",
     "react-dom": "17.0.1"
   },
   "devDependencies": {
