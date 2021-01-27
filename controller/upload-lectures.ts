@@ -1,4 +1,3 @@
-import { Http2ServerRequest } from "http2"
 import axios from "./utils/common-axio-instance"
 
 export function createNewLecture(formDate, onUploadProgress) {

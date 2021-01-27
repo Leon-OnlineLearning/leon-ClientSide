@@ -11,8 +11,6 @@ type ProfessorLecturesProps = {
     lectures: [Lecture]
 }
 
-
-
 export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) {
     const [lectureName, setLectureName] = useState("")
     const [selectedCourse, setSelectedCourse] = useState("Select a course")
@@ -25,7 +23,22 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
     const [selectedFile, setSelectedFile] = useState()
     const [progress, setProgress] = useState(0)
     const [lectureID, setLectureId] = useState("")
+    const [successMessage, setSuccessMessage] = useState(false)
     let edit = false;
+    // validation
+    const [isLectureNameValid, setIsLectureNameValid] = useState(true)
+
+    const validate = () => {
+        let result = true
+        const lecNameValidState = lectureName.length !== 0
+        result = result && lecNameValidState && selectedFile !== undefined
+        console.log("eveything is valid", result);
+
+        setIsLectureNameValid(
+            lecNameValidState
+        )
+        return result;
+    }
 
     const editLectureHandler = ({ lectureTitle, lectureDate, course, id }: Lecture) => {
 
@@ -75,8 +88,6 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
     }
 
     const progressUpdate = (event) => {
-        console.log('loaded stuff?',event);
-        
         setProgress(Math.round((100 * event.loaded) / event.total));
     }
 
@@ -89,21 +100,21 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
         formDate.append('lectureCourse', selectedCourse)
         formDate.append('lectureFile', selectedFile)
 
-        if (edit) {
-            // edit lecture
-            if (!lectureID.length) {
-                throw new ReferenceError("Lecture id wasn't provided")
+        if (validate()) {
+            if (edit) {
+                // edit lecture
+                editLecture(formDate, lectureID, progressUpdate)
+                    .then(() => setSuccessMessage(true))
+                    .catch((err) => console.error(err))
+            } else {
+                // create new lecture
+                createNewLecture(formDate, progressUpdate)
+                    .then(() => setSuccessMessage(true))
+                    .catch((err) => console.error(err))
             }
-            editLecture(formDate, lectureID, progressUpdate)
-                .then((result) => result.data)
-                .catch((err) => console.error(err))
-        } else {
-            // create new lecture
-            createNewLecture(formDate, progressUpdate)
-                .then((result) => result.data)
-                .catch((err) => console.error(err))
         }
     }
+
     return (
         <>
             <div className={styles["professor-lecture-layout"]}>
@@ -114,9 +125,9 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                         })
                     }
                     <Modal show={deleteDialogShown} onHide={() => setDeleteDialogShown(false)}>
-                        <Modal.Body>
+                        <Modal.Header>
                             {deletionMessage}
-                        </Modal.Body>
+                        </Modal.Header>
                         <Modal.Footer>
                             <Button variant="danger" onClick={() => deleteLecture()}>Yes</Button>
                             <Button onClick={() => setDeleteDialogShown(false)}>No</Button>
@@ -128,7 +139,7 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                     <Form>
                         <Form.Group controlId="formLectureTitle">
                             <Form.Label>Lecture title</Form.Label>
-                            <Form.Control placeholder="Enter lecture title" onChange={onLectureNameChange} value={lectureName}></Form.Control>
+                            <Form.Control placeholder="Enter lecture title" onChange={onLectureNameChange} value={lectureName} isInvalid={!isLectureNameValid}></Form.Control>
                         </Form.Group>
                         <Form.Group controlId="formCourseSelect">
                             <Form.Label>Select course</Form.Label>
@@ -148,10 +159,19 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                             <Form.Control type="time" value={lectureTime} onChange={onCourseTimeChange}>
                             </Form.Control>
                         </Form.Group>
-                        <input type="file" onChange={onFileUploadChange} accept=".pdf" aria-label="upload file"/>
-                        <ProgressBar now={progress} className={`${styles['progress-bar']}`}></ProgressBar>
+                        <input type="file" onChange={onFileUploadChange} accept=".pdf" aria-label="upload file" />
+                        {
+                            <div style={{ marginTop: "8px", opacity: (progress !== 0 && progress !== 100) ? 100 : 0 }}>
+                                <ProgressBar now={progress} className={`${styles['progress-bar']}`}></ProgressBar>
+                            </div>
+                        } <br />
                         <Button onClick={submitLecturesForm}>
                             <i className="bi bi-save-fill"></i> Save changes</Button>
+                        <Modal show={successMessage} onHide={() => setSuccessMessage(false)}>
+                            <Modal.Body>
+                                Upload completed
+                            </Modal.Body>
+                        </Modal>
                     </Form>
                 </div>
             </div>
