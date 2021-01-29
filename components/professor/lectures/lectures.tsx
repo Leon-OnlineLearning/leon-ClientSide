@@ -8,7 +8,7 @@ import ProgressBar from "react-bootstrap/ProgressBar"
 import { createNewLecture, editLecture } from "../../../controller/upload-lectures"
 
 type ProfessorLecturesProps = {
-    lectures: [Lecture]
+    lectures: Lecture[]
 }
 
 export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) {
