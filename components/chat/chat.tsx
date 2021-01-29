@@ -14,6 +14,7 @@ type ChatProps = {
     messages: Array<MessageContent>,
     senderName: string,
     professorPrefix: string,
+    yearSelection?: boolean
 }
 
 type ChatRoomDate = {
@@ -25,7 +26,7 @@ type ChatRoomDate = {
  * Displays chat content in reverse order 
  * @param param0 
  */
-export default function Chat({ messages, senderName, professorPrefix }: ChatProps) {
+export default function Chat({ messages, senderName, professorPrefix, yearSelection = false }: ChatProps) {
     // NOTE: here i made chat room as a derived value we may need to change that later
 
     const [yearName, setYearName] = useState("Select year")
@@ -48,15 +49,18 @@ export default function Chat({ messages, senderName, professorPrefix }: ChatProp
         <>
             <div className={`${styles["chat-layout"]}`}>
                 <div>
-                    <Dropdown onSelect={onYearsSelected} className={`${styles["dropdown-area"]}`}>
-                        <Dropdown.Toggle style={{ width: "95%", margin:"8px" }} variant="primary" id="years" className={`${styles["dropdown-btn"]} bg-secondary`}>
-                            {yearName}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu style={{ width: "95%" }} className={`${styles["dropdown-item"]}`}>
-                            <Dropdown.Item eventKey="Year 1" >Year 1</Dropdown.Item>
-                            <Dropdown.Item eventKey="Year 2" >Year 2</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+
+                    {yearSelection ?
+                        <Dropdown onSelect={onYearsSelected} className={`${styles["dropdown-area"]}`}>
+                            <Dropdown.Toggle style={{ width: "95%", margin: "8px" }} variant="primary" id="years" className={`${styles["dropdown-btn"]} bg-secondary`}>
+                                {yearName}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu style={{ width: "95%" }} className={`${styles["dropdown-item"]}`}>
+                                <Dropdown.Item eventKey="Year 1" >Year 1</Dropdown.Item>
+                                <Dropdown.Item eventKey="Year 2" >Year 2</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown> : ""
+                    }
                     <div className={`${styles["chat-rooms-container"]}`}>
                         {chatRooms.map(room => {
                             return (

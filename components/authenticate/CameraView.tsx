@@ -7,7 +7,7 @@ const CAPTURE_OPTIONS = {
 };
 
 export default function CameraView() {
-    const videoRef = useRef();
+    const videoRef = useRef(null);
     const mediaStream = useUserMedia(CAPTURE_OPTIONS);
   
     if (mediaStream && videoRef.current && !videoRef.current.srcObject) {

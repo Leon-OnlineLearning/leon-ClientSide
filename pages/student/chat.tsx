@@ -1,6 +1,7 @@
 import ProfessorStudentAttendance from "../../components/professor/student-attendace/professor-student-attendance"
 import {ProfessorDashboard, ProfessorDashboardSelectedPage} from "../../components/professor/dashboard/professor-dashboard";
 import Chat from "../../components/chat/chat"
+import { StudentDashboard, StudentDashboardSelectedPage } from "../../components/student/dashboad/student-dashboard";
 
 export default function Dashboard() {
     let msgs = [
@@ -18,9 +19,9 @@ export default function Dashboard() {
     ]
     return (
         <>
-            <ProfessorDashboard selectedPage={ProfessorDashboardSelectedPage.chat}>
-                <Chat yearSelection messages={msgs} senderName="me" professorPrefix="Dr"></Chat>
-            </ProfessorDashboard>
+            <StudentDashboard selectedPage={StudentDashboardSelectedPage.chat}>
+                <Chat messages={msgs} senderName="me" professorPrefix="Dr"></Chat>
+            </StudentDashboard>
         </>
     )
 }
