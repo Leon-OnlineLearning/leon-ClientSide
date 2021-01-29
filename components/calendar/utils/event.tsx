@@ -25,7 +25,7 @@ export function CalendarEvent({ events }: CalendarEventProps) {
                         {events[0].startDate.getFullYear() + "/" + (events[0].startDate.getMonth() + 1) + "/" + events[0].startDate.getDate()}
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Header>
                     {
                         events.map(
                             e => {
@@ -33,7 +33,7 @@ export function CalendarEvent({ events }: CalendarEventProps) {
                             }
                         )
                     }
-                </Modal.Body>
+                </Modal.Header>
             </Modal>
         </>
     );
