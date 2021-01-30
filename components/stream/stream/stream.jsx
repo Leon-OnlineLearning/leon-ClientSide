@@ -1,5 +1,8 @@
+/* tslint:disable */
+
 import { useEffect, useRef, useState } from "react";
 import Janus from "../../../public/janus/janus";
+// import { Janus } from 'janus-gateway';
 
 var server = "/janus_back";
 
@@ -35,7 +38,8 @@ export default function Stream({
               opaqueId: opaqueId,
               success: function (pluginHandle) {
                 mixertest = pluginHandle;
-                Janus.log(
+                // tslint:disable-next-line
+                Janus.log( 
                   "Plugin attached! (" +
                     mixertest.getPlugin() +
                     ", id=" +
