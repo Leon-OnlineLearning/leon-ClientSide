@@ -1,16 +1,17 @@
 import ProfessorStudentAttendance from "../../components/professor/student-attendace/professor-student-attendance"
 import { ProfessorDashboard, ProfessorDashboardSelectedPage } from "../../components/professor/dashboard/professor-dashboard";
-import Settings from "../../components/settings/settings";
+import ButtonsListLayout from "../../components/buttons-list-layout/buttons-list-layout";
+import AccountSettings from "../../components/accounts-settings/account-settings"
 
 export default function Dashboard() {
     return (
         <ProfessorDashboard selectedPage={ProfessorDashboardSelectedPage.accountSettings}>
-            <Settings pages={
+            <ButtonsListLayout pages={
                 {
-                    "hello": "world",
-                    "yahoo": "lossy"
+                    "Account Settings": <AccountSettings />,
+                    "Profile": "lossy"
                 }
-            }></Settings>
+            }></ButtonsListLayout>
         </ProfessorDashboard>
     )
 }

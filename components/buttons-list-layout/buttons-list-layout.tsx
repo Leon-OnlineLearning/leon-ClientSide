@@ -1,4 +1,4 @@
-import styles from "./settings.module.css"
+import styles from "./buttons-list-layout.module.css"
 import ButtonGroup from "react-bootstrap/ButtonGroup"
 import Button from "react-bootstrap/Button"
 import { SyntheticEvent, useState } from "react"
@@ -7,7 +7,7 @@ type SettingsProps = {
     pages: object
 }
 
-export default function Settings({ pages }: SettingsProps) {
+export default function ButtonsListLayout({ pages }: SettingsProps) {
 
     const [selectedPage, setSelectedPage] = useState(Object.keys(pages)[0])
 
