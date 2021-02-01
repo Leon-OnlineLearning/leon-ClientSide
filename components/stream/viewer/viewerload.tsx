@@ -1,18 +1,35 @@
 import React, { useMemo, useState } from "react";
 
-import {Document, Page} from 'react-pdf/dist/esm/entry.webpack'
+import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 
-
-import { useEffect } from "react";
-
+import { useEffect, useRef } from "react";
+import Pointer_canvas from './pointer_canvas';
 
 export default function PdfViewer() {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
   const [tall, setTall] = useState(0);
+  const [viewer_width, setWidthViewer] = useState(0);
+  const [pageX, setPageX] = useState(0);
+  const [pageY, setPageY] = useState(0);
+  const [pointerPositionX, setPointerPositionX] = useState(100)
+  const [pointerPositionY, setPointerPositionY] = useState(100)
+
+  const pageViewerRef = useRef(null);
+  // if (typeof window !== "undefined"){
+  // }
+
+  function setCanvasPosition(e) {
+    const viewerRect = pageViewerRef.current.getBoundingClientRect();
+
+    setPageX(viewerRect.left);
+    setPageY(viewerRect.top);
+    setWidthViewer(viewerRect.right - viewerRect.left);
+  }
   useEffect(() => {
-    setTall(window.innerHeight);
+    setTall(0.9 * window.innerHeight); //0.9 height relative to window
+    window.onresize = () => setTall(0.9 * window.innerHeight);
   }, []);
 
   function onDocumentLoadSuccess({ numPages }) {
@@ -69,14 +86,24 @@ export default function PdfViewer() {
         // renderMode="svg"
       >
         <Page
+          inputRef={pageViewerRef}
+          onLoadSuccess={setCanvasPosition}
           className="d-inline-flex"
           pageNumber={pageNumber}
-          height={0.9 * tall}
+          height={tall}
           onGetTextError={onGetTextError}
           renderTextLayer={true}
-
         />
       </Document>
+      <Pointer_canvas
+        height={tall}
+        width={viewer_width}
+        top={pageX}
+        left={pageY}
+        pointerX={pointerPositionX}
+        pointerY={pointerPositionY}
+
+      />
       <div>
         <p>
           Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}
