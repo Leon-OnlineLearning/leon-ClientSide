@@ -7,6 +7,11 @@ const Stream = dynamic(() => import("../../components/stream/stream/stream"), {
   ssr: false,
 });
 
+const PdfViewer = dynamic(
+  () => import('../../components/stream/viewer/viewerload'),
+  { ssr: false }
+);
+
 export default function Room() {
   const [participants, setParticipants] = useState([]);
   const [myData, setMyData] = useState({ name: "" });
@@ -26,7 +31,7 @@ export default function Room() {
   }, []);
 
   return (
-    <div>
+    <>
       <Stream
         addParticipants={addParticipants}
         removeParticipants={removeParticipants}
@@ -37,6 +42,7 @@ export default function Room() {
       />
       {myData.name && <h1>{myData.name}</h1>}
       <ParticipantsTable participants={participants} />
-    </div>
+      <PdfViewer />
+    </>
   );
 }
