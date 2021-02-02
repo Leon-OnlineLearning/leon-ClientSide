@@ -57,23 +57,6 @@ export default function PdfViewer() {
     changePage(1);
   }
 
-  function highlightPattern(text, pattern) {
-    const splitText = text.split(pattern);
-
-    if (splitText.length <= 1) {
-      return text;
-    }
-
-    const matches = text.match(pattern);
-
-    return splitText.reduce(
-      (arr, element, index) =>
-        matches[index]
-          ? [...arr, element, <mark key={index}>{matches[index]}</mark>]
-          : [...arr, element],
-      []
-    );
-  }
 
   function onGetTextError(error) {
     alert(error);
