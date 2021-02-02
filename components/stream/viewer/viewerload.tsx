@@ -91,8 +91,8 @@ export default function PdfViewer() {
         }
         file="/test.pdf"
         onLoadSuccess={onDocumentLoadSuccess}
-        // renderMode="svg"
       >
+        <div id="drawContainer" style={{position: "relative"}}>
         <Page
           inputRef={pageViewerRef}
           onLoadSuccess={setCanvasPosition}
@@ -102,16 +102,16 @@ export default function PdfViewer() {
           onGetTextError={onGetTextError}
           renderTextLayer={true}
         />
-      </Document>
       <Pointer_canvas
         height={tall}
         width={viewer_width}
-        top={pageX}
-        left={pageY}
         pointerX={pointerPositionX}
         pointerY={pointerPositionY}
 
       />
+      </div>
+      </Document>
+      {/* TODO add navigation in top of page viewer */}
       <div>
         <p>
           Page {pageNumber || (numPages ? 1 : "--")} of {numPages || "--"}

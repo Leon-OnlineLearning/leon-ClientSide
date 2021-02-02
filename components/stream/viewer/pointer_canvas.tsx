@@ -5,8 +5,6 @@ import pointer_img from "./pointer.svg"
 export default function Pointer_canvas({
   height,
   width,
-  top,
-  left,
   pointerX,
   pointerY,
 }) {
@@ -33,11 +31,10 @@ export default function Pointer_canvas({
       height={height}
       width={width}
       style={{
-        opacity: 0.5,
         position: "absolute",
-        top: top,
-        left: left,
-        zIndex:10000
+        top: 0,
+        left: 0,
+        zIndex:10000,
       }}
     />
   );
