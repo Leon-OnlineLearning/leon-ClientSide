@@ -90,6 +90,7 @@ export default function PdfViewer() {
       >
         <div id="drawContainer" style={{position: "relative"}}>
         <Page
+        // @ts-expect-error: Let's ignore a single compiler error like this unreachable code 
           canvasRef={pageViewerRef}
           onLoadSuccess={initCanvas}
           className="d-inline-flex"
