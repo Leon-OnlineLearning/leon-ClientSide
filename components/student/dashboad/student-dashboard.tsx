@@ -6,7 +6,8 @@ export enum StudentDashboardSelectedPage {
     home,
     attendance,
     chat,
-    grads
+    grads,
+    accountSettings
 }
 
 export interface StudentDashboardProps extends React.HTMLAttributes<HTMLElement> {
@@ -27,6 +28,10 @@ export function StudentDashboard({ selectedPage, children }: StudentDashboardPro
                     } text={"Chat"} selected={selectedPage === StudentDashboardSelectedPage.chat}></SidebarElement>
                     <SidebarElement href="/student/grades" iconClassName={"bi-percent"
                     } text={"Grades"} selected={selectedPage === StudentDashboardSelectedPage.grads}></SidebarElement>
+                    <SidebarElement href="/student/settings" iconClassName={"bi-person-circle"
+                    } text={"Account"} selected={selectedPage === StudentDashboardSelectedPage.accountSettings}></SidebarElement>
+                    <SidebarElement href="/" iconClassName={"bi-arrow-left"
+                    } text={"Log out"} ></SidebarElement>
                 </>
             }>
                 {children}
