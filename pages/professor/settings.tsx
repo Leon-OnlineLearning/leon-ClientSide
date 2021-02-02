@@ -9,7 +9,6 @@ export default function Dashboard() {
             <ButtonsListLayout pages={
                 {
                     "Account Settings": <AccountSettings />,
-                    "Profile": "lossy"
                 }
             }></ButtonsListLayout>
         </ProfessorDashboard>
