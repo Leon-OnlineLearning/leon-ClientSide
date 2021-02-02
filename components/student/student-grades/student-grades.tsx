@@ -4,30 +4,16 @@ import ButtonGroup from "react-bootstrap/ButtonGroup"
 import Button from "react-bootstrap/Button"
 import { useState } from "react";
 import { Table } from "react-bootstrap";
-export default function ProfessorStudentGrades() {
-    const [yearName, setYearName] = useState("Years");
+export default function StudentGrades() {
     const [courseName, setCourseName] = useState("Course Name");
-
-    const onYearsSelected = (eventKey: string) => {
-        setYearName(eventKey);
-    }
     const onCourseSelected = (eventKey: string) => {
         setCourseName(eventKey);
     }
     return (
         <>
             <div className="m-3">
-                <h2 className="m-2">Students Grades</h2>
+                <h2 className="m-2">Your Grades</h2>
                 <span className={`${styles["dropdown-container"]}`}>
-                    <Dropdown onSelect={onYearsSelected} className={`${styles["dropdown-area"]}`}>
-                        <Dropdown.Toggle variant="primary" id="years" className={`${styles["dropdown-btn"]}`}>
-                            {yearName}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu className={`${styles["dropdown-item"]}`}>
-                            <Dropdown.Item eventKey="Year1" >Year1</Dropdown.Item>
-                            <Dropdown.Item eventKey="Year2" >Year2</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
                     <Dropdown onSelect={onCourseSelected} className={`${styles["dropdown-area"]}`}>
                         <Dropdown.Toggle variant="primary" id="courses" className={`${styles["dropdown-btn"]}`}>
                             {courseName}
@@ -41,29 +27,26 @@ export default function ProfessorStudentGrades() {
                 <Table hover bordered className={`${styles["attendance-table"]}`}>
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Exam 1</th>
-                            <th>Exam 2</th>
-                            <th>Sum</th>
+                            <th>Exam</th>
+                            <th>Grade</th>
+                            <th>FullMark</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th>Ahmed</th>
+                            <th>Exam number one</th>
                             <th>10</th>
                             <th>10</th>
-                            <th>20</th>
                         </tr>
                         <tr>
-                            <th>Ahmed2</th>
+                            <th>Exam number two</th>
                             <th>10</th>
-                            <th>15</th>
-                            <th>25</th>
+                            <th>10</th>
                         </tr>
                     </tbody>
                 </Table>
                 <span className="p-2" style={{ display: "flex", justifyContent: "center" }}>
-                    Overall performance: <b>45/50 = 90%</b>
+                    Total: <b>20/20 = 100%</b>
                 </span>
                 <span style={{ display: "flex", justifyContent: "center" }}>
                     <ButtonGroup aria-label="Pages" className="mx-2">
