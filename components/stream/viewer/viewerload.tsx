@@ -27,10 +27,18 @@ export default function PdfViewer() {
     setPageY(viewerRect.top);
     setWidthViewer(viewerRect.right - viewerRect.left);
   }
+
   useEffect(() => {
     setTall(0.9 * window.innerHeight); //0.9 height relative to window
     window.onresize = () => setTall(0.9 * window.innerHeight);
   }, []);
+
+  useEffect(()=>{
+    window.onmousemove = (e) => {
+      setPointerPositionX(e.clientX - pageX)
+      setPointerPositionY(e.clientY - pageY)
+    }
+  },[pageX,pageY])
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -72,7 +80,7 @@ export default function PdfViewer() {
   }
 
   return (
-    <div>
+    <div className="p-5">
       <Document
         options={
           {
