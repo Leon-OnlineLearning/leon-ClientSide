@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 
@@ -11,34 +11,47 @@ export default function PdfViewer() {
 
   const [tall, setTall] = useState(0);
   const [viewer_width, setWidthViewer] = useState(0);
-  const [pageX, setPageX] = useState(0);
-  const [pageY, setPageY] = useState(0);
+  const [pdfPageX, setPdfPageX] = useState(0);
+  const [pdfPageY, setPdfPageY] = useState(0);
   const [pointerPositionX, setPointerPositionX] = useState(100)
   const [pointerPositionY, setPointerPositionY] = useState(100)
 
   const pageViewerRef = useRef(null);
-  // if (typeof window !== "undefined"){
-  // }
 
-  function setCanvasPosition(e) {
+  function initCanvas(){
     const viewerRect = pageViewerRef.current.getBoundingClientRect();
+    setCanvasWidth(viewerRect)
+    setPdfPageX(pageViewerRef.current.offsetLeft)
+    setPdfPageY(pageViewerRef.current.offsetY)
 
-    setPageX(viewerRect.left);
-    setPageY(viewerRect.top);
-    setWidthViewer(viewerRect.right - viewerRect.left);
+    window.onmousemove = (e) => {
+      const viewerRect = pageViewerRef.current.getBoundingClientRect();
+      setPointerPositionX(e.clientX - viewerRect.x)
+      setPointerPositionY(e.clientY - viewerRect.y)
+    }
   }
 
+
+  function setCanvasWidth(viewerRect) {
+    // this only set width for pointer canvas 
+      setWidthViewer(viewerRect.right - viewerRect.left);
+  }
+  function setHeight(){
+    // height applied to pdf and canvas and Elements
+    setTall(0.9 * window.innerHeight); //0.9 height relative to window  window
+  }
+
+
+  //this should only fire once in load 
   useEffect(() => {
-    setTall(0.9 * window.innerHeight); //0.9 height relative to window
-    window.onresize = () => setTall(0.9 * window.innerHeight);
+    setHeight()
+    // update the canvas with page resize
+    window.onresize = () => {
+      setHeight()
+      initCanvas();
+    }
   }, []);
 
-  useEffect(()=>{
-    window.onmousemove = (e) => {
-      setPointerPositionX(e.clientX - pageX)
-      setPointerPositionY(e.clientY - pageY)
-    }
-  },[pageX,pageY])
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
@@ -77,8 +90,8 @@ export default function PdfViewer() {
       >
         <div id="drawContainer" style={{position: "relative"}}>
         <Page
-          inputRef={pageViewerRef}
-          onLoadSuccess={setCanvasPosition}
+          canvasRef={pageViewerRef}
+          onLoadSuccess={initCanvas}
           className="d-inline-flex"
           pageNumber={pageNumber}
           height={tall}
