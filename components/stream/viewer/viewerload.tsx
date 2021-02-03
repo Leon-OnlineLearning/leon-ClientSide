@@ -11,8 +11,7 @@ export default function PdfViewer() {
 
   const [tall, setTall] = useState(0);
   const [viewer_width, setWidthViewer] = useState(0);
-  const [pdfPageX, setPdfPageX] = useState(0);
-  const [pdfPageY, setPdfPageY] = useState(0);
+  
   const [pointerPositionX, setPointerPositionX] = useState(100)
   const [pointerPositionY, setPointerPositionY] = useState(100)
 
@@ -21,8 +20,7 @@ export default function PdfViewer() {
   function initCanvas(){
     const viewerRect = pageViewerRef.current.getBoundingClientRect();
     setCanvasWidth(viewerRect)
-    setPdfPageX(pageViewerRef.current.offsetLeft)
-    setPdfPageY(pageViewerRef.current.offsetY)
+    
 
     window.onmousemove = (e) => {
       const viewerRect = pageViewerRef.current.getBoundingClientRect();
