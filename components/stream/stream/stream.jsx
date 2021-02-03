@@ -20,10 +20,11 @@ export default function Stream({
   let audio_player = useRef(null);
 
   useEffect(() => {
+    console.warn("times")
     let webrtcUp = false;
 
     Janus.init({
-      debug: false,
+      debug: true,
       callback: function () {
         if (!Janus.isWebrtcSupported()) {
           alert("No WebRTC support... ");
@@ -110,7 +111,7 @@ export default function Stream({
                       }
                     }
                     // Any room participant?
-                    if (msg["participants"].length > 0) {
+                    if (msg["participants"] && (msg["participants"].length > 0)) {
                       var list = msg["participants"];
                       Janus.debug("Got a list of participants:", list);
                       addParticipants(list);
@@ -122,7 +123,7 @@ export default function Stream({
                       "Moved to room " + msg["room"] + ", new ID: " + msg["id"]
                     );
                     // Any room participant?
-                    if (msg["participants"]) {
+                    if (msg["participants"] && (msg["participants"].length > 0)) {
                       var list = msg["participants"];
                       Janus.debug("Got a list of participants:", list);
                       setParticipants(list);
@@ -132,28 +133,31 @@ export default function Stream({
                     Janus.warn("The room has been destroyed!");
                     alert("The room has been destroyed");
                     window.location.reload();
-                  } else if (event === "event") {
-                    if (msg["participants"].length > 0) {
-                      var list = msg["participants"];
-                      Janus.debug("Got a list of participants:", list);
-                      // TODO check when this happen
+                  } 
+                  else if (event === "event") {
+                    if (msg["participants"] && (msg["participants"].length > 0)) {
+                      
+                        var list = msg["participants"];
+                        Janus.debug("Got a list of participants:", list);
+                        // TODO check when this happen
+                      } 
+                    else if (msg["error"]) {
+                      if (msg["error_code"] === 485) {
+                        // This is a "no such room" error: give a more meaningful description
+                        Janus.error("audiobridge plug in is not working");
+                      } else {
+                        alert(msg["error"]);
+                      }
+                      // return;
                     }
-                  } else if (msg["error"]) {
-                    if (msg["error_code"] === 485) {
-                      // This is a "no such room" error: give a more meaningful description
-                      Janus.error("audiobridge plug in is not working");
-                    } else {
-                      alert(msg["error"]);
+                    // Any new feed to attach to?
+                    if (msg["leaving"]) {
+                      // One of the participants has gone away?
+                      let leaving = msg["leaving"];
+                      removeParticipants(leaving);
+                      Janus.log(`Participant left: "${leaving}`);
                     }
-                    return;
-                  }
-                  // Any new feed to attach to?
-                  if (msg["leaving"]) {
-                    // One of the participants has gone away?
-                    let leaving = msg["leaving"];
-                    removeParticipants(leaving);
-                    Janus.log(`Participant left: "${leaving}`);
-                  }
+                    }
                 }
 
                 if (jsep) {
