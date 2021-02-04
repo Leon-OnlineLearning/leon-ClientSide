@@ -1,6 +1,6 @@
 /* tslint:disable */
 
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import Janus from "../../../public/janus/janus";
 // import { Janus } from 'janus-gateway';
 
@@ -9,14 +9,19 @@ var server = "/janus_back";
 let mixertest = null;
 var opaqueId = "audiobridgetest-" + Janus.randomString(12); //FIXME what am i
 
-export default function Stream({
-  setParticipants,
-  addParticipants,
-  removeParticipants,
-  setMyData,
-  myData,
-  room,
-}) {
+let Stream = forwardRef(
+  (
+    {
+    setParticipants,
+    addParticipants,
+    removeParticipants,
+    setMyData,
+    myData,
+    room,
+  },ref) =>{
+
+  
+  
   let audio_player = useRef(null);
 
   useEffect(() => {
@@ -179,6 +184,9 @@ export default function Stream({
             });
           },
         });
+        if (ref != null){ // should always go in
+          ref.current = janus
+        }
       },
     });
   }, []);
@@ -194,3 +202,5 @@ export default function Stream({
     </div>
   );
 }
+)
+export default Stream;

@@ -29,10 +29,13 @@ export default function Room() {
     let name = prompt("name");
     setMyData({ name: name });
   }, []);
+  const janusRef = useRef(null)
 
   return (
     <>
       <Stream
+        ref={janusRef}
+        // @ts-expect-error: canvas refrance isnot added to types yet 
         addParticipants={addParticipants}
         removeParticipants={removeParticipants}
         setParticipants={setParticipants}

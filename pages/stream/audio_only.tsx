@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from 'react';
 import ParticipantsTable from "../../components/stream/participants";
 
 import dynamic from "next/dynamic";
@@ -27,11 +27,13 @@ export default function Room() {
   }, []);
 
 
-     
-  
+  const janusRef = useRef(null)
+
   return (
     <>
       <Stream
+        ref={janusRef}
+        // @ts-expect-error: canvas refrance isnot added to types yet 
         addParticipants={addParticipants}
         removeParticipants={removeParticipants}
         setParticipants={setParticipants}
