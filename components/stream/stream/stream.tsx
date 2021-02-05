@@ -1,5 +1,3 @@
-/* tslint:disable */
-
 import { forwardRef, useEffect, useRef } from "react";
 import Janus from "../../../public/janus/janus";
 // import { Janus } from 'janus-gateway';
@@ -9,23 +7,21 @@ var server = "/janus_back";
 let mixertest = null;
 var opaqueId = "audiobridgetest-" + Janus.randomString(12); //FIXME what am i
 
-let Stream = forwardRef(
-  (
-    {
+let Stream = (
+  {
     setParticipants,
     addParticipants,
     removeParticipants,
     setMyData,
     myData,
     room,
-  },ref) =>{
-
-  
-  
+    // isMaster,
+  },
+  ref
+) => {
   let audio_player = useRef(null);
 
   useEffect(() => {
-    console.warn("times")
     let webrtcUp = false;
 
     Janus.init({
@@ -44,8 +40,7 @@ let Stream = forwardRef(
               opaqueId: opaqueId,
               success: function (pluginHandle) {
                 mixertest = pluginHandle;
-                // tslint:disable-next-line
-                Janus.log( 
+                Janus.log(
                   "Plugin attached! (" +
                     mixertest.getPlugin() +
                     ", id=" +
@@ -116,7 +111,7 @@ let Stream = forwardRef(
                       }
                     }
                     // Any room participant?
-                    if (msg["participants"] && (msg["participants"].length > 0)) {
+                    if (msg["participants"] && msg["participants"].length > 0) {
                       var list = msg["participants"];
                       Janus.debug("Got a list of participants:", list);
                       addParticipants(list);
@@ -128,7 +123,7 @@ let Stream = forwardRef(
                       "Moved to room " + msg["room"] + ", new ID: " + msg["id"]
                     );
                     // Any room participant?
-                    if (msg["participants"] && (msg["participants"].length > 0)) {
+                    if (msg["participants"] && msg["participants"].length > 0) {
                       var list = msg["participants"];
                       Janus.debug("Got a list of participants:", list);
                       setParticipants(list);
@@ -138,15 +133,12 @@ let Stream = forwardRef(
                     Janus.warn("The room has been destroyed!");
                     alert("The room has been destroyed");
                     window.location.reload();
-                  } 
-                  else if (event === "event") {
-                    if (msg["participants"] && (msg["participants"].length > 0)) {
-                      
-                        var list = msg["participants"];
-                        Janus.debug("Got a list of participants:", list);
-                        // TODO check when this happen
-                      } 
-                    else if (msg["error"]) {
+                  } else if (event === "event") {
+                    if (msg["participants"] && msg["participants"].length > 0) {
+                      var list = msg["participants"];
+                      Janus.debug("Got a list of participants:", list);
+                      // TODO check when this happen
+                    } else if (msg["error"]) {
                       if (msg["error_code"] === 485) {
                         // This is a "no such room" error: give a more meaningful description
                         Janus.error("audiobridge plug in is not working");
@@ -162,7 +154,7 @@ let Stream = forwardRef(
                       removeParticipants(leaving);
                       Janus.log(`Participant left: "${leaving}`);
                     }
-                    }
+                  }
                 }
 
                 if (jsep) {
@@ -184,8 +176,9 @@ let Stream = forwardRef(
             });
           },
         });
-        if (ref != null){ // should always go in
-          ref.current = janus
+        if (ref != null) {
+          // should always go in
+          ref.current = janus;
         }
       },
     });
@@ -201,6 +194,6 @@ let Stream = forwardRef(
       <audio className="rounded centered" ref={audio_player} autoPlay />
     </div>
   );
-}
-)
-export default Stream;
+};
+
+export default forwardRef(Stream);
