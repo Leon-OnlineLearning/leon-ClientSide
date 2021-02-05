@@ -1,5 +1,23 @@
 import { forwardRef, useEffect, useRef } from "react";
 import Janus from "../../../public/janus/janus";
+import {
+  alert_pluginError,
+  log_consentDialog,
+  log_iceState,
+  log_mediaState,
+  log_webrtcState,
+  log_plugAttach,
+  debug_msg,
+  log_joining,
+  log_roomChange,
+  alert_roomDestroy,
+  alert_msgError,
+} from "./callback_logger";
+import {
+  handleParticipants,
+  HasParticipants,
+  publishMyAudioStream,
+} from "./utils";
 // import { Janus } from 'janus-gateway';
 
 var server = "/janus_back";
@@ -15,6 +33,7 @@ let Stream = (
     setMyData,
     myData,
     room,
+    extendCall,
     // isMaster,
   },
   ref
@@ -40,123 +59,52 @@ let Stream = (
               opaqueId: opaqueId,
               success: function (pluginHandle) {
                 mixertest = pluginHandle;
-                Janus.log(
-                  "Plugin attached! (" +
-                    mixertest.getPlugin() +
-                    ", id=" +
-                    mixertest.getId() +
-                    ")"
-                );
+                log_plugAttach(mixertest);
               },
-              error: function (error) {
-                Janus.error("  -- Error attaching plugin...", error);
-                alert("Error attaching plugin... " + error);
-              },
-              consentDialog: function (on) {
-                Janus.debug(
-                  "Consent dialog should be " + (on ? "on" : "off") + " now"
-                );
-              },
-              iceState: function (state) {
-                Janus.log("ICE state changed to " + state);
-              },
-              mediaState: function (medium, on) {
-                Janus.log(
-                  "Janus " +
-                    (on ? "started" : "stopped") +
-                    " receiving our " +
-                    medium
-                );
-              },
-              webrtcState: function (on) {
-                Janus.log(
-                  "Janus says our WebRTC PeerConnection is " +
-                    (on ? "up" : "down") +
-                    " now"
-                );
-              },
+              error: alert_pluginError,
+              consentDialog: log_consentDialog,
+              iceState: log_iceState,
+              mediaState: log_mediaState,
+              webrtcState: log_webrtcState,
               onmessage: function (msg, jsep) {
-                console.debug(" ::: Got a message :::", msg);
+                debug_msg(msg);
                 var event = msg["audiobridge"];
-                Janus.debug("Event: " + event);
                 if (event) {
+                  // this event would fire when me or other participants join the call
                   if (event === "joined") {
                     // Successfully joined, negotiate WebRTC now
                     if (msg["id"]) {
                       setMyData({ ...myData, id: msg["id"] });
-                      Janus.log(
-                        "Successfully joined room " +
-                          msg["room"] +
-                          " with ID " +
-                          myData.id
-                      );
+                      log_joining(msg);
                       if (!webrtcUp) {
                         webrtcUp = true;
-                        // Publish our stream
-                        mixertest.createOffer({
-                          media: { video: false }, // This is an audio only room
-                          success: function (jsep) {
-                            Janus.debug("Got SDP!", jsep);
-                            var publish = {
-                              request: "configure",
-                              muted: false,
-                            };
-                            mixertest.send({ message: publish, jsep: jsep });
-                          },
-                          error: function (error) {
-                            Janus.error("WebRTC error:", error);
-                            alert("WebRTC error... " + error.message);
-                          },
-                        });
+                        publishMyAudioStream(mixertest);
                       }
                     }
-                    // Any room participant?
-                    if (msg["participants"] && msg["participants"].length > 0) {
-                      var list = msg["participants"];
-                      Janus.debug("Got a list of participants:", list);
-                      addParticipants(list);
-                    }
+                    handleParticipants(msg, addParticipants);
                   } else if (event === "roomchanged") {
                     // The user switched to a different room
                     setMyData({ ...myData, id: msg["id"] });
-                    Janus.log(
-                      "Moved to room " + msg["room"] + ", new ID: " + msg["id"]
-                    );
-                    // Any room participant?
-                    if (msg["participants"] && msg["participants"].length > 0) {
-                      var list = msg["participants"];
-                      Janus.debug("Got a list of participants:", list);
-                      setParticipants(list);
-                    }
+                    log_roomChange(msg);
+                    handleParticipants(msg, setParticipants);
                   } else if (event === "destroyed") {
                     // The room has been destroyed
-                    Janus.warn("The room has been destroyed!");
-                    alert("The room has been destroyed");
+                    alert_roomDestroy();
                     window.location.reload();
                   } else if (event === "event") {
-                    if (msg["participants"] && msg["participants"].length > 0) {
-                      var list = msg["participants"];
-                      Janus.debug("Got a list of participants:", list);
-                      // TODO check when this happen
-                    } else if (msg["error"]) {
-                      if (msg["error_code"] === 485) {
-                        // This is a "no such room" error: give a more meaningful description
-                        Janus.error("audiobridge plug in is not working");
-                      } else {
-                        alert(msg["error"]);
-                      }
-                      // return;
-                    }
-                    // Any new feed to attach to?
-                    if (msg["leaving"]) {
-                      // One of the participants has gone away?
-                      let leaving = msg["leaving"];
-                      removeParticipants(leaving);
-                      Janus.log(`Participant left: "${leaving}`);
-                    }
+                    // no need for update they already added at join event
+                    // handleParticipants(msg, addParticipants);
+                    // TODO check when this happen
+                  } else if (msg["error"]) {
+                    alert_msgError(msg);
+                    // return;
+                  }
+                  if (msg["leaving"]) {
+                    // One of the participants has gone away?
+                    removeParticipants(msg["leaving"]);
+                    Janus.log(`Participant left: "${msg["leaving"]}`);
                   }
                 }
-
                 if (jsep) {
                   Janus.debug("Handling SDP as well...", jsep);
                   mixertest.handleRemoteJsep({ jsep: jsep });
@@ -172,8 +120,13 @@ let Stream = (
               oncleanup: function () {
                 webrtcUp = false;
                 Janus.log(" ::: Got a cleanup notification :::");
+                // TODO update ui
               },
             });
+
+            if (extendCall) {
+              // janus.attach()
+            }
           },
         });
         if (ref != null) {
