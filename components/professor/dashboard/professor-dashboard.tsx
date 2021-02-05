@@ -7,8 +7,7 @@ export enum ProfessorDashboardSelectedPage {
     lectures,
     chat,
     exams,
-    grads, 
-    accountSettings
+    grads
 }
 
 export interface ProfessorDashboardProps extends React.HTMLAttributes<HTMLElement> {
@@ -33,10 +32,6 @@ export function ProfessorDashboard({ selectedPage, children }: ProfessorDashboar
                     } text={"Exams"} selected={selectedPage === ProfessorDashboardSelectedPage.exams}></SidebarElement>
                     <SidebarElement href="/professor/grades" iconClassName={"bi-percent"
                     } text={"Grades"} selected={selectedPage === ProfessorDashboardSelectedPage.grads}></SidebarElement>
-                    <SidebarElement href="/professor/settings" iconClassName={"bi-person-circle"
-                    } text={"Account"} selected={selectedPage === ProfessorDashboardSelectedPage.accountSettings}></SidebarElement>
-                    <SidebarElement href="/" iconClassName={"bi-arrow-left"
-                    } text={"Log out"} ></SidebarElement>
                 </>
             }>
                 {children}
