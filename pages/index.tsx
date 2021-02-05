@@ -54,6 +54,21 @@ export default function Home() {
       .from("#windowFrame", { y: "10%", opacity: "0", duration: "0.7", })
       .from("#sideBar", { x: "-50%", duration: "0.8" }, "<")
       .from("#windowContent", { y: "10%", opacity: "0", duration: "1" }, "<0.2")
+
+    const slide3Timeline = gsap.timeline({ scrollTrigger: "#slide3Title" });
+    slide3Timeline.from("#slide3Title, #paragraph3", { y: "120%", opacity: "0", duration: "1" })
+      .from("#servicesContainer", { y: "20%", opacity: "0" })
+
+    gsap.timeline({ scrollTrigger: "#slide3Title", repeat: -1 })
+      .to("#yourService", { backgroundColor: "#31b325", width: "105px", height: "105px", repeat: 1, duration: "0.2", yoyo: true })
+      .from("#message", { opacity: "0", x: "550%", duration: 1 })
+      .to("#message", { opacity: "0" }, "<0.5")
+      .set("#message", { opacity: "0" })
+      .to("#ourApi", { backgroundColor: "#31b325", width: "105px", height: "105px", repeat: 1, duration: "0.2", yoyo: true })
+      .set("#message", { opacity: "1" })
+      .to("#message", { opacity: "0", x: "550%", duration: 1 })
+
+
   }, [])
 
   return (
@@ -62,7 +77,7 @@ export default function Home() {
         <div className={`${styles["intro-slide-container"]}`}>
           <div className={`${styles["intro-left-pan"]}`}>
             <h1 style={{ color: "#343A40", fontWeight: 700 }}>Leon</h1>
-            <p style={{color: "#343A40", fontSize:"1.1rem"}}>Leon is a focused online system that provides secure examination system and efficient lectures hosting</p>
+            <p style={{ color: "#343A40", fontSize: "1.1rem" }}>Leon is a focused online system that provides secure examination system and efficient lectures hosting</p>
             <Button style={{ width: "50%" }}>Get started</Button>
           </div>
           <div className={`${styles["intro-right-pan"]}`}>
@@ -128,7 +143,14 @@ export default function Home() {
       </section>
       <section className="slide-container">
         <h3 id="slide3Title" className={`${styles["slide-title"]}`}>Designed with integration in mind</h3>
-        <p id="paragraph3" className={`${styles["paragraph"]}`}></p>
+        <p id="paragraph3" className={`${styles["paragraph"]}`}>Using RESTFul API to reach and manage resources and jwt for authorization you can easily integrate our serves in another services without a hassle! </p>
+        <div id="servicesContainer" className={`${styles["service-container"]}`}>
+          <div id="ourApi" className={`${styles["service"]}`}>Our API</div>
+          <div style={{ width: "200px" }}>
+            <div id="message" style={{ backgroundColor: "#31b325", width: "50px", height: "50px", borderRadius: "5px", transform: "translateX(-110%)" }}></div>
+          </div>
+          <div id="yourService" className={`${styles["service"]}`}>Your Service</div>
+        </div>
       </section>
     </div>
   )

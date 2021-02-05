@@ -197,3 +197,19 @@
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
 }
+
+.service-container {
+  display: flex;
+  align-items: center;
+}
+
+.service {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:rgb(243, 243, 243);
+  background-color: #343A40;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
