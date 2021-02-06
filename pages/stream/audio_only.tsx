@@ -33,7 +33,6 @@ export default function Room() {
     <>
       <Stream
         ref={janusRef}
-        // @ts-expect-error: canvas refrance isnot added to types yet 
         addParticipants={addParticipants}
         removeParticipants={removeParticipants}
         setParticipants={setParticipants}
