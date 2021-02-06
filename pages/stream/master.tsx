@@ -9,14 +9,21 @@ const Stream = dynamic(() => import("../../components/stream/stream/stream"), {
   ssr: false,
 });
 
-const PdfViewer = dynamic(
-  () => import('../../components/stream/viewer/viewerload'),
+const AdminViewer = dynamic(
+  () => import('../../components/stream/viewer/adminViewer'),
   { ssr: false }
 );
+
+
 
 export default function Room() {
   const [participants, setParticipants] = useState([]);
   const [myData, setMyData] = useState({ name: "" });
+
+  // TODO use recoile or context for those states
+  const [pointerPositionX, setPointerPositionX] = useState(100);
+  const [pointerPositionY, setPointerPositionY] = useState(100);
+  const [pageNumber, setPageNumber] = useState(1);
 
   let addParticipants = (new_participants) => {
     setParticipants((p) => p.concat(new_participants));
@@ -44,10 +51,20 @@ export default function Room() {
         myData={myData}
         room={1234}
         enableDataSend = {true}
+        pointerX={pointerPositionX}
+        pointerY={pointerPositionY}
+        pageNumber={pageNumber}
       />
       {myData.name && <h1>{myData.name}</h1>}
       <ParticipantsTable participants={participants} />
-      {/* <PdfViewer /> */}
+      <AdminViewer 
+      pointerPositionX={pointerPositionX}
+      setPointerPositionX={setPointerPositionX}
+      pointerPositionY={pointerPositionY}
+      setPointerPositionY={setPointerPositionY}
+      pageNumber={pageNumber}
+      setPageNumber={setPageNumber}
+      />
     </>
   );
 }

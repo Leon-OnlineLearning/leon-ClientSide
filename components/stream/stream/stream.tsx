@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import Janus from "../../../public/janus/janus";
 import {
   alert_pluginError,
@@ -24,7 +24,6 @@ import { publishOwnFeed } from './utils';
 var server = "/janus_back";
 
 let mixertest = null;
-let sfutest = null;
 var opaqueId = "audiobridgetest-" + Janus.randomString(12); //FIXME what am i
 let private_id= null;
 let Stream = (
@@ -35,13 +34,20 @@ let Stream = (
     setMyData,
     myData,
     room,
+    pointerX = 50,
+    pointerY = 50,
+    setPointerPositionX = null,
+    setPointerPositionY = null,
     enableAudio = true,
     enableDataSend = false,
     enableDataRecv = false,
+    pageNumber = 1,
+    setPageNumber = null
   },
   ref
 ) => {
   let audio_player = useRef(null);
+  let sfuRef = useRef(null);
 
   useEffect(() => {
     let webrtcUp = false;
@@ -58,6 +64,7 @@ let Stream = (
           success: function () {
             // Attach to AudioBridge plugin
             if (enableAudio){
+              // TODO move this to seprate file
               janus.attach({
                 plugin: "janus.plugin.audiobridge",
                 opaqueId: opaqueId,
@@ -131,12 +138,14 @@ let Stream = (
 
             if (enableDataSend || enableDataRecv) {
               // attach to vedio room to send data or screen share if needed
+              let sfutest;
               janus.attach(
                 {
                   plugin: "janus.plugin.videoroom",
                   // opaqueId: opaqueId
                   success: (pluginHandle)=>{
-                    sfutest = pluginHandle;
+                    sfuRef.current = pluginHandle;
+                    sfutest = pluginHandle
                     log_plugAttach(pluginHandle)
                   },
                   error: alert_pluginError,
@@ -157,7 +166,8 @@ let Stream = (
                             publishOwnFeed(sfutest);
                           }
                           if (enableDataRecv){
-                            handleRemoteFeed(janus, msg, private_id,room);
+                            handleRemoteFeed(janus, msg, private_id,room,
+                              setPointerPositionX,setPointerPositionY,setPageNumber);
                           }
                           break;
                         case "destroyed":
@@ -166,7 +176,8 @@ let Stream = (
                           break;
                         case "event":
                           if (enableDataRecv){
-                            handleRemoteFeed(janus, msg, private_id,room);
+                            handleRemoteFeed(janus, msg, private_id,room,
+                              setPointerPositionX,setPointerPositionY,setPageNumber);
                           }
                           if(msg["leaving"]){
                             Janus.log(`Participant left: "${msg["leaving"]}`);
@@ -217,13 +228,27 @@ let Stream = (
 
   function register_data(){
     var register = {request: "join", room: room,ptype:"publisher", display: myData.name}
-    sfutest.send({message: register})
+    sfuRef.current.send({message: register})
   }
 
+  useEffect(() => {
+    if (sfuRef.current !== null && enableDataSend){
+      send_data(`${pointerX},${pointerY}`)
 
-  function send_data(){
-    sfutest.data({
-      text:"sometext",
+    }
+  },[pointerX,pointerY])
+  
+
+  useEffect(() => {
+    if (sfuRef.current !== null && enableDataSend){
+      send_data(`${pageNumber}`)
+    }
+  },[pageNumber])
+  
+  function send_data(data){
+
+    sfuRef.current.data({
+      text:data,
       // label:"test",
       success: ()=>{
         Janus.log("data sent")

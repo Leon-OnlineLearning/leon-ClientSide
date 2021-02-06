@@ -3,7 +3,7 @@ import Janus from "../../../public/janus/janus";
 
 import { alert_pluginError, log_plugAttach, log_iceState, log_webrtcState, debug_msg, log_mediaState, alert_webrtcError } from './callback_logger';
 import { subscribeToFeed } from './videoRoomUtils';
-export function newRemoteFeed(janus, id, display, audio, video, private_id, room_id){
+export function newRemoteFeed(janus, id, display, audio, video, private_id, room_id,setPointerPositionX,setPointerPositionY,setPageNumber){
     let remoteFeed = null
     janus.attach({
         plugin: "janus.plugin.videoroom",
@@ -47,6 +47,16 @@ export function newRemoteFeed(janus, id, display, audio, video, private_id, room
         ondata:(data,label)=>{
             Janus.log(`got data: ${JSON.stringify(data)} and label ${label}`);
             console.warn("a remote message");
+            // TODO use better approach to check messages
+            if (data.indexOf(",") > -1){
+                let [x,y] = data.split(",")
+                setPointerPositionX(x)
+                setPointerPositionY(y)
+            }
+            else{ 
+                setPageNumber(parseInt(data))
+            }
+            
         },
         ondataopen:(data,label)=>{
             Janus.log(`got data: ${JSON.stringify(data)} and label ${label}`);

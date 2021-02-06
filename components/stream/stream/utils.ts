@@ -50,7 +50,7 @@ export function publishOwnFeed(plugin) {
   )
 }
 
-export function handleRemoteFeed(janus, msg, private_id, room_id) {
+export function handleRemoteFeed(janus, msg, private_id, room_id,setPointerPositionX,setPointerPositionY,setPageNumber) {
   if (hasPublisher(msg)) {
     var list = msg["publishers"];
     Janus.debug("Got a list of participants:", list);
@@ -62,7 +62,8 @@ export function handleRemoteFeed(janus, msg, private_id, room_id) {
         pulisher.audio_codec,
         pulisher.video_codec,
         private_id,
-        room_id
+        room_id,
+        setPointerPositionX,setPointerPositionY,setPageNumber
       );
     }
   }

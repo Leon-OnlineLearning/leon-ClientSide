@@ -2,30 +2,28 @@ import React, { useState } from "react";
 
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from 'react';
 import Pointer_canvas from './pointer_canvas';
 
-export default function PdfViewer() {
+export default function PdfViewer({onMouseMove,pointerCanvasGenerator,pageNumber,
+  setPageNumber}) {
   const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
 
   const [tall, setTall] = useState(0);
   const [viewer_width, setWidthViewer] = useState(0);
   
-  const [pointerPositionX, setPointerPositionX] = useState(100)
-  const [pointerPositionY, setPointerPositionY] = useState(100)
 
+  let drawwen_canvas = pointerCanvasGenerator && pointerCanvasGenerator(tall,viewer_width)      
   const pageViewerRef = useRef(null);
 
   function initCanvas(){
-    const viewerRect = pageViewerRef.current.getBoundingClientRect();
-    setCanvasWidth(viewerRect)
-    
-
-    window.onmousemove = (e) => {
+    if (pageViewerRef.current !== null){
       const viewerRect = pageViewerRef.current.getBoundingClientRect();
-      setPointerPositionX(e.clientX - viewerRect.x)
-      setPointerPositionY(e.clientY - viewerRect.y)
+      setCanvasWidth(viewerRect)
+      if (onMouseMove!==null){
+        window.onmousemove = onMouseMove(pageViewerRef.current)
+  
+      }
     }
   }
 
@@ -42,6 +40,7 @@ export default function PdfViewer() {
 
   //this should only fire once in load 
   useEffect(() => {
+    
     setHeight()
     // update the canvas with page resize
     window.onresize = () => {
@@ -74,7 +73,7 @@ export default function PdfViewer() {
   }
 
   return (
-    <div className="p-5">
+    <div className="p-1">
       <Document
         options={
           {
@@ -88,7 +87,7 @@ export default function PdfViewer() {
       >
         <div id="drawContainer" style={{position: "relative"}}>
         <Page
-        // @ts-expect-error: Let's ignore a single compiler error like this unreachable code 
+        // @ts-expect-error: canvas refrance isnot added to types yet 
           canvasRef={pageViewerRef}
           onLoadSuccess={initCanvas}
           className="d-inline-flex"
@@ -97,13 +96,7 @@ export default function PdfViewer() {
           onGetTextError={onGetTextError}
           renderTextLayer={true}
         />
-      <Pointer_canvas
-        height={tall}
-        width={viewer_width}
-        pointerX={pointerPositionX}
-        pointerY={pointerPositionY}
-
-      />
+        {drawwen_canvas}
       </div>
       </Document>
       {/* TODO add navigation in top of page viewer */}

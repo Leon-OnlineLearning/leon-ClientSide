@@ -7,14 +7,18 @@ const Stream = dynamic(() => import("../../components/stream/stream/stream"), {
   ssr: false,
 });
 
-const PdfViewer = dynamic(
-  () => import('../../components/stream/viewer/viewerload'),
+const StudentViewer = dynamic(
+  () => import('../../components/stream/viewer/studentViewer'),
   { ssr: false }
-);
+)
 
 export default function Room() {
   const [participants, setParticipants] = useState([]);
   const [myData, setMyData] = useState({ name: "" });
+
+  const [pointerPositionX, setPointerPositionX] = useState(100);
+  const [pointerPositionY, setPointerPositionY] = useState(100);
+  const [pageNumber, setPageNumber] = useState(1);
 
   let addParticipants = (new_participants) => {
     setParticipants((p) => p.concat(new_participants));
@@ -41,10 +45,17 @@ export default function Room() {
         setMyData={setMyData}
         myData={myData}
         room={1234}
+        enableDataRecv={true}
+        setPointerPositionX={setPointerPositionX}
+        setPointerPositionY={setPointerPositionY}
+        setPageNumber={setPageNumber}
       />
       {myData.name && <h1>{myData.name}</h1>}
       <ParticipantsTable participants={participants} />
-      <PdfViewer />
+      <StudentViewer pointerPositionX={pointerPositionX} pointerPositionY={pointerPositionY}
+      pageNumber={pageNumber}
+      setPageNumber={setPageNumber}
+      />
     </>
   );
 }

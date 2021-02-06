@@ -11,5 +11,7 @@ const PdfViewer = dynamic(
 );
 
 export default function MyApp() {
-  return <PdfViewer />
+  // return <PdfViewer onMouseMove={(()=>{})} pointerCanvasGenerator={null}/>
+  return <h1>temp</h1>
+
 }
