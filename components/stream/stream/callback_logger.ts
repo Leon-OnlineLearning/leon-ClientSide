@@ -58,9 +58,9 @@ export function log_plugAttach(plugin) {
   );
 }
 
-export function debug_msg(msg) {
+export function debug_msg(msg,event) {
   Janus.debug(" ::: Got a message :::", msg);
-  Janus.debug("Event: ", msg.event);
+  Janus.debug("Event: ", event);
 }
 
 export function log_joining(msg) {
