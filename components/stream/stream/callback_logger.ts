@@ -23,7 +23,11 @@ export function alert_msgError(msg){
   if (msg["error_code"] === 485) {
     // This is a "no such room" error: give a more meaningful description
     Janus.error("audiobridge plug in is not working");
-  } else {
+  }
+  else if (msg["error_code"] ===426){
+    Janus.error("room does not exist");
+  }
+  else {
     alert(msg["error"]);
   }
 }
