@@ -18,8 +18,7 @@ export default function NewAccount({ privilagesComponents }) {
   const [privilage, setPrevilage] = useState(privileges[0]);
 
   const handleOnPrivilageSelected = (e) => {
-    console.log("pivilage seleted is", e.target.value);
-    setPrevilage(e.target.value);
+    setPrevilage(e);
   };
 
 	//TODO validate values on privileges selected
