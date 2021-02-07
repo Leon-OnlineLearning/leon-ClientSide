@@ -121,11 +121,11 @@ export default function ProfessorStudentAttendance() {
                         <Table hover>
                             <tbody>
                                 <tr>
-                                    <td>Minimum number of students</td>
+                                    <td>Maximum number of students</td>
                                     <td>12</td>
                                 </tr>
                                 <tr>
-                                    <td>Maximum number of students</td>
+                                    <td>Minimum number of students</td>
                                     <td>1</td>
                                 </tr>
                                 <tr>
@@ -137,12 +137,12 @@ export default function ProfessorStudentAttendance() {
                                     <td>5.5</td>
                                 </tr>
                                 <tr>
-                                    <td>Lecture with minimum attendance</td>
-                                    <td>lecture 10</td>
-                                </tr>
-                                <tr>
                                     <td>Lecture with maximum attendance</td>
                                     <td>lecture 5</td>
+                                </tr>
+                                <tr>
+                                    <td>Lecture with minimum attendance</td>
+                                    <td>lecture 10</td>
                                 </tr>
                             </tbody>
                         </Table>
