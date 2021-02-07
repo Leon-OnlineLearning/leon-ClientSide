@@ -27,7 +27,7 @@ export default function NewAccount({ privilagesComponents }) {
     <div>
       <Card className={`p-3`}>
         <Card.Title>Create a new account</Card.Title>
-        <div className={`${styles["new-account-form"]}`}>
+        <Form className={`${styles["new-account-form"]}`}>
           <Form.Group>
             <Form.Control
               className={`${styles["controller"]}`}
@@ -49,7 +49,8 @@ export default function NewAccount({ privilagesComponents }) {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Control className={`${styles["controller"]}`}
+            <Form.Control
+              className={`${styles["controller"]}`}
               placeholder="Retype password"
               type="password"
               required
@@ -58,7 +59,8 @@ export default function NewAccount({ privilagesComponents }) {
             />
           </Form.Group>
           <Form.Group>
-            <Form.Control className={`${styles["controller"]}`}
+            <Form.Control
+              className={`${styles["controller"]}`}
               placeholder="First Name"
               required
               value={firstName}
@@ -73,29 +75,29 @@ export default function NewAccount({ privilagesComponents }) {
               onChange={(e) => changeSynchronizer(e, setLastName)}
             />
           </Form.Group>
-          <Dropdown
-            onSelect={handleOnPrivilageSelected}
-            className={`${styles["controller"]}`}
+        </Form>
+        <Dropdown
+          onSelect={handleOnPrivilageSelected}
+          className={`${styles["controller"]}`}
+        >
+          <Dropdown.Toggle
+            variant="primary"
+            id="years"
+            className={`${styles["dropdown-btn"]}`}
           >
-            <Dropdown.Toggle
-              variant="primary"
-              id="years"
-              className={`${styles["dropdown-btn"]}`}
-            >
-              {privilage}
-            </Dropdown.Toggle>
-            <Dropdown.Menu className={`${styles["dropdown-item"]}`}>
-              {privileges.map((priv) => (
-                <Dropdown.Item key={priv} eventKey={`${priv.toLowerCase()}`}>
-                  {priv}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-          {privilagesComponents[privilage](
-            new User(firstName, lastName, userEmail)
-          )}
-        </div>
+            {privilage}
+          </Dropdown.Toggle>
+          <Dropdown.Menu className={`${styles["dropdown-item"]}`}>
+            {privileges.map((priv) => (
+              <Dropdown.Item key={priv} eventKey={`${priv.toLowerCase()}`}>
+                {priv}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+        {privilagesComponents[privilage](
+          new User(firstName, lastName, userEmail)
+        )}
       </Card>
     </div>
   );
