@@ -1,4 +1,4 @@
-export function isStrongPassword(password:string) {
+export default function isStrongPassword(password:string) {
     return (
       /[A-Z]/g.test(password) &&
       /[a-z]/g.test(password) &&
