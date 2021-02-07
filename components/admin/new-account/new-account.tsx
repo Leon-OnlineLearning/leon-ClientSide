@@ -21,7 +21,7 @@ export default function NewAccount({ privilagesComponents }) {
     setPrevilage(e);
   };
 
-	//TODO validate values on privileges selected
+  //TODO validate values on privileges selected
 
   return (
     <div>
