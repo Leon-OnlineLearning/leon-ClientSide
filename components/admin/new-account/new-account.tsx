@@ -3,6 +3,9 @@ import { Card, Form, Dropdown } from "react-bootstrap";
 import styles from "./new-account.module.css";
 import changeSynchronizer from "../../../utils/change-synchronizer";
 import User from "../../../model/users/User";
+import isValidEmail from "../../../utils/validEmail";
+import isValidName from "../../../utils/validName";
+import isStrongPassword from "../../../utils/strongPassword";
 
 /**
  * Create new account components
@@ -16,12 +19,34 @@ export default function NewAccount({ privilagesComponents }) {
   const [lastName, setLastName] = useState("");
   const privileges = Object.keys(privilagesComponents);
   const [privilage, setPrevilage] = useState(privileges[0]);
+	const [userEmailIsInvalid, setUserEmailIsInvalid] = useState(false)
+	const [passwordIsInvalid, setPasswordIsInvalid] = useState(false)
+	const [retypedPasswordIsInvalid, setRetypedPasswordIsInvalid] = useState(false)
+	const [firstNameIsInValid, setFirstNameIsInvalid] = useState(false)
+	const [lastNameIsInvalid, setLastNameIsInvalid] = useState(false)
 
-  const handleOnPrivilageSelected = (e) => {
-    setPrevilage(e);
-  };
 
   //TODO validate values on privileges selected
+	//
+	const validate = () => {
+		const userEmailIsInvalid = !isValidEmail(userEmail)
+		setUserEmailIsInvalid(userEmailIsInvalid)
+		const firstNameIsInValid = !isValidName(firstName)
+		setFirstNameIsInvalid(firstNameIsInValid)
+		const lastNameIsInvalid = !isValidName(lastName)
+		setLastNameIsInvalid(lastNameIsInvalid)
+		const passwordIsInvalid = !isStrongPassword(password)
+		setPasswordIsInvalid(passwordIsInvalid)
+		const retypedPasswordIsInvalid = !(retypedPassword === password)
+		setRetypedPasswordIsInvalid(retypedPasswordIsInvalid)
+		return userEmailIsInvalid && firstNameIsInValid && lastNameIsInvalid && passwordIsInvalid && retypedPasswordIsInvalid;
+	}
+
+  const handleOnPrivilageSelected = (e) => {
+		if (validate())
+			setPrevilage(e);
+  };
+
 
   return (
     <div>
@@ -33,10 +58,11 @@ export default function NewAccount({ privilagesComponents }) {
               className={`${styles["controller"]}`}
               placeholder="Email Address"
               type="email"
-              required
               value={userEmail}
               onChange={(e) => changeSynchronizer(e, setUserEmail)}
+							isInvalid={userEmailIsInvalid}
             />
+						<Form.Control.Feedback>Please insert your email address</Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
             <Form.Control
@@ -46,7 +72,9 @@ export default function NewAccount({ privilagesComponents }) {
               required
               value={password}
               onChange={(e) => changeSynchronizer(e, setPassword)}
+							isInvalid={passwordIsInvalid}
             />
+						<Form.Control.Feedback>Please insert your email address</Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
             <Form.Control
@@ -56,7 +84,9 @@ export default function NewAccount({ privilagesComponents }) {
               required
               value={retypedPassword}
               onChange={(e) => changeSynchronizer(e, setRetypedPassword)}
+							isInvalid={retypedPasswordIsInvalid}
             />
+						<Form.Control.Feedback>Please insert your email address</Form.Control.Feedback>
           </Form.Group>
           <Form.Group>
             <Form.Control
@@ -65,7 +95,9 @@ export default function NewAccount({ privilagesComponents }) {
               required
               value={firstName}
               onChange={(e) => changeSynchronizer(e, setFirstName)}
+							isInvalid={firstNameIsInValid}
             />
+						<Form.Control.Feedback>Please insert your email address</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className={`${styles["controller"]}`}>
             <Form.Control
@@ -73,7 +105,9 @@ export default function NewAccount({ privilagesComponents }) {
               required
               value={lastName}
               onChange={(e) => changeSynchronizer(e, setLastName)}
+							isInvalid={lastNameIsInvalid}
             />
+						<Form.Control.Feedback>Please insert your email address</Form.Control.Feedback>
           </Form.Group>
         </Form>
         <Dropdown
