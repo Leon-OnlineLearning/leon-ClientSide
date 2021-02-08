@@ -6,7 +6,8 @@ import ButtonsListLayout from "../../components/buttons-list-layout/buttons-list
 import AccountSettings from "../../components/accounts-settings/account-settings";
 import CreateNewAccount from "../../components/admin/new-account/new-account";
 import newStudentComponentGenerator from "../../components/admin/new-account/new-student";
-import newProfessorComponentGenerator from "../../components/admin/new-account/new-professor"
+import newProfessorComponentGenerator from "../../components/admin/new-account/new-professor";
+import newAdminComponentGenerator from "../../components/admin/new-account/new-admin";
 
 export default function Dashboard() {
   return (
@@ -15,8 +16,11 @@ export default function Dashboard() {
         pages={{
           "Create new accounts": (
             <CreateNewAccount
-              privilagesComponents={{ student: newStudentComponentGenerator,
-							professor: newProfessorComponentGenerator}}
+              privilagesComponents={{
+                student: newStudentComponentGenerator,
+                professor: newProfessorComponentGenerator,
+                admin: newAdminComponentGenerator,
+              }}
             />
           ),
           "Manage privileges": <AccountSettings />,

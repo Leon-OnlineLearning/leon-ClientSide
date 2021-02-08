@@ -36,27 +36,7 @@ function NewAdmin({ userDate }: NewStudentProps) {
 
   return (
     <>
-      <Form
-        onSubmit={onSubmitHandler}
-        className={`${styles["new-account-from"]}`}
-      >
-        <Dropdown
-          onSelect={onYearsSelectedHandler}
-          className={`${styles["controller"]}`}
-        >
-          <Dropdown.Toggle variant="primary" id="years">
-            {yearName}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {years.length ? (
-              years.map((y) => <Dropdown.Item key={y} eventKey={y}>{y}</Dropdown.Item>)
-            ) : (
-              <Dropdown.Item>Loading years...</Dropdown.Item>
-            )}
-          </Dropdown.Menu>
-        </Dropdown>
         <Button type="submit">Create new user</Button>
-      </Form>
     </>
   );
 }

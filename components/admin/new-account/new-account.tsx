@@ -6,6 +6,7 @@ import User from "../../../model/users/User";
 import isValidEmail from "../../../utils/validEmail";
 import isValidName from "../../../utils/validName";
 import isStrongPassword from "../../../utils/strongPassword";
+import {log} from "util";
 
 /**
  * Create new account components
@@ -39,10 +40,12 @@ export default function NewAccount({ privilagesComponents }) {
 		setPasswordIsInvalid(passwordIsInvalid)
 		const retypedPasswordIsInvalid = !(retypedPassword === password)
 		setRetypedPasswordIsInvalid(retypedPasswordIsInvalid)
-		return userEmailIsInvalid && firstNameIsInValid && lastNameIsInvalid && passwordIsInvalid && retypedPasswordIsInvalid;
+		return !(userEmailIsInvalid || firstNameIsInValid || lastNameIsInvalid || passwordIsInvalid || retypedPasswordIsInvalid);
 	}
 
   const handleOnPrivilageSelected = (e) => {
+		const valid = validate()
+		console.log(valid ,e)
 		if (validate())
 			setPrevilage(e);
   };
