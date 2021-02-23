@@ -1,0 +1,3 @@
+.git/
+.next/                # Existing Next.js builds
+node_modules/         # Installed inside container
