@@ -8,7 +8,7 @@ function AccountCard(props: User) {
             <Card.Title>{`${props.firstName} ${props.lastName}`}</Card.Title>
             <Card.Body>
                 <strong>Email</strong> {props.email}
-                <strong>Role</strong> {props.}
+                <strong>Role</strong> {props.role}
             </Card.Body>
         </Card>
        </>
