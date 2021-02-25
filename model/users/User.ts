@@ -1,9 +1,10 @@
-export default class User {
+export default abstract class User {
   constructor(
     private _firstName: string,
     private _lastName: string,
-    private email: string,
-    private _id?: number
+    private _email: string,
+    private _role: string,
+    private _id?: string,
   ) {}
 
   public get firstName(): string {
@@ -22,9 +23,18 @@ export default class User {
     this._lastName = v;
   }
 
+  public get email() : string {
+    return this._email
+  }
 
-  public get id(): number {
+  public get id(): string {
     return this._id;
   }
+
+  
+  public get role() : string {
+    return this._role
+  }
+  
 }
 

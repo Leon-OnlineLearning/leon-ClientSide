@@ -1,11 +1,11 @@
 import User from "./User";
 
 export default class Student extends User {
-  constructor(id: number, name: string, private _year: string) {
-    super(name, id);
+  constructor(firstName: string, lastName: string, email: string, private _year: string, id?: string) {
+    super(firstName, lastName, email, "student", id ?? id);
   }
 
-  get year() : string {
+  get year(): string {
     return this._year;
   }
 }
