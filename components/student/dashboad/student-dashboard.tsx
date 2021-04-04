@@ -12,7 +12,6 @@ export enum StudentDashboardSelectedPage {
 
 export interface StudentDashboardProps extends React.HTMLAttributes<HTMLElement> {
     selectedPage: StudentDashboardSelectedPage,
-
 }
 
 export function StudentDashboard({ selectedPage, children }: StudentDashboardProps) {
