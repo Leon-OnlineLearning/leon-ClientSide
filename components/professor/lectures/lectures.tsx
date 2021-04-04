@@ -27,6 +27,7 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
     let edit = false;
     // validation
     const [isLectureNameValid, setIsLectureNameValid] = useState(true)
+    const [selectedFile, setSelectedFile] = useState();
 
     const validate = () => {
         let result = true
@@ -84,6 +85,7 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
     }
 
     const onFileUploadChange = (e) => {
+<<<<<<< HEAD
         setSelectedFile(e.target.files[0])
     }
 
@@ -113,6 +115,9 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                     .catch((err) => console.error(err))
             }
         }
+=======
+        
+>>>>>>> dev-student
     }
 
     return (
