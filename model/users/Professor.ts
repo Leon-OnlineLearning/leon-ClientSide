@@ -2,11 +2,11 @@ import User from "./User";
 import Course from "../course/Course";
 
 export default class Professor extends User {
-  constructor(id: number, name: string, private _courses: [Course]) {
-    super(name, id);
+  constructor(firstName: string, lastName: string, email: string, private _courses: [Course], id?: string) {
+    super(firstName, lastName, email, "professor", id ?? id);
   }
 
-  get courses() : [Course] {
+  get courses(): [Course] {
     return this._courses;
   }
 }
