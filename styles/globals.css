@@ -1,0 +1,11 @@
+.sections-container { 
+  background-color: #fdfdfd;
+}
+
+.slide-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

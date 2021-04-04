@@ -19,7 +19,7 @@ export default function Dashboard() {
     return (
         <>
             <ProfessorDashboard selectedPage={ProfessorDashboardSelectedPage.chat}>
-                <Chat messages={msgs} senderName="me" professorPrefix="Dr"></Chat>
+                <Chat yearSelection messages={msgs} senderName="me" professorPrefix="Dr"></Chat>
             </ProfessorDashboard>
         </>
     )
