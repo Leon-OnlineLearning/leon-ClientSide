@@ -84,7 +84,6 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
     }
 
     const onFileUploadChange = (e) => {
-<<<<<<< HEAD
         setSelectedFile(e.target.files[0])
     }
 
@@ -114,9 +113,6 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                     .catch((err) => console.error(err))
             }
         }
-=======
-        
->>>>>>> dev-student
     }
 
     return (
