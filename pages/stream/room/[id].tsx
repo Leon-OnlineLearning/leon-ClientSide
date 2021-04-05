@@ -16,7 +16,7 @@ export default function room() {
     const { role } = router.query
     // get the tocken from header
     const accessTocken = ""
-    
+    const roomId = 1234
     // only used for testing
     const studnetUser = {role:"student"}
     const teacherUser = {role:"student"}
@@ -33,6 +33,7 @@ export default function room() {
             <Lecture_manager 
             plugins_meta = {plugin_meta}
             userData = {user}
+            roomId = {roomId}
             />
         </>
     )
