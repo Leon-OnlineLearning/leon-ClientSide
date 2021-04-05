@@ -1,7 +1,7 @@
 // temp file for testing
 
 import { useEffect, useRef, useState } from "react";
-import ParticipantsTable from "../../components/stream/participants";
+import ParticipantsTable from "../../components/stream/lecture_view/paticipants/participants";
 
 import dynamic from "next/dynamic";
 

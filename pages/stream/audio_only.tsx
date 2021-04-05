@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import ParticipantsTable from "../../components/stream/participants";
+import ParticipantsTable from "../../components/stream/lecture_view/paticipants/participants";
 
 import dynamic from "next/dynamic";
 
