@@ -10,75 +10,49 @@ export default function attachAudio(props: callControls_stream & { janus: Janus 
 
     const audioHandler = useRef(null)
 
-    const [controlMsg, setControlMsg] = useState({});
-    const [controlJsep, setControlJsep] = useState({});
-
     const [webrtcUp, setWebrtcUp] = useState(false);
 
+    function handleControlMsg(handler, msg) {
+        var event = msg["audiobridge"];
 
-    // handle message effect
-    useEffect(() => {
-        if (audioHandler.current) {
-
-            let msg = controlMsg
-            var event = msg["audiobridge"];
-
-
-            if (event) {
-                // this event would fire when me or other participants join the call
-                if (event === "joined") {
-                    // Successfully joined, negotiate WebRTC now
-                    if (msg["id"]) {
-                        // setMyData({ ...myData, id: msg["id"] });
-                        log_joining(msg);
-                        if (!webrtcUp) {
-                            setWebrtcUp(true);
-                            publishMyAudioStream(audioHandler.current);
-                        }
+        if (event) {
+            // this event would fire when me or other participants join the call
+            if (event === "joined") {
+                // Successfully joined, negotiate WebRTC now
+                if (msg["id"]) {
+                    // NOTE do we need this id
+                    // setMyData({ ...myData, id_audio: msg["id"] });
+                    log_joining(msg);
+                    if (!webrtcUp) {
+                        setWebrtcUp(true);
+                        publishMyAudioStream(handler);
                     }
-                    handleParticipants(msg, (partc) => addToList(partc, props.setParticipants));
-                } else if (event === "roomchanged") {
-                    // The user switched to a different room
-                    //   setMyData({ ...myData, id: msg["id"] });
-                    log_roomChange(msg);
-                    handleParticipants(msg, props.setParticipants);
-                } else if (event === "destroyed") {
-                    alert_roomDestroy();
-                } else if (event === "event") {
-                    // no need for update they already added at join event
-                    // handleParticipants(msg, addParticipants);
-                    // TODO check when this happen
-                } else if (msg["error"]) {
-                    alert_msgError(msg);
-                    // return;
                 }
-                if (msg["leaving"]) {
-                    // One of the participants has gone away?
-                    const partc = msg["leaving"]
-                    removeFromListUsingId(partc, props.setParticipants)
-
-                    Janus.log(`Participant left: "${msg["leaving"]}`);
-                }
+                handleParticipants(msg, (partc) => addToList(partc, props.setParticipants));
+            } else if (event === "roomchanged") {
+                // The user switched to a different room
+                //   setMyData({ ...myData, id: msg["id"] });
+                log_roomChange(msg);
+                handleParticipants(msg, props.setParticipants);
+            } else if (event === "destroyed") {
+                alert_roomDestroy();
+            } else if (event === "event") {
+                Janus.log(msg)
+                // no need for update they already added at join event
+                // handleParticipants(msg, addParticipants);
+                // TODO check when this happen
+            } else if (msg["error"]) {
+                alert_msgError(msg);
+                // return;
+            }
+            if (msg["leaving"]) {
+                // One of the participants has gone away?
+                const partc = msg["leaving"]
+                removeFromListUsingId(partc, props.setParticipants)
+                Janus.log(`Participant left: "${msg["leaving"]}`);
             }
         }
     }
-        , [controlMsg]);
-
-    // handle jsep effect
-    useEffect(() => {
-        if (audioHandler.current) {
-            audioHandler.current.handleRemoteJsep({ jsep: controlJsep });
-        }
-    }, [controlJsep])
-
-    // send response to start call
-    useEffect(() => {
-        if (audioHandler.current) {
-            var register = { request: "join", room: props.room, display: props.userName };
-            audioHandler.current.send({ message: register });
-        }
-    }, [props.startCall])
-
 
     useEffect(() => {
         props.janus.attach({
@@ -87,6 +61,8 @@ export default function attachAudio(props: callControls_stream & { janus: Janus 
                 audioHandler.current = pluginHandle;
                 props.setIsReadyToJoin(true);
                 log_plugAttach(audioHandler.current);
+                var register = { request: "join", room: props.room, display: props.userName };
+                audioHandler.current.send({ message: register });
             },
             error: alert_pluginError,
             consentDialog: log_consentDialog,
@@ -98,11 +74,12 @@ export default function attachAudio(props: callControls_stream & { janus: Janus 
                 if (msg) {
                     // debug msg and event
                     debug_msg(msg, msg['audiobridge']);
-                    setControlMsg(msg)
+                    handleControlMsg(audioHandler.current, msg)
                 }
                 if (jsep) {
                     Janus.debug("Handling SDP as well...", jsep);
-                    setControlJsep(jsep)
+                    console.log(audioHandler.current)
+                    audioHandler.current.handleRemoteJsep({ jsep: jsep });
                 }
             },
             onlocalstream: function (stream) {
