@@ -6,10 +6,20 @@ import { handleParticipants, publishMyAudioStream } from "./utils";
 import { callControls_stream, participantInfo_stream } from "./stream_manager"
 import { addToList, removeFromListUsingId } from "./StateMutation";
 
+
+
+/**
+ * sequence of operation
+ * 1. attach audio plugin
+ * 2. regester in specified room 
+ * 3. negoiate audio stream
+ * 4. attach remote stream to audioplayer
+ * 5. send our stream muted until user interact
+ */
 export default function attachAudio(props: callControls_stream & { janus: Janus } & participantInfo_stream) {
 
     const audioHandler = useRef(null)
-
+    const audioSourceDeviceRef = useRef(null)
     const [webrtcUp, setWebrtcUp] = useState(false);
 
     function handleControlMsg(handler, msg) {
@@ -87,7 +97,7 @@ export default function attachAudio(props: callControls_stream & { janus: Janus 
                 // TODO unmute button
             },
             onremotestream: function (stream) {
-                Janus.attachMediaStream(props.audioSourceDevice, stream);
+                Janus.attachMediaStream(audioSourceDeviceRef.current, stream);
             },
             oncleanup: function () {
                 setWebrtcUp(false);
@@ -97,7 +107,7 @@ export default function attachAudio(props: callControls_stream & { janus: Janus 
     }, [])
 
 
-    return <div style={{ display: 'None' }} />
+    return <audio ref={audioSourceDeviceRef} autoPlay />
 
 
 }

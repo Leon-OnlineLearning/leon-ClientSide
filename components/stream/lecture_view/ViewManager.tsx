@@ -25,10 +25,9 @@ interface dataControl_view {
 
 
 
-function ViewManager(props: callControls_view & dataControl_view & sessionState_view, audioSourceDeviceRef) {
+export default function ViewManager(props: callControls_view & dataControl_view & sessionState_view, audioSourceDeviceRef) {
     return (
         <>
-            <audio ref={audioSourceDeviceRef} autoPlay />
             {props.isReadyToJoin && <button onClick={() => { props.setStartCall(true) }}>join call</button>}
             <p>i am lecture view</p>
 
@@ -36,6 +35,3 @@ function ViewManager(props: callControls_view & dataControl_view & sessionState_
         </>
     )
 }
-
-
-export default forwardRef(ViewManager)

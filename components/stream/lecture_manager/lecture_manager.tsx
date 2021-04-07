@@ -52,7 +52,6 @@ export default function Lecture_manager({ plugins_meta, userData, roomId }) {
 
                 setIsReadyToJoin={setIsReadyToJoin}
                 startCall={startCall}
-                audioSourceDevice={audioSourceDeviceRef.current}
                 setParticipants={setParticipants}
 
                 dataToSend={dataToSend}
@@ -70,8 +69,6 @@ export default function Lecture_manager({ plugins_meta, userData, roomId }) {
                 setDataToSend={setDataToSend}
                 dataRecived={dataRecived}
                 role={userData.role}
-
-                ref={audioSourceDeviceRef}
             />
 
         </>

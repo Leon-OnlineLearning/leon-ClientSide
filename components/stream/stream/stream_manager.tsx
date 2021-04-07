@@ -26,7 +26,6 @@ export interface callControls_stream {
   setEndCall: CallableFunction,
   muteAudio: boolean,
   setMuteAudio: CallableFunction,
-  audioSourceDevice: HTMLMediaElement,
   setParticipants: CallableFunction
 }
 
