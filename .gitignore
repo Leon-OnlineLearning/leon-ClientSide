@@ -35,3 +35,4 @@ yarn-error.log*
 
 stories
 todo.md
+public/janus_test/*
