@@ -24,7 +24,7 @@ export function hasPublisher(msg) {
 }
 
 /**
- *
+ * add one or set participants dependind on action
  * @param msg recived msg from janus
  * @param actionOnParticipants callable funcition to update participants state
  */

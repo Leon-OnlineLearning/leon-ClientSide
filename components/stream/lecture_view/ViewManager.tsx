@@ -2,36 +2,41 @@ import { forwardRef } from 'react'
 import { UserRole } from '../../../model/users/User'
 
 
-interface sessionState_view {
-    isJanusConnected: boolean
-}
 
 interface callControls_view {
     isReadyToJoin: boolean,
-    setStartCall: CallableFunction,
-    endCall: boolean,
-    setEndCall: CallableFunction,
-    muteAudio: boolean,
-    setMuteAudio: CallableFunction,
+
+    muteLocal: boolean,
+    muteRemote: boolean,
+    setMuteLocal: CallableFunction,
+    setMuteRemote: CallableFunction,
+
     participants: Array<any>
 }
 
 interface dataControl_view {
     setDataToSend: (data: string) => void,
     dataRecived: string,
-    role: UserRole
+    role: UserRole,
 }
 
 
 
 
-export default function ViewManager(props: callControls_view & dataControl_view & sessionState_view, audioSourceDeviceRef) {
+export default function ViewManager(props: callControls_view & dataControl_view) {
+
+ 
+    const joining_state = props.isReadyToJoin ? 'joined call' : "loading..."
+
     return (
         <>
-            {props.isReadyToJoin && <button onClick={() => { props.setStartCall(true) }}>join call</button>}
+            {joining_state}
+            {props.isReadyToJoin &&<>
+                <button onClick={()=>props.setMuteLocal(muteLocal => !muteLocal)}>toggleAudio
+                </button><p>audio is {props.muteLocal ? "off" : "on"}</p>
+                </>
+            }
             <p>i am lecture view</p>
-
-
         </>
     )
 }

@@ -3,18 +3,27 @@ import { useEffect, useRef, useState } from "react";
 import Janus from "../../../public/janus/janus";
 import { alert_msgError, alert_pluginError, alert_roomDestroy, debug_msg, log_consentDialog, log_iceState, log_joining, log_mediaState, log_plugAttach, log_roomChange, log_webrtcState } from "./callback_logger";
 import { handleParticipants, publishMyAudioStream } from "./utils";
-import { callControls_stream, participantInfo_stream } from "./stream_manager"
+import { participantInfo_stream } from "./stream_manager"
 import { addToList, removeFromListUsingId } from "./StateMutation";
 
-
+export interface callControls_stream {
+    setIsReadyToJoin: CallableFunction,
+    muteRemote: boolean,
+    muteLocal: boolean,
+    setParticipants: CallableFunction
+}
 
 /**
  * sequence of operation
+ *  [ without use interaction ]
  * 1. attach audio plugin
  * 2. regester in specified room 
  * 3. negoiate audio stream
  * 4. attach remote stream to audioplayer
- * 5. send our stream muted until user interact
+ * 5. send our stream muted 
+ *  [ with user interaction ]
+ * play remote stream (props.muteRemote)
+ * user can unmute local stream (props.muteLocal)
  */
 export default function attachAudio(props: callControls_stream & { janus: Janus } & participantInfo_stream) {
 
@@ -22,6 +31,17 @@ export default function attachAudio(props: callControls_stream & { janus: Janus 
     const audioSourceDeviceRef = useRef(null)
     const [webrtcUp, setWebrtcUp] = useState(false);
 
+    useEffect(() => {
+        if (audioHandler.current) {
+            props.muteLocal ? audioHandler.current.muteAudio() : audioHandler.current.unmuteAudio()
+        }
+    }, [props.muteLocal])
+    /**
+     * 
+     * REVIEW to read updates in any state variable we need to make  
+     * this inside effect otherwise it doesn't update
+     * as it use the one passed at onInit effect
+     */
     function handleControlMsg(handler, msg) {
         var event = msg["audiobridge"];
 
@@ -29,8 +49,10 @@ export default function attachAudio(props: callControls_stream & { janus: Janus 
             // this event would fire when me or other participants join the call
             if (event === "joined") {
                 // Successfully joined, negotiate WebRTC now
+                // REVIEW  if the message will have id only once at
+                // joining then we don't need to check if it's first time
                 if (msg["id"]) {
-                    // NOTE do we need this id
+                    // REVIEW  do we need this id
                     // setMyData({ ...myData, id_audio: msg["id"] });
                     log_joining(msg);
                     if (!webrtcUp) {
@@ -64,6 +86,9 @@ export default function attachAudio(props: callControls_stream & { janus: Janus 
         }
     }
 
+    /**
+     * onInit
+     */
     useEffect(() => {
         props.janus.attach({
             plugin: "janus.plugin.audiobridge",
@@ -94,6 +119,9 @@ export default function attachAudio(props: callControls_stream & { janus: Janus 
             },
             onlocalstream: function (stream) {
                 Janus.debug(" ::: Got a local stream :::", stream);
+                if (props.muteLocal) {
+                    audioHandler.current.muteAudio()
+                }
                 // TODO unmute button
             },
             onremotestream: function (stream) {

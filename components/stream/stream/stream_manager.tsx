@@ -1,33 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Janus from "../../../public/janus/janus";
 import AudioPlugin from "./audioPlugin";
-
+import { callControls_stream } from "./audioPlugin"
 
 // TODO use variable from env
 const server = "/janus_back";
 
-
-export interface sessionState_stream {
-  setIsJanusConnected: CallableFunction
-  isJanusConnected: boolean
-}
 
 export interface participantInfo_stream {
   room: string
   userName: string
 }
 
-
-export interface callControls_stream {
-  setIsReadyToJoin: CallableFunction,
-  startCall: boolean,
-  endCall: boolean,
-  setEndCall: CallableFunction,
-  muteAudio: boolean,
-  setMuteAudio: CallableFunction,
-  setParticipants: CallableFunction
-}
 
 interface dataControl_stream {
   dataToSend: string,
@@ -40,8 +25,9 @@ interface dataControl_stream {
  * this will manage the session by initiating it and pass it
  * to audio and data childs
  */
-export default function StreamManager(props: callControls_stream & dataControl_stream & sessionState_stream & participantInfo_stream) {
+export default function StreamManager(props: callControls_stream & dataControl_stream & participantInfo_stream) {
 
+  const [isJanusConnected,setIsJanusConnected] = useState(false);
   const jan = useRef<Janus | null>()
 
   useEffect(() => {
@@ -51,7 +37,7 @@ export default function StreamManager(props: callControls_stream & dataControl_s
 
     jan.current = new Janus({
       server: server,
-      success: () => { props.setIsJanusConnected(true) },
+      success: () => { setIsJanusConnected(true) },
       error: Janus.error,
     })
 
@@ -64,12 +50,17 @@ export default function StreamManager(props: callControls_stream & dataControl_s
   // because of hooks asyncronouse nature
   return (
     <>
-      {props.isJanusConnected && <>
+      {isJanusConnected && 
+      <>
         <AudioPlugin
           {...props}
           janus={jan.current}
         />
-        {/* <h2>the data plugin</h2>  */}
+{/*         
+        <DataPlugin
+          {...props}
+          janus={jan.current}
+          />   */}
       </>
       }
     </>
