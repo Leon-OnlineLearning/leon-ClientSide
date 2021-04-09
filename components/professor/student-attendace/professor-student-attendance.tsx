@@ -24,13 +24,9 @@ export default function ProfessorStudentAttendance() {
         { lecture: "12", "students": 1 },
     ]
 
-    const [yearName, setYearName] = useState("Years");
     const [courseName, setCourseName] = useState("Course Name");
     const [lectureName, setLectureName] = useState("Lecture");
 
-    const onYearsSelected = (eventKey: string) => {
-        setYearName(eventKey);
-    }
     const onCourseSelected = (eventKey: string) => {
         setCourseName(eventKey);
     }
@@ -44,15 +40,6 @@ export default function ProfessorStudentAttendance() {
                     <section className="m-2">
                         <h2 className="m-2">Students Attendance</h2>
                         <span className={`${styles["dropdown-container"]}`}>
-                            <Dropdown onSelect={onYearsSelected} className={`${styles["dropdown-area"]}`}>
-                                <Dropdown.Toggle variant="primary" id="years" className={`${styles["dropdown-btn"]}`}>
-                                    {yearName}
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className={`${styles["dropdown-item"]}`}>
-                                    <Dropdown.Item eventKey="Year1" >Year1</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Year2" >Year2</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
                             <Dropdown onSelect={onCourseSelected} className={`${styles["dropdown-area"]}`}>
                                 <Dropdown.Toggle variant="primary" id="courses" className={`${styles["dropdown-btn"]}`}>
                                     {courseName}
