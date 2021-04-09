@@ -1,14 +1,14 @@
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form";
-import { FormControl } from "react-bootstrap";
 import GoogleLogin, { GoogleLoginResponse } from "react-google-login";
 import axios from "axios"
 import config from "../utils/config";
 import styles from "../styles/login.module.css";
-import { refreshToken, storeUserSession } from "../controller/tokens";
+import { storeUserSession } from "../controller/tokens";
 import React, { useState } from "react";
-import jwtDecode from "jwt-decode";
+import { useRouter } from "next/router"
+import { useError } from "../hooks/useError"
 
 // login logic
 // in case of google
@@ -18,19 +18,29 @@ import jwtDecode from "jwt-decode";
 // recive {refresh token, jwt}
 // store refresh token in indexed db
 // redirect to suitable dashboard
-
 export default function LoginPage() {
 
     const [email, setEmail] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const [invalidCredentials, setInvalidCredentials] = useState(false)
+    const [error, errorMsg, setErrorMsg] = useError()
+    const router = useRouter()
+
+    const handleRedirection = (userRole: string) => {
+        if (userRole.toLowerCase() === "student") {
+            router.push('/student')
+        } else if (userRole.toLowerCase() === "professor") {
+            router.push('/professor')
+        } else if (userRole.toLowerCase() === "admin") {
+            router.push('/admin')
+        }
+    }
 
     const onGoogleSignInSuccess = (response: GoogleLoginResponse) => {
         axios.post(`${config.serverBaseUrl}/auth/google`, { tokenId: response.tokenId })
             .then(response => response.data)
             .then(data => {
                 storeUserSession(data.refreshToken, data.token)
-            })
+            }).then(_ => { handleRedirection(localStorage.getItem('role')) })
             .catch(err => console.error(err))
     }
 
@@ -41,10 +51,12 @@ export default function LoginPage() {
             .then(response => response.data)
             .then(data => {
                 storeUserSession(data.refreshToken, data.token)
-            })
+            }).then(_ => { handleRedirection(localStorage.getItem('role')) })
             .catch(err => {
                 const response = err.response
-                if (err.response.status == 401) { setInvalidCredentials(true) }
+                if (!response || response.status == 500) { setErrorMsg("Server error please try again later"); }
+                else if (response.status == 401) { setErrorMsg("Invalid email or password") }
+                else if (response.status == 429) { setErrorMsg("Login attempts limited has been exceeded") }
             })
     }
 
@@ -68,7 +80,7 @@ export default function LoginPage() {
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control onChange={(e) => setPassword(e.target.value)} required value={password} type="password" placeholder="Password"></Form.Control>
                                 </Form.Group>
-                                <div style={{ display: invalidCredentials ? "block" : "none", color: "red" }}>Invalid email/password</div>
+                                <div style={{ display: error ? "block" : "none", color: "red" }}>{errorMsg}</div>
                                 <Button variant="link">Forgot your password?</Button>
                                 <div className={`${styles["login-group"]}`}>
                                     <Button type="submit" onClick={handleLogin} className={`my-2 ${styles["loginbtn"]}`} variant="outline-primary"><i className="bi bi-file-person-fill"></i> Login</Button>{' '}
