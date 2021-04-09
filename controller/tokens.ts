@@ -1,5 +1,6 @@
 import axios from "axios"
 import Cookie from "js-cookie"
+import jwtDecode from "jwt-decode"
 import config from "../utils/config"
 
 export const refreshToken = () => {
@@ -11,13 +12,29 @@ export const refreshToken = () => {
     })
         .then(response => response.data)
         .then(data => {
-            storeTokens(data.refreshToken, data.token)
+            storeUserSession(data.refreshToken, data.token)
         })
         .catch(err => console.error(err))
 }
 
-export const storeTokens = (refreshToken: string, token: string, cookieExpirationInterval: number = 0) => {
+/**
+ * store tokens and user data (refresh, req) 
+ * @param refreshToken 
+ * @param token 
+ * @param cookieExpirationInterval 
+ * @returns wether or not the tokens were stored successfully
+ */
+export const storeUserSession = (refreshToken: string, token: string, cookieExpirationInterval: number = 0) => {
     if (cookieExpirationInterval < 0) throw new Error("Expiration interval must be positive or zero");
     Cookie.set('token', token, { expires: cookieExpirationInterval || undefined })
-    window.localStorage.setItem('refreshToken', refreshToken)
+    if (typeof window !== 'undefined') {
+        window.localStorage.setItem('refreshToken', refreshToken)
+        const userData: any = jwtDecode(token)
+        for (let key in userData) {
+            localStorage.setItem(key, userData[key])
+        }
+        return true
+    } else {
+        return false
+    }
 }
