@@ -133,7 +133,7 @@ export default function NewAccount({ privilagesComponents }) {
           </Dropdown.Menu>
         </Dropdown>
         {privilagesComponents[privilage](
-          new User(firstName, lastName, userEmail)
+          new User(firstName, lastName, userEmail, password)
         )}
       </Card>
     </div>

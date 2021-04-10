@@ -1,3 +1,17 @@
+/**
+ * ABOUT THE "WITH CREDENTIALS" FLAG 
+ *           ------------
+ * 
+ * JWT should be stored in an HTTPOnly cookie theses cookies are 
+ * used in authentication process. If with credential is set to true
+ * this indicates that cookies will be used in authentication process.
+ * 
+ * One more thing about it, if it was false (the default behavior) the jwt cookie
+ * will be ignored.
+ * 
+ * for more details see https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials
+ */
+
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form";
@@ -15,7 +29,7 @@ import { useError } from "../hooks/useError"
 // send tokenId to /auth/google
 // Show loading indicator with portals
 //// the following is unified in google and basic ////
-// recive {refresh token, jwt}
+// receive {refresh token, jwt}
 // store refresh token in indexed db
 // redirect to suitable dashboard
 export default function LoginPage() {
@@ -36,7 +50,7 @@ export default function LoginPage() {
     }
 
     const onGoogleSignInSuccess = (response: GoogleLoginResponse) => {
-        axios.post(`${config.serverBaseUrl}/auth/google`, { tokenId: response.tokenId })
+        axios.post(`${config.serverBaseUrl}/auth/google`, { tokenId: response.tokenId }, { withCredentials: true })
             .then(response => response.data)
             .then(data => {
                 storeUserSession(data.refreshToken, data.token)
@@ -47,7 +61,7 @@ export default function LoginPage() {
     const handleLogin = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
         //TODO validate the form fields
-        axios.post(`${config.serverBaseUrl}/auth/login`, { email, password })
+        axios.post(`${config.serverBaseUrl}/auth/login`, { email, password }, { withCredentials: true })
             .then(response => response.data)
             .then(data => {
                 storeUserSession(data.refreshToken, data.token)
