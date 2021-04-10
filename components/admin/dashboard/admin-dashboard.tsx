@@ -6,6 +6,8 @@ export enum AdminDashboardSelectedPage {
   lectures,
   events,
   exams,
+  departments,
+  courses
 }
 
 export interface AdminDashboardProps extends React.HTMLAttributes<HTMLElement> {
@@ -38,6 +40,18 @@ export function AdminDashboard({
               iconClassName={"bi-card-checklist"}
               text={"Exams"}
               selected={selectedPage === AdminDashboardSelectedPage.exams}
+            ></SidebarElement>
+            <SidebarElement
+              href="/admin/departments"
+              iconClassName={"bi bi-building"}
+              text={"Departments"}
+              selected={selectedPage === AdminDashboardSelectedPage.departments}
+            ></SidebarElement>
+            <SidebarElement
+              href="/admin/courses"
+              iconClassName={"bi bi-filter-square-fill"}
+              text={"Courses"}
+              selected={selectedPage === AdminDashboardSelectedPage.courses}
             ></SidebarElement>
             <SidebarElement
               href="/"
