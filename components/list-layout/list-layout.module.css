@@ -1,0 +1,5 @@
+.add-new-container {
+  display: flex;
+  width: 100%;
+  align-items: flex-end
+}
