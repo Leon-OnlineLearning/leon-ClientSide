@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Table from "react-bootstrap/Table"
 import styles from "./list-layout.module.css"
-
-interface Item {
-    id?: string,
-    name: string
-}
+import Item from "../../model/Item"
 
 interface ItemModalTemplateProps {
   show : boolean,
@@ -92,13 +88,14 @@ const ListLayout: React.FC<ListLayoutProps> = ({ title, onAddNewItem, onFetchIte
               setAddNewModelShow(true);
             }}
           >
-            Add new
+            <i className="bi bi-file-earmark-plus-fill"></i> Add new
           </Button>
           <ItemModalTemplate
             onSubmit={async (e: React.MouseEvent<HTMLButtonElement>) => {
               e.preventDefault();
               try {
                 const newItem = await onAddNewItem(newItemName);
+                console.log(newItem)
                 setItems([...items, newItem]);
                 setAddNewModelShow(false);
               } catch (err) {
@@ -138,21 +135,38 @@ const ListLayout: React.FC<ListLayoutProps> = ({ title, onAddNewItem, onFetchIte
                         setEditingModalShow(true);
                       }}
                     >
-                      Edit
+                      <i className="bi bi-pencil-square"></i> Edit
                     </Button>
                   </td>
                   <td>
-                    <Button variant="danger">Delete</Button>
+                    <Button
+                      variant="danger"
+                      onClick={async () => {
+                        try {
+                          await onDeleteItem(item);
+                          setItems(items.filter((i) => i.id !== item.id));
+                        } catch (err) {
+                          console.log(err);
+                        }
+                      }}
+                    >
+                      <i className="bi bi-trash-fill"></i> Delete
+                    </Button>
                     <ItemModalTemplate
                       title={`Edit ${selectedItemName}`}
                       onHide={() => setEditingModalShow(false)}
                       show={editModalShow}
                       itemName={selectedItemName}
-                      onItemNameChange={(e)=>setSelectedItemName(e.target.value)}
+                      onItemNameChange={(e) =>
+                        setSelectedItemName(e.target.value)
+                      }
                       onSubmit={async (e) => {
                         e.preventDefault();
                         try {
-                          await onEditItem(item, { id: item.id ,name: selectedItemName });
+                          await onEditItem(item, {
+                            id: item.id,
+                            name: selectedItemName,
+                          });
                           setItems(
                             items.map((i) => {
                               if (i.id !== item.id) {
@@ -162,7 +176,7 @@ const ListLayout: React.FC<ListLayoutProps> = ({ title, onAddNewItem, onFetchIte
                               }
                             })
                           );
-                           setEditingModalShow(false);
+                          setEditingModalShow(false);
                         } catch (err) {
                           console.error(err);
                         }
