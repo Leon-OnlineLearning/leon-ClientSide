@@ -86,6 +86,7 @@ const ListLayout: React.FC<ListLayoutProps> = ({ title, onAddNewItem, onFetchIte
         <h1>{title}</h1>
         <div className={`${styles["add-new-container"]}`}>
           <Button
+            className={styles["btn"]}
             variant="primary"
             onClick={() => {
               setAddNewModelShow(true);
