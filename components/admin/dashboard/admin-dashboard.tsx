@@ -1,3 +1,5 @@
+import {useRouter} from "next/router";
+import {logout} from "../../../controller/user/user";
 import DashboardLayout from "../../dashboard-layout/dashboard-layout";
 import { SidebarElement } from "../../sidebar/sidebar";
 
@@ -18,6 +20,7 @@ export function AdminDashboard({
   selectedPage,
   children,
 }: AdminDashboardProps) {
+  const router = useRouter()
   return (
     <>
       <DashboardLayout
@@ -57,6 +60,7 @@ export function AdminDashboard({
               href="/"
               iconClassName={"bi-arrow-left"}
               text={"Log out"}
+              onClick={async ()=>{await logout(); router.push('/')}}
             ></SidebarElement>
           </>
         }
