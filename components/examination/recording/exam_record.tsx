@@ -45,6 +45,7 @@ export default function Recorder() {
         var fd = new FormData();
         fd.append('upl', blob, `test${counter++}.webm`);
 
+        // TODO use link from variable
         fetch("http://localhost:5000/video", {
             method: "POST",
             body: fd
