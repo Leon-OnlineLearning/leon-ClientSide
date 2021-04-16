@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
 import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin"
 import Image from "next/image"
 import { Button } from "react-bootstrap"
+import Link from "next/link"
 
 export default function Home() {
 
@@ -78,7 +79,9 @@ export default function Home() {
           <div className={`${styles["intro-left-pan"]}`}>
             <h1 style={{ color: "#343A40", fontWeight: 700 }}>Leon</h1>
             <p style={{ color: "#343A40", fontSize: "1.1rem" }}>Leon is a focused online system that provides secure examination system and efficient lectures hosting</p>
-            <Button style={{ width: "50%" }}>Get started</Button>
+            <Link href="/login">
+              <Button style={{ width: "50%" }}>Get started</Button>
+            </Link>
           </div>
           <div className={`${styles["intro-right-pan"]}`}>
             <div className={`${styles["image-elements"]} ${styles["image-container"]}`}>

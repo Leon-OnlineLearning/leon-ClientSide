@@ -1,3 +1,4 @@
+import {logout} from "../../../controller/user/user";
 import DashboardLayout from "../../dashboard-layout/dashboard-layout";
 import { SidebarElement } from "../../sidebar/sidebar";
 
@@ -77,6 +78,7 @@ export function ProfessorDashboard({
               href="/"
               iconClassName={"bi-arrow-left"}
               text={"Log out"}
+              onClick = {async () => await logout()}
             ></SidebarElement>
           </>
         }

@@ -1,3 +1,5 @@
+import {useRouter} from "next/router";
+import {logout} from "../../../controller/user/user";
 import DashboardLayout from "../../dashboard-layout/dashboard-layout";
 import { SidebarElement } from "../../sidebar/sidebar";
 
@@ -6,6 +8,8 @@ export enum AdminDashboardSelectedPage {
   lectures,
   events,
   exams,
+  departments,
+  courses
 }
 
 export interface AdminDashboardProps extends React.HTMLAttributes<HTMLElement> {
@@ -16,6 +20,7 @@ export function AdminDashboard({
   selectedPage,
   children,
 }: AdminDashboardProps) {
+  const router = useRouter()
   return (
     <>
       <DashboardLayout
@@ -40,9 +45,22 @@ export function AdminDashboard({
               selected={selectedPage === AdminDashboardSelectedPage.exams}
             ></SidebarElement>
             <SidebarElement
+              href="/admin/departments"
+              iconClassName={"bi bi-building"}
+              text={"Departments"}
+              selected={selectedPage === AdminDashboardSelectedPage.departments}
+            ></SidebarElement>
+            <SidebarElement
+              href="/admin/courses"
+              iconClassName={"bi bi-filter-square-fill"}
+              text={"Courses"}
+              selected={selectedPage === AdminDashboardSelectedPage.courses}
+            ></SidebarElement>
+            <SidebarElement
               href="/"
               iconClassName={"bi-arrow-left"}
               text={"Log out"}
+              onClick={async ()=>{await logout(); router.push('/')}}
             ></SidebarElement>
           </>
         }

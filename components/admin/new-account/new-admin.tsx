@@ -2,7 +2,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import User from "../../../model/users/User";
-import { sendUserData } from "../../../controller/user/user";
+import { createNewStudent } from "../../../controller/user/user";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "../../../controller/courses/courses";
 import styles from "./new-account.module.css";
@@ -26,7 +26,7 @@ function NewAdmin({ userDate }: NewStudentProps) {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    await sendUserData({ ...userDate, year: yearName });
+    await createNewStudent({ ...userDate, year: yearName });
   };
 
   const onYearsSelectedHandler = (eventkey: string) => {

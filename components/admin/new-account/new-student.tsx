@@ -1,37 +1,58 @@
-import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import User from "../../../model/users/User";
-import { sendUserData } from "../../../controller/user/user";
+import { createNewStudent } from "../../../controller/user/user";
 import { useEffect, useState } from "react";
 import { getAllYears } from "../../../controller/years/yearsController";
 import styles from "./new-account.module.css";
+import { useError } from "../../../hooks/useError";
+import { Dropdown ,DropdownButton, FormControl } from "react-bootstrap";
+import {getDepartments} from "../../../controller/departments";
+import Item from "../../../model/Item";
 
 type NewStudentProps = {
   userDate: User;
 };
 
 function NewStudent({ userDate }: NewStudentProps) {
-  const [yearName, setYearName] = useState("Select student's year");
-  const [years, setYears] = useState([]);
+
+  const [year, setYear] = useState(1);
+  const [error, errorMsg, setError] = useError();
+  const [departments, setDepartments ] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState<Item| undefined>();
+
+  const yearChangingHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const writtenYear = parseInt(e.target.value)
+    if (writtenYear && writtenYear >= 1) {
+      setYear(writtenYear)
+    } else {
+      setError("year must be greater than 1")
+    }
+  }
+
+  const onSubmitHandler = async (e : React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("here is user data",userDate);
+    await createNewStudent({ ...userDate, year, department: selectedDepartment.id });
+  };
 
   useEffect(() => {
-    async function fetchYears() {
-      const ys = await getAllYears();
-      setYears(ys);
+    const _getD = async () => {
+     const departments = await getDepartments();
+     setDepartments(departments);
     }
-    fetchYears();
-  }, []);
+    _getD();
+  }, []); 
+  
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    await sendUserData({ ...userDate, year: yearName });
-  };
-
-  const onYearsSelectedHandler = (eventkey: string) => {
-		console.log(eventkey)
-    setYearName(eventkey);
-  };
+  const handleOnDepartmentSelected = (id :string) => {
+    console.log("why are you e: ", id)
+    setSelectedDepartment(
+      departments.filter((dep) => {
+        return dep.id === id;
+      })[0]
+    );
+  }
 
   return (
     <>
@@ -39,21 +60,27 @@ function NewStudent({ userDate }: NewStudentProps) {
         onSubmit={onSubmitHandler}
         className={`${styles["new-account-from"]}`}
       >
-        <Dropdown
-          onSelect={onYearsSelectedHandler}
-          className={`${styles["controller"]}`}
+        <FormControl
+          className={`${styles["form-item"]}`}
+          placeholder="year"
+          type="text"
+          name="year"
+          as="input"
+          onChange={yearChangingHandler}
+        />
+        <div style={{ display: error ? "block" : "none", color: "red" }}>
+          {errorMsg}
+        </div>
+        <DropdownButton
+          title={selectedDepartment ? selectedDepartment.name : "Departments"}
+          onSelect={handleOnDepartmentSelected}
         >
-          <Dropdown.Toggle variant="primary" id="years">
-            {yearName}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {years.length ? (
-              years.map((y) => <Dropdown.Item key={y} eventKey={y}>{y}</Dropdown.Item>)
-            ) : (
-              <Dropdown.Item>Loading years...</Dropdown.Item>
-            )}
-          </Dropdown.Menu>
-        </Dropdown>
+          {departments.map(dep => {
+            return <Dropdown.Item key={dep.id} eventKey={dep.id}>
+              {dep.name}
+            </Dropdown.Item>
+          })}
+        </DropdownButton>
         <Button type="submit">Create new user</Button>
       </Form>
     </>

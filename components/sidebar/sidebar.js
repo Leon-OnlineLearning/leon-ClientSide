@@ -14,14 +14,14 @@ export function Sidebar(props) {
     );
 }
 
-
 /**
  * 
  * @param {Object} props
  * @param {React.Component} icon
  * @param {string} text
  */
-export function SidebarElement({ iconClassName, text, href, selected }) {
+export function SidebarElement({ iconClassName, text, href, selected, onClick }) {
+  if (!onClick) {
     if (selected) {
         return (<Link href={href}><div style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center" }} className="py-1">
             <i style={{ fontSize: "24px"}} className={`${iconClassName} text-primary`}></i>
@@ -33,4 +33,21 @@ export function SidebarElement({ iconClassName, text, href, selected }) {
             <div >{text}</div>
         </div></Link>);
     }
+  } else {
+    return (
+      <div
+        onClick={onClick}
+        style={{
+          cursor: "pointer",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+        className="py-1"
+      >
+        <i style={{ fontSize: "24px" }} className={iconClassName}></i>
+        <div>{text}</div>
+      </div>
+    );
+  }
 }
