@@ -7,6 +7,8 @@ import React, {
 } from "react";
 import styles from "./auth-view-styles.module.css";
 
+// TODO add fixed dimensions parameters instead of fixed width and height
+
 interface AuthenticationViewProps {
   width: number;
   height: number;
@@ -66,7 +68,7 @@ const AuthenticationView: React.FC<AuthenticationViewProps> = ({
         <video
           style={{
             width: `${width + blurSize}px`,
-            height: `${height + blurSize}`,
+            height: `${height + blurSize}px`,
             filter: `blur(${blurSize}px)`,
           }}
           onCanPlay={onCanPlay}
@@ -91,7 +93,7 @@ const AuthenticationView: React.FC<AuthenticationViewProps> = ({
           <video
             style={{
               width: `${width + blurSize}px`,
-              height: `${height + blurSize}`,
+              height: `${height + blurSize}px`,
               clipPath: `circle(${radius}px at center)`,
               position: "absolute",
               top: "50%",
