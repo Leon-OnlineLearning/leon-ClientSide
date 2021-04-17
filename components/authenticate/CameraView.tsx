@@ -1,28 +1,40 @@
-import { useEffect, useRef, useState } from 'react';
-
+import { useEffect, useRef, useState } from "react";
+import AuthenticationView from "./AuthenticationView";
 
 const CAPTURE_OPTIONS = {
-    audio: false,
-    video: true,
+  audio: false,
+  video: true,
 };
 
 export default function CameraView() {
-    const videoRef = useRef(null);
-    const mediaStream = useUserMedia(CAPTURE_OPTIONS);
-  
-    if (mediaStream && videoRef.current && !videoRef.current.srcObject) {
-      videoRef.current.srcObject = mediaStream;
-    }
-  
-    function handleCanPlay() {
-      videoRef.current.play();
-    }
-  
-    return (
-      <video ref={videoRef} onCanPlay={handleCanPlay} autoPlay playsInline muted />
-    );
+  // const videoRef = useRef<HTMLVideoElement>(null);
+  const mediaStream = useUserMedia(CAPTURE_OPTIONS);
+  let srcObj;
+
+  if (mediaStream && srcObj == null) {
+    // videoRef.current.srcObject = mediaStream;
+    srcObj = mediaStream;
+    console.log("src obj is", srcObj);
   }
 
+  function handleCanPlay(e) {
+    // videoRef.current.play();
+    console.log("e is:", e);
+    e.target.play();
+  }
+
+  return (
+    // <video ref={videoRef} onCanPlay={handleCanPlay} autoPlay playsInline muted />
+    <AuthenticationView
+      borderColor="#efefef"
+      width={480}
+      height={360}
+      onCanPlay={handleCanPlay}
+      radius={170}
+      srcObject={srcObj}
+    />
+  );
+}
 
 export function useUserMedia(requestedMedia) {
   const [mediaStream, setMediaStream] = useState(null);
@@ -30,9 +42,11 @@ export function useUserMedia(requestedMedia) {
   useEffect(() => {
     async function enableStream() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia(requestedMedia);
+        const stream = await navigator.mediaDevices.getUserMedia(
+          requestedMedia
+        );
         setMediaStream(stream);
-      } catch(err) {
+      } catch (err) {
         // Removed for brevity
       }
     }
@@ -41,10 +55,10 @@ export function useUserMedia(requestedMedia) {
       enableStream();
     } else {
       return function cleanup() {
-        mediaStream.getTracks().forEach(track => {
+        mediaStream.getTracks().forEach((track) => {
           track.stop();
         });
-      }
+      };
     }
   }, [mediaStream, requestedMedia]);
 
