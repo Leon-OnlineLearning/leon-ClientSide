@@ -100,7 +100,6 @@ const AuthenticationView: React.FC<AuthenticationViewProps> = ({
               left: "50%",
               transform: "translate(-50%,-50%)",
             }}
-            onCanPlay={onCanPlay}
             autoPlay
             playsInline
             muted
