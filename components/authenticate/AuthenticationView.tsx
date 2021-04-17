@@ -66,7 +66,7 @@ const AuthenticationView: React.FC<AuthenticationViewProps> = ({
         <video
           style={{
             width: `${width + blurSize}px`,
-            height: `${height + blurSize}`,
+            height: `${height + blurSize}px`,
             filter: `blur(${blurSize}px)`,
           }}
           onCanPlay={onCanPlay}
@@ -91,7 +91,7 @@ const AuthenticationView: React.FC<AuthenticationViewProps> = ({
           <video
             style={{
               width: `${width + blurSize}px`,
-              height: `${height + blurSize}`,
+              height: `${height + blurSize}px`,
               clipPath: `circle(${radius}px at center)`,
               position: "absolute",
               top: "50%",
