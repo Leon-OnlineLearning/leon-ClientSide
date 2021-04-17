@@ -25,6 +25,8 @@ interface AuthenticationViewProps {
  * @param {number} width the width of the component in pixels
  * @param {number} borderWidth the width of circle's border in pixels
  * @param {string} borderColor the border color of the circle
+ * @param {number} blurSize the size of the blur filter
+ * @param {number} radius the radius of the circle
  * @param {MediaProvider} srcObject the source object for the video element
  * @param {ReactEventHandler<HTMLVideoElement>} onCanPlay
  */
@@ -60,6 +62,7 @@ const AuthenticationView: React.FC<AuthenticationViewProps> = ({
           position: "relative",
         }}
       >
+        {/* add blur size to width and heigh to clip the smooth edges of picture */}
         <video
           style={{
             width: `${width + blurSize}px`,
