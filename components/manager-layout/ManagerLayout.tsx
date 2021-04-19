@@ -2,6 +2,7 @@ import { Button, Card, FormControl, Modal } from "react-bootstrap";
 import { useState, FC, Fragment } from "react";
 import useSearch from "../../hooks/useSearch";
 
+//TODO this is the manager layout that you will forget about it later XD
 export interface ManagerLayoutProps {
   associationActions?: {
     actionName: string;

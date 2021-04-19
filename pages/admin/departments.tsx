@@ -5,7 +5,7 @@ import {
 import ListLayout from "../../components/list-layout/list-layout";
 import {
   editDepartment,
-  deleteDeprtment,
+  deleteDepartment,
   getDepartments,
   addNewDepartment
 } from "../../controller/departments";
@@ -18,7 +18,7 @@ export default function Dashboard() {
           onFetchItems={getDepartments}
           onEditItem={editDepartment}
           onAddNewItem={addNewDepartment}
-          onDeleteItem={deleteDeprtment}
+          onDeleteItem={deleteDepartment}
         />
       </AdminDashboard>
     );

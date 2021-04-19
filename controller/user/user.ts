@@ -4,8 +4,6 @@ import resourcesPoster from "../utils/resourcesPoster";
 import Cookies from "js-cookie";
 
 export async function createNewStudent(data: any) {
-	console.log(data);
-	
 	return await resourcesPoster("students", data)
 }
 
