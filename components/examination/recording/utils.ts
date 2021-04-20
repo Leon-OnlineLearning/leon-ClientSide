@@ -45,7 +45,8 @@ export function download(recordedChunks) {
     // TODO use link from variable
     fetch("/backend/exams/record", {
         method: "put",
-        body: fd
+        body: fd,
+        credentials: "include"
     }).then(res => {
         console.log("Promise resolved", res);
     }).catch(console.log)
