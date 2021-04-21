@@ -34,3 +34,4 @@ yarn-error.log*
 .vercel
 
 stories
+public/janus_test/
