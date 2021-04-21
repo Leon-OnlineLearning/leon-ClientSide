@@ -59,7 +59,7 @@ export default function RefranceCapturingView(props: {
 
           try {
             clearInterval(detection_interval)
-            // Stop all video streams.
+            // TODO Stop all video streams and use router to send to other page
             // mediaStream.getVideoTracks().forEach(track => track.stop());
           }
           catch (error) {
