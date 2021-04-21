@@ -1,6 +1,8 @@
-import CameraView from '../../../components/authenticate/CameraView';
 import Link from 'next/link'
-
+import dynamic from 'next/dynamic';
+// SSR most be closed as loading it at node give has some problems and not required
+const CameraView = dynamic(() => import('../../../components/examination/authenticate/CameraView'),{ssr:false});
+  
 
 
 export default function Authenticate(){
@@ -11,7 +13,11 @@ export default function Authenticate(){
     </div>
  
     <div className="d-flex justify-content-center my-3" style={{width: "100%" , alignItems: "center",}} >
-        <CameraView />
+        <CameraView 
+        accaptableWidth = {200}
+        accaptableHieght = {200}
+        accaptableScore = {0.95}
+        />
     </div>
     <div className="d-flex justify-content-center" style={{width: "100%"}}>
     <Link href="/examination/form_viewer/1">
