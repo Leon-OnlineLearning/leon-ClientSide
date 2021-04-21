@@ -56,9 +56,6 @@ export default function RefranceCapturingView(props: {
           detections[0].score > props.accaptableScore) {
 
           recordForPeriod(mediaStream, video_length)
-          console.log(detections)
-
-          // console.log(detections)
 
           try {
             clearInterval(detection_interval)
