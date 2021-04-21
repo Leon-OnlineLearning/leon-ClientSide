@@ -21,8 +21,8 @@ export default function RefranceCapturingView(props: {
   accaptableHieght: number
   accaptableScore: number
 }) {
-  const [modelLaoded, setModelLaoded] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isModelLaoded, setIsModelLaoded] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const mediaStream = useUserMedia(CAPTURE_OPTIONS);
   const videoRef = useRef(null)
@@ -38,14 +38,14 @@ export default function RefranceCapturingView(props: {
   useEffect(() => {
     Promise.all([
       nets.tinyFaceDetector.loadFromUri('/models'),
-    ]).then(() => setModelLaoded(true))
+    ]).then(() => setIsModelLaoded(true))
   }, [])
 
 
   // detect user face
   useEffect(() => {
 
-    if (modelLaoded && videoLoaded) {
+    if (isModelLaoded && isVideoLoaded) {
       const displaySize = { width: videoRef.current.width, height: videoRef.current.height }
 
       let detection_interval = setInterval(async () => {
@@ -74,7 +74,7 @@ export default function RefranceCapturingView(props: {
 
     }
 
-  }, [modelLaoded, videoLoaded])
+  }, [isModelLaoded, isVideoLoaded])
 
   return (
     <>
@@ -86,7 +86,7 @@ export default function RefranceCapturingView(props: {
         radius={170}
         srcObject={srcObj}
       />
-      <video ref={videoRef} style={{ display: 'none' }} onCanPlay={() => { setVideoLoaded(true) }} autoPlay />
+      <video ref={videoRef} style={{ display: 'none' }} onCanPlay={() => { setIsVideoLoaded(true) }} autoPlay />
     </>
   );
 }
