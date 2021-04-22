@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useUserMedia } from "../../authenticate/CameraView";
-import { send_chunck} from "./utils"
+import { sendExamRecording } from "../../../controller/exam/exam";
+import useUserMedia from "../../../hooks/useUserMedia";
 
 let counter = 1;
 const record_slice = 3 * 1000 //10 seconds
@@ -10,10 +10,15 @@ export default function Recorder() {
     function handleDataAvailable(event) {
         let recordedChunks = []
 
-        console.log("data-available");
         if (event.data.size > 0) {
             recordedChunks.push(event.data);
-            send_chunck(recordedChunks,counter++);
+            sendExamRecording({
+                // TODO get exam id
+                examId: String(1),
+                userId: localStorage.getItem('id'),
+                chunckIndex: counter++,
+                recordedChunks: recordedChunks
+            })
         }
     }
 
