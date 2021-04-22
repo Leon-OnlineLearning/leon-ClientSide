@@ -69,7 +69,7 @@ export default function RefranceCapturingView(props: {
 
         }
 
-      }, 1000)
+      }, 200)
 
       // clean interval in unmount
 
