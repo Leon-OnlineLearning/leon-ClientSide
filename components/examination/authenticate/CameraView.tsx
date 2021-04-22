@@ -55,6 +55,7 @@ export default function RefranceCapturingView(props: {
           detections[0].box.height > props.accaptableHieght &&
           detections[0].score > props.accaptableScore) {
 
+          // FIXME this will send vedio twice sometimes ??
           recordForPeriod(mediaStream, video_length)
 
           try {
@@ -68,7 +69,7 @@ export default function RefranceCapturingView(props: {
 
         }
 
-      }, 1000)
+      }, 200)
 
       // clean interval in unmount
 

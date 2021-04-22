@@ -5,6 +5,7 @@ export function recordForPeriod(stream, recordingTime:number){
     let options = { mimeType: "video/webm" };
     let recorder = new MediaRecorder(stream, options);
     
+    console.debug("start recording")
     function handleDataAvailable(event) {
         let recordedChunks = []
 
