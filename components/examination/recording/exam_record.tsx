@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { sendExamRecording } from "../../../controller/exam/exam";
 import useUserMedia from "../../../hooks/useUserMedia";
-import { send_chunck} from "./utils"
 
 let counter = 1;
 const record_slice = 3 * 1000 //10 seconds
@@ -14,6 +13,7 @@ export default function Recorder() {
         if (event.data.size > 0) {
             recordedChunks.push(event.data);
             sendExamRecording({
+                // TODO get exam id
                 examId: String(1),
                 userId: localStorage.getItem('id'),
                 chunckIndex: counter++,
