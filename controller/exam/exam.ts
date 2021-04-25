@@ -47,6 +47,12 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface) {
   fd.append('chunckIndex', String(examRecording.chunckIndex))
   fd.append('userId', examRecording.userId);
   fd.append('examId', examRecording.examId);
+  // TODO add last chunk
+  fd.append('lastChunk', String(false));
+  // TODO calculate this with dynamic resloation 
+  fd.append('chunkStartTime', String(examRecording.chunckIndex * 10));
+  fd.append('chunkEndTime', String((examRecording.chunckIndex+1) * 10));
+
 
   const url = `${config.serverBaseUrl}/exams/record`
   fetch(url, {
