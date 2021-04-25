@@ -3,7 +3,7 @@ import { sendExamRecording } from "../../../controller/exam/exam";
 import useUserMedia from "../../../hooks/useUserMedia";
 
 let counter = 1;
-const record_slice = 3 * 1000 //10 seconds
+const record_slice = 10 * 1000 //10 seconds
 export default function Recorder() {
 
 
