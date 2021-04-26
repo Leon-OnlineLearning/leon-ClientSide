@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { sendExamRecording } from "../../../controller/exam/exam";
 import useUserMedia from "../../../hooks/useUserMedia";
 
-let counter = 1;
+let counter = 0;
 const record_slice = 10 * 1000 //10 seconds
 export default function Recorder() {
 
