@@ -1,7 +1,7 @@
 import { Card } from "react-bootstrap";
 import User from "../../../model/users/User";
 
-function AccountCard(props: User) {
+function AccountCard(props: User&{role:string}) {
    return (
        <>
         <Card>
