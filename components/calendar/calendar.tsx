@@ -11,7 +11,7 @@ type CalenderDaysProps = {
 }
 
 type CalenderProps = {
-    getEvents: (year: number, month: number) => Array<Event>,
+    getEvents: (year: number, month: number) => Promise<Event[]>,
     style?: CSSProperties
 }
 
@@ -23,14 +23,17 @@ export default function Calendar({ getEvents, style }: CalenderProps): JSX.Eleme
     const [events, setEvents] = useState([])
 
     useEffect(() => {
-        setEvents(getEvents(year, month))
+        const _getEvents = async () => {
+            setEvents(await getEvents(year, month))
+        }
+        _getEvents()
     }, []);
 
     const changeYear = (amount: number) => setYear(year + amount)
     const upYear = () => { changeYear(1) }
     const downYear = () => { changeYear(-1) }
 
-    const changeMonth = (amount: number) => {
+    const changeMonth = async (amount: number) => {
         let newMonth = month + amount
         let y = year
         let m = month
@@ -43,7 +46,7 @@ export default function Calendar({ getEvents, style }: CalenderProps): JSX.Eleme
         } else {
             m = newMonth
         }
-        setEvents(getEvents(y, m))
+        setEvents(await getEvents(y, m))
         setYear(y)
         setMonth(m)
     }

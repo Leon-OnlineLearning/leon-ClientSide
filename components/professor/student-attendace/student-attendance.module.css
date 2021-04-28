@@ -18,9 +18,22 @@
 }
 
 .container {
-    padding : 8px
+    padding : 8px;
+    display: flex; 
+    justify-content: space-around;
+}
+
+.container section {
+    width: 100%;
 }
 
 .attendance-table{
     margin: 8px
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
 }

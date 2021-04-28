@@ -1,4 +1,5 @@
 
+import {logout} from "../../../controller/user/user";
 import DashboardLayout from "../../dashboard-layout/dashboard-layout";
 import { SidebarElement } from "../../sidebar/sidebar";
 
@@ -6,12 +7,12 @@ export enum StudentDashboardSelectedPage {
     home,
     attendance,
     chat,
-    grads
+    grads,
+    accountSettings
 }
 
 export interface StudentDashboardProps extends React.HTMLAttributes<HTMLElement> {
     selectedPage: StudentDashboardSelectedPage,
-    
 }
 
 export function StudentDashboard({ selectedPage, children }: StudentDashboardProps) {
@@ -27,6 +28,20 @@ export function StudentDashboard({ selectedPage, children }: StudentDashboardPro
                     } text={"Chat"} selected={selectedPage === StudentDashboardSelectedPage.chat}></SidebarElement>
                     <SidebarElement href="/student/grades" iconClassName={"bi-percent"
                     } text={"Grades"} selected={selectedPage === StudentDashboardSelectedPage.grads}></SidebarElement>
+                    <SidebarElement
+                        href="/student/settings"
+                        iconClassName={"bi-person-circle"}
+                        text={"Account"}
+                        selected={
+                            selectedPage === StudentDashboardSelectedPage.accountSettings
+                        }
+                    ></SidebarElement>
+                    <SidebarElement
+                        href="/"
+                        iconClassName={"bi-arrow-left"}
+                        text={"Log out"}
+                        onClick={async () => await logout()}
+                    ></SidebarElement>
                 </>
             }>
                 {children}

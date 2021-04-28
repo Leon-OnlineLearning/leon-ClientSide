@@ -9,6 +9,7 @@ module.exports = withImages(
         new options.webpack.ProvidePlugin({ adapter: 'webrtc-adapter' }),
 
       )
+      config.node.fs = "empty"
       return config
     }
   }

@@ -20,13 +20,13 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
     const [deleteDialogShown, setDeleteDialogShown] = useState(false)
     const [deletionMessage, setDeletionMessage] = useState("")
     const [lectureIdDelete, setLectureIdDelete] = useState("")
-    const [selectedFile, setSelectedFile] = useState()
     const [progress, setProgress] = useState(0)
     const [lectureID, setLectureId] = useState("")
     const [successMessage, setSuccessMessage] = useState(false)
     let edit = false;
     // validation
     const [isLectureNameValid, setIsLectureNameValid] = useState(true)
+    const [selectedFile, setSelectedFile] = useState();
 
     const validate = () => {
         let result = true

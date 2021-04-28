@@ -1,12 +1,11 @@
-import User, { UserRole } from "./User";
-import Course from "../course/Course";
+import User from "./User";
 
 export default class Student extends User {
-  constructor(id: number, name: string, private _courses: [Course]) {
-    super(name, id, UserRole.Student);
+  constructor(firstName: string, lastName: string, email: string, private _year: string, id?: string) {
+    super(firstName, lastName, email, "student", id ?? id);
   }
 
-  get courses() : [Course] {
-    return this._courses;
+  get year(): string {
+    return this._year;
   }
 }

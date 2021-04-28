@@ -1,12 +1,13 @@
-import axios from "./utils/common-axio-instance"
+import config from "../utils/config";
+import axios from "axios"
 
 export function createNewLecture(formDate, onUploadProgress) {
-    return axios.post('/lectures', formDate, {onUploadProgress});
+    return axios.post(`${config.serverBaseUrl}/lectures`, formDate, { onUploadProgress });
 }
 
 export function editLecture(formDate, lectureId, onUploadProgress) {
-    
-    return axios.put(`/lectures/${lectureId}`, formDate, {
+
+    return axios.put(`${config.serverBaseUrl}/lectures/${lectureId}`, formDate, {
         headers: {
             "Content-type": "multipart/form-data"
         }

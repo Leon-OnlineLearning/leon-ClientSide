@@ -29,7 +29,7 @@ export default function StudentGrades() {
                         <tr>
                             <th>Exam</th>
                             <th>Grade</th>
-                            <th>FullMark</th>
+                            <th>Full Mark</th>
                         </tr>
                     </thead>
                     <tbody>
