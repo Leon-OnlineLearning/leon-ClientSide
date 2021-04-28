@@ -1,41 +1,47 @@
 import { useRouter } from 'next/router'
 
 import Lecture_manager from '../../../components/stream/lecture_manager/lecture_manager'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import User, { UserRole } from '../../../model/users/User'
+import Student from '../../../model/users/Student';
 
 
 
-const hard_coded_plugs = [{ type: "main", views: ["side", "header"] }, { type: "secondry", views: ["main"] }]
 /**
- * contain 
+ * lecture page
  * @returns react component
  */
 export default function room() {
     // TODO make this an id and get room number from backend
+    const [user, setUser] = useState<User>();
+
+
+    // TODO make this useUser hook
+    useEffect(() => {
+        const firstName = localStorage.getItem("firstName")
+        const lastName = localStorage.getItem("lastName")
+        // TODO add email to localStorage
+        const email = "not yet implemented"
+        const role = localStorage.getItem("role")
+        const id = localStorage.getItem("id")
+        let user = new User(firstName, lastName, email, "", id)
+        user.role = role as UserRole
+        setUser(user)
+
+    }, [])
+
     const router = useRouter()
-    const { role } = router.query
-    // get the tocken from header
-    const accessTocken = ""
-    const roomId = 1234
-    // only used for testing
-    const studnetUser = {role:"student"}
-    const teacherUser = {role:"student"}
+    const { roomId } = router.query
 
-
-    let user = role == "student" ? studnetUser : teacherUser
-    
-    const [plugin_meta, setPlugin_meta] = useState([])
-    useEffect(() => { setPlugin_meta(hard_coded_plugs) }, [])
-
-
-    return(
-        <>
-            <Lecture_manager 
-            plugins_meta = {plugin_meta}
-            userData = {user}
-            roomId = {roomId}
+    console.log(user)
+    return (<>
+        {user &&
+            <Lecture_manager
+                userData={user}
+                roomId={roomId as string}
             />
-        </>
+        }
+    </>
     )
 
 }

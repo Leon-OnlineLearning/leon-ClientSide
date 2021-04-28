@@ -9,7 +9,7 @@ const server = "/janus_back";
 
 
 export interface participantInfo_stream {
-  room: string
+  room: number
   userName: string
 }
 

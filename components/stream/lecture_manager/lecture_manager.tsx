@@ -7,7 +7,7 @@ import User, { UserRole } from '../../../model/users/User'
 
 
 
-export default function Lecture_manager({ plugins_meta, userData, roomId }) {
+export default function Lecture_manager(props:{ userData:User, roomId :string}) {
 
 
     /* ------------------------------ callControls ------------------------------ */
@@ -54,8 +54,8 @@ export default function Lecture_manager({ plugins_meta, userData, roomId }) {
                 {...dataIO_remote}
                 setParticipants={setParticipants}
 
-                userName={userData.name}
-                room={roomId}
+                userName={props.userData.name}
+                room={parseInt(props.roomId)}
             />
 
             <ViewManager
@@ -64,7 +64,7 @@ export default function Lecture_manager({ plugins_meta, userData, roomId }) {
                 {...controlCall}
                 {...dataIO_local}
                 participants={participants}
-                role={userData.role}
+                role={props.userData.role}
             />
 
         </>
