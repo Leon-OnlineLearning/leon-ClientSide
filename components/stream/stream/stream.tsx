@@ -26,6 +26,13 @@ var server = "/janus_back";
 let mixertest = null;
 var opaqueId = "audiobridgetest-" + Janus.randomString(12); //FIXME what am i
 let private_id= null;
+
+
+
+/**
+ * @deprecated
+ * @returns 
+ */
 let Stream = (
   {
     setParticipants,

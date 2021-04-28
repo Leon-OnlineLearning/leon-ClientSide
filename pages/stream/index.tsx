@@ -11,7 +11,9 @@ const StudentViewer = dynamic(
   () => import('../../components/stream/viewer/studentViewer'),
   { ssr: false }
 )
-
+/**
+ * @deprecated
+ */
 export default function Room() {
   const [participants, setParticipants] = useState([]);
   const [myData, setMyData] = useState({ name: "" });

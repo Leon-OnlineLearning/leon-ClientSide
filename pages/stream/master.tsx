@@ -15,7 +15,10 @@ const AdminViewer = dynamic(
 );
 
 
-
+/**
+ * 
+ * @deprecated
+ */
 export default function Room() {
   const [participants, setParticipants] = useState([]);
   const [myData, setMyData] = useState({ name: "" });
