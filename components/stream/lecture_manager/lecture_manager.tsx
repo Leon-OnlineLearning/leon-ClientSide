@@ -7,7 +7,7 @@ import User, { UserRole } from '../../../model/users/User'
 
 
 
-export default function Lecture_manager(props:{ userData:User, roomId :string}) {
+export default function LectureManager(props:{ userData:User, roomId :string}) {
 
 
     /* ------------------------------ callControls ------------------------------ */

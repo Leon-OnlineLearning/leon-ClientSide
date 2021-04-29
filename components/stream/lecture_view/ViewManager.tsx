@@ -3,7 +3,7 @@ import { UserRole } from '../../../model/users/User'
 
 
 
-interface callControls_view {
+interface callControlsView {
     isReadyToJoin: boolean,
 
     muteLocal: boolean,
@@ -14,7 +14,7 @@ interface callControls_view {
     participants: Array<any>
 }
 
-interface dataControl_view {
+interface dataControlView {
     setDataToSend: (data: string) => void,
     dataRecived: string,
     role: UserRole,
@@ -23,7 +23,7 @@ interface dataControl_view {
 
 
 
-export default function ViewManager(props: callControls_view & dataControl_view) {
+export default function ViewManager(props: callControlsView & dataControlView) {
 
  
     const joining_state = props.isReadyToJoin ? 'joined call' : "loading..."

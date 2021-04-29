@@ -25,7 +25,7 @@ export interface callControls_stream {
  * play remote stream (props.muteRemote)
  * user can unmute local stream (props.muteLocal)
  */
-export default function attachAudio(props: callControls_stream & { janus: Janus } & participantInfo_stream) {
+export default function AudioPlugin(props: callControls_stream & { janus: Janus } & participantInfo_stream) {
 
     const audioHandler = useRef(null)
     const audioSourceDeviceRef = useRef(null)

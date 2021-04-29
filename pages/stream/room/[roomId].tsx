@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-import Lecture_manager from '../../../components/stream/lecture_manager/lecture_manager'
+import LectureManager from '../../../components/stream/lecture_manager/lecture_manager'
 import { useEffect, useState } from 'react'
 import User, { UserRole } from '../../../model/users/User'
 import Student from '../../../model/users/Student';
@@ -36,7 +36,7 @@ export default function room() {
     console.log(user)
     return (<>
         {user &&
-            <Lecture_manager
+            <LectureManager
                 userData={user}
                 roomId={roomId as string}
             />
