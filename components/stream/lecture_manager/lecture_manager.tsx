@@ -54,7 +54,7 @@ export default function LectureManager(props:{ userData:User, roomId :string}) {
                 {...dataIO_remote}
                 setParticipants={setParticipants}
 
-                userName={props.userData.name}
+                userName={props.userData.fullName}
                 room={parseInt(props.roomId)}
             />
 

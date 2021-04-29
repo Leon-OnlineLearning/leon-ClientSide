@@ -14,8 +14,8 @@ export default class User {
     public id?: string,
     public role? :UserRole
   ) {}
-  get name (){
-    return this.firstName+this.lastName
+  get fullName (){
+    return this.firstName+" "+this.lastName
   }
 }
 
