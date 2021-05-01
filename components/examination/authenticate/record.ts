@@ -11,7 +11,7 @@ export function recordForPeriod(stream, recordingTime:number,callback){
 
         if (event.data.size > 0) {
             recordedChunks.push(event.data);
-            
+            // TODO make sure this returns true   
             sendRefranceVideo({
                 userId: localStorage.getItem('id'),
                 recordedChunks: recordedChunks
