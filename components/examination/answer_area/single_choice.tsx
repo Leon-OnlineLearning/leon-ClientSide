@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { TextAnswer } from '../../../../../../dev/test/leon-ClientSide/model/examination/answer';
-import { AnswerAreaInterface } from '../../../../../../dev/test/leon-ClientSide/components/examination/answer_area/AnswerAreaInterface';
+import { TextAnswer } from '../../../model/examination/answer';
+import { AnswerAreaInterface } from '../../../components/examination/answer_area/AnswerAreaInterface';
 
 
 let Option =({question, choice,handleChange})=>(
