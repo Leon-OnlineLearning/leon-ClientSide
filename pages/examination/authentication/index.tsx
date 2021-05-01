@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import dynamic from 'next/dynamic';
+import PageHeader from '../../../components/examination/authenticate/layout/header';
 import { useEffect, useState } from 'react';
 // SSR most be closed as loading it at node give has some problems and not required
 const CameraView = dynamic(() => import('../../../components/examination/authenticate/CameraView'),
@@ -33,7 +34,9 @@ export default function Authenticate() {
         setcurrentInstuction(AuthInstructions.greeting)
     }, [])
     return (
-    <>
+        <>
+            <PageHeader centerTitle="Authenticate" />
+
 
             <div className="d-flex flex-column justify-content-center my-3" style={{ width: "100%", alignItems: "center", }} >
                 <h2>{currentInstuction} </h2>
