@@ -1,7 +1,7 @@
 import { sendRefranceVideo } from "../../../controller/exam/exam";
 import { download } from "../recording/utils";
 
-export function recordForPeriod(stream, recordingTime:number){
+export function recordForPeriod(stream, recordingTime:number,callback){
     let options = { mimeType: "video/webm" };
     let recorder = new MediaRecorder(stream, options);
     
@@ -26,5 +26,6 @@ export function recordForPeriod(stream, recordingTime:number){
     setTimeout(() => {
     recorder.stop()
     console.log("recoding stoped")
+    callback()
     }, recordingTime * 1000)
 }

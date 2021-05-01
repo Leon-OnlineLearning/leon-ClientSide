@@ -3,9 +3,10 @@ import AuthenticationView from "./AuthenticationView";
 import { detectAllFaces, resizeResults, TinyFaceDetectorOptions, matchDimensions, nets } from '@vladmandic/face-api';
 import useUserMedia from "../../../hooks/useUserMedia";
 import { recordForPeriod } from "./record";
+import { AuthInstructions } from "../../../pages/examination/authentication";
 
 
-const video_length = 12  // 12 second
+const video_length = 8  // 8 second
 
 const CAPTURE_OPTIONS = {
   audio: false,
@@ -20,6 +21,8 @@ export default function RefranceCapturingView(props: {
   accaptableWidth: number
   accaptableHieght: number
   accaptableScore: number
+  setIsDone: CallableFunction
+  setcurrentInstuction: CallableFunction
 }) {
   const [isModelLaoded, setIsModelLaoded] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
@@ -38,9 +41,14 @@ export default function RefranceCapturingView(props: {
 
   //load the model
   useEffect(() => {
+    props.setcurrentInstuction(AuthInstructions.model_loading)
+
     Promise.all([
       nets.tinyFaceDetector.loadFromUri('/models'),
-    ]).then(() => setIsModelLaoded(true))
+    ]).then(() => {
+      console.debug("modelloaded")
+      setIsModelLaoded(true)
+    })
   }, [])
 
 
@@ -48,17 +56,41 @@ export default function RefranceCapturingView(props: {
   useEffect(() => {
 
     if (isModelLaoded && isVideoLoaded) {
+      props.setcurrentInstuction(AuthInstructions.put_face)
       const displaySize = { width: videoRef.current.width, height: videoRef.current.height }
 
       let detection_interval = setInterval(async () => {
         const detections = await detectAllFaces(videoRef.current, new TinyFaceDetectorOptions())
         if (detections[0] &&
           detections[0].box.width > props.accaptableWidth &&
-          detections[0].box.height > props.accaptableHieght &&
-          detections[0].score > props.accaptableScore) {
+          detections[0].box.height > props.accaptableHieght) {
+          if (detections[0].score > props.accaptableScore) {
+            console.debug(`score = ${detections[0].score}`)
 
-          // FIXME this will send vedio twice sometimes ??
-          recordForPeriod(mediaStream, video_length)
+            // FIXME this will send vedio twice sometimes ??
+            props.setcurrentInstuction(`${AuthInstructions.start_recording} wait for ${video_length}s`)
+            recordForPeriod(srcObj, video_length, () => {
+              props.setIsDone(true)
+            })
+          }
+          else {
+            // if score is bad 
+            console.debug(`score = ${detections[0].score}`)
+
+            // give instucture for lightning
+            props.setcurrentInstuction(current => {
+              if (current == AuthInstructions.bad_lighting) {
+                return current
+              }
+              else {
+                // set it to bad and remove it after some time
+                return AuthInstructions.bad_lighting
+              }
+            })
+
+
+            return
+          }
 
           try {
             clearInterval(detection_interval)
@@ -70,7 +102,21 @@ export default function RefranceCapturingView(props: {
           }
 
         }
-
+        else {
+          if (detections[0]) {
+            console.debug(`width = ${detections[0].box.width}`)
+            console.debug(`hieght = ${detections[0].box.height}`)
+            console.debug(`-----------------------------`)
+            props.setcurrentInstuction(current => {
+              if (current == AuthInstructions.bad_lighting)
+                return AuthInstructions.put_face // return to put face message
+              else
+                return current // if file is uploading don't change it
+            })
+          }
+          else
+            console.debug("no_face")
+        }
       }, 200)
 
       // clean interval in unmount
