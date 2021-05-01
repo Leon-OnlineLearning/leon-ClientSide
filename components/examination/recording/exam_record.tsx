@@ -4,7 +4,7 @@ import useUserMedia from "../../../hooks/useUserMedia";
 
 let counter = 0;
 const record_slice = 10 * 1000 //10 seconds
-export default function Recorder() {
+export default function Recorder(props:{examId:string}) {
 
 
     function handleDataAvailable(event) {
@@ -14,7 +14,7 @@ export default function Recorder() {
             recordedChunks.push(event.data);
             sendExamRecording({
                 // TODO get exam id
-                examId: String(1),
+                examId: props.examId,
                 userId: localStorage.getItem('id'),
                 chunckIndex: counter++,
                 recordedChunks: recordedChunks
