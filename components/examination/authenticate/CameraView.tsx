@@ -24,15 +24,17 @@ export default function RefranceCapturingView(props: {
   const [isModelLaoded, setIsModelLaoded] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
-  const mediaStream = useUserMedia(CAPTURE_OPTIONS);
+  const srcObj = useUserMedia(CAPTURE_OPTIONS);
   const videoRef = useRef(null)
-  let srcObj;
+  // let srcObj;
 
-  if (mediaStream && srcObj == null) {
-    videoRef.current.srcObject = mediaStream;
-    srcObj = mediaStream;
-    console.log("src obj is", srcObj);
-  }
+  useEffect(() => {
+    if (srcObj) {
+      videoRef.current.srcObject = srcObj;
+      console.log("src obj is", srcObj);
+    }
+  }, [srcObj])
+
 
   //load the model
   useEffect(() => {
