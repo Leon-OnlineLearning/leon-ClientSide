@@ -86,6 +86,8 @@ export default function RefranceCapturingView(props: {
         onCanPlay={() => { }}
         radius={170}
         srcObject={srcObj}
+        isLoading={!isModelLaoded}
+
       />
       <video ref={videoRef} style={{ display: 'none' }} onCanPlay={() => { setIsVideoLoaded(true) }} autoPlay />
     </>

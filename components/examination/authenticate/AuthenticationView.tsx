@@ -18,6 +18,7 @@ interface AuthenticationViewProps {
   blurSize?: number;
   srcObject?: MediaProvider | null;
   radius: number;
+  isLoading: boolean;
 }
 
 /**
@@ -41,6 +42,7 @@ const AuthenticationView: React.FC<AuthenticationViewProps> = ({
   srcObject,
   borderColor = "#efefef",
   radius,
+  isLoading
 }) => {
   if (height < 1 || width < 1) {
     throw new Error("Width and height must be >= 1");
@@ -99,6 +101,7 @@ const AuthenticationView: React.FC<AuthenticationViewProps> = ({
               top: "50%",
               left: "50%",
               transform: "translate(-50%,-50%)",
+              filter: isLoading ? "brightness(0.5)" : null
             }}
             autoPlay
             playsInline
