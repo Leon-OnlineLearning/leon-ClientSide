@@ -35,7 +35,7 @@ export default function Authenticate() {
             <PageHeader centerTitle="Authenticate" />
 
 
-            <div className="d-flex flex-column justify-content-center my-3" style={{ width: "100%", alignItems: "center", }} >
+            <div className="d-flex flex-column align-items-center my-3 w-100">
                 <h2>{currentInstuction} </h2>
                 <CameraView
                     accaptableWidth={230}
