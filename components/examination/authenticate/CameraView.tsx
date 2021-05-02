@@ -3,7 +3,7 @@ import AuthenticationView from "./AuthenticationView";
 import { detectAllFaces, resizeResults, TinyFaceDetectorOptions, matchDimensions, nets } from '@vladmandic/face-api';
 import useUserMedia from "../../../hooks/useUserMedia";
 import { recordForPeriod } from "./record";
-import { AuthInstructions } from "../../../pages/examination/authentication";
+import { AuthInstructions } from "../../../pages/student/examination/authentication";
 
 
 const video_length = 8  // 8 second

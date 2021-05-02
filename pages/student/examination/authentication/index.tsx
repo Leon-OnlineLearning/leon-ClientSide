@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import dynamic from 'next/dynamic';
-import PageHeader from '../../../components/examination/authenticate/layout/header';
+import PageHeader from '../../../../components/examination/authenticate/layout/header';
 import { useEffect, useState } from 'react';
 // SSR most be closed as loading it at node give has some problems and not required
-const CameraView = dynamic(() => import('../../../components/examination/authenticate/CameraView'),
+const CameraView = dynamic(() => import('../../../../components/examination/authenticate/CameraView'),
     {
         ssr: false,
         loading: () => <p>loading ...</p>

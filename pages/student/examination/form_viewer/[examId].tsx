@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import ExamContainer from '../../../components/examination/exam_container/ExamContainer';
-import Question_view from '../../../components/examination/Question_view';
-import Recorder from '../../../components/examination/recording/exam_record';
-import Timer from '../../../components/examination/timer/timer';
-import { QuestionInterface } from '../../../model/examination/question';
-import db from "../../../db.json"
+import ExamContainer from '../../../../components/examination/exam_container/ExamContainer';
+import Question_view from '../../../../components/examination/Question_view';
+import Recorder from '../../../../components/examination/recording/exam_record';
+import Timer from '../../../../components/examination/timer/timer';
+import { QuestionInterface } from '../../../../model/examination/question';
+import db from "../../../../db.json"
 
 
 export default function Form_viewer() {
