@@ -30,9 +30,6 @@ export default function Authenticate() {
 
     const [currentInstuction, setcurrentInstuction] = useState(AuthInstructions.greeting);
 
-    useEffect(() => {
-        setcurrentInstuction(AuthInstructions.greeting)
-    }, [])
     return (
         <>
             <PageHeader centerTitle="Authenticate" />
