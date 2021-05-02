@@ -2,6 +2,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic';
 import PageHeader from '../../../../components/examination/authenticate/layout/header';
 import { useEffect, useState } from 'react';
+import { StudentDashboard, StudentDashboardSelectedPage } from '../../../../components/student/dashboad/student-dashboard';
 // SSR most be closed as loading it at node give has some problems and not required
 const CameraView = dynamic(() => import('../../../../components/examination/authenticate/CameraView'),
     {
@@ -19,7 +20,7 @@ export enum AuthInstructions {
 }
 
 
-export default function Authenticate() {
+function Authenticate() {
     // inidcate if vedio has been recorded and ready to leave page
     const [isDone, setIsDone] = useState(false);
     useEffect(() => {
@@ -57,5 +58,13 @@ export default function Authenticate() {
 
 
 
+    )
+}
+
+export default function AuthenticationPage() {
+    return (
+        <StudentDashboard selectedPage={StudentDashboardSelectedPage.exams}>
+            <Authenticate />
+        </StudentDashboard>
     )
 }
