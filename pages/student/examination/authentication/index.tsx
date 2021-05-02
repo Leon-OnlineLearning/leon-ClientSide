@@ -47,7 +47,7 @@ function Authenticate() {
                 />
             </div>
             <div className="d-flex justify-content-center" style={{ width: "100%" }}>
-                <Link href="/examination/form_viewer/6cc2aa24-a155-4590-a4b5-e06c26eb78be">
+                <Link href="/student/examination/form_viewer/6cc2aa24-a155-4590-a4b5-e06c26eb78be">
                     <a>
                         <button className="btn btn-primary mx-auto" hidden={!isDone}>done</button>
                     </a>
