@@ -4,6 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import AccessDenied from "./access-denied"
 import { useRouter } from "next/router"
 import LoginPage from './login'
+import { Spinner } from 'react-bootstrap'
 
 function MyApp({ Component, pageProps }) {
   if (typeof window === 'undefined') {
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }) {
     if (router.pathname !== "/login" && router.pathname !== "/") {
       // TODO a cheap trick to prevent overflow
       router.push('/login')
-      return <div></div>
+      return <Spinner animation="border" variant="primary" />
     }
   }
 
@@ -31,7 +32,7 @@ function MyApp({ Component, pageProps }) {
       const embeddingSigned = localStorage.getItem('embedding-signed')
       if (!embeddingSigned) {
         router.push("/sendEmbedding")
-        return <div>hello</div>
+        return <Spinner animation="border" variant="primary" />
       }
     }
   }
