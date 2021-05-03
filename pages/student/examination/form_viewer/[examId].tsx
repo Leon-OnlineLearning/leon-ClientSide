@@ -11,7 +11,7 @@ import { StudentDashboard, StudentDashboardSelectedPage } from '../../../../comp
 import { Spinner } from 'react-bootstrap';
 
 
-function FormViewer(props: { examId: string }) {
+export default function FormViewer() {
   const questions = db.exams[0].questions
   const [answers, setAnswers] = useState(Array(questions.length).fill(null));
   function handleChange(index, user_answer) {
@@ -21,24 +21,28 @@ function FormViewer(props: { examId: string }) {
     console.log(new_answers)
   }
   let questions_comp = questions.map((question, index) => {
-
     return <Question_view question={question} key={question.questionId} onChange={(answer) => handleChange(index, answer)} />
   })
+  const [examId, queryChecked] = useRouterQuery("examId")
 
-  const router = useRouter()
   // TODO get test length
-  // TODO auto submit when times up
+  // TODO auto submit when times up (ALMOST DONE see `onTimerFinish`)
   // TODO add submit button
 
   return (
     <>
       <div className="position-sticky bg-primary d-flex justify-content-center" style={{ top: 0, zIndex: 1000 }}>
         {/* TODO it should be something more useful not just logging finished!*/}
-        <Timer onTimerFinish={()=>{console.log('finished!')}} timerLength={5} />
+        <Timer onTimerFinish={() => { console.log('finished!') }} timerLength={5} />
       </div>
 
       <ExamContainer>{questions_comp}</ExamContainer>
-      <Recorder examId={props.examId} />
+      {
+        queryChecked ?
+          <Recorder examId={examId} /> :
+          <Spinner animation="border" variant="primary" />
+      }
+
     </>
   )
 }
@@ -71,14 +75,3 @@ function FormViewer(props: { examId: string }) {
 //   // Pass exam data to the page via props
 //   return { props: { ...exam },revalidate: 1 };
 // }
-
-export default function FormViewerPage() {
-  const [examId, queryChecked] = useRouterQuery("examId")
-  return <StudentDashboard selectedPage={StudentDashboardSelectedPage.exams}>
-    {
-      queryChecked ?
-        <FormViewer examId={examId} /> :
-        <Spinner animation="border" variant="primary" />
-    }
-  </StudentDashboard>
-}
