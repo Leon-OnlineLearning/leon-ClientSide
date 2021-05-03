@@ -33,7 +33,8 @@ function FormViewer(props: { examId: string }) {
   return (
     <>
       <div className="position-sticky bg-primary d-flex justify-content-center" style={{ top: 0, zIndex: 1000 }}>
-        <Timer test_length={120} />
+        {/* TODO it should be something more useful not just logging finished!*/}
+        <Timer onTimerFinish={()=>{console.log('finished!')}} timerLength={5} />
       </div>
 
       <ExamContainer>{questions_comp}</ExamContainer>
