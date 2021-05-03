@@ -30,7 +30,7 @@ export function StudentDashboard({ selectedPage, children }: StudentDashboardPro
                     <SidebarElement href="/student/grades" iconClassName={"bi-percent"
                     } text={"Grades"} selected={selectedPage === StudentDashboardSelectedPage.grads}></SidebarElement>
                     <SidebarElement
-                        href="/student/examination/authentication"
+                        href="/student/examination"
                         iconClassName={"bi bi-ui-checks"}
                         text={"Exam"}
                         selected={

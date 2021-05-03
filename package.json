@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev-mock": "json-server --watch ./db.json -p 3001&; next dev",
     "debug-win": "cross-env NODE_OPTIONS='--inspect' next dev",
     "build": "next build && next export",
     "start": "next start",
