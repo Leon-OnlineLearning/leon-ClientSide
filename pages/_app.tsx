@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import AccessDenied from "./access-denied"
 import { useRouter } from "next/router"
+import LoginPage from './login'
 
 function MyApp({ Component, pageProps }) {
   if (typeof window === 'undefined') {
@@ -11,8 +12,28 @@ function MyApp({ Component, pageProps }) {
   const role = localStorage.getItem('role')
   let allowed = true
   const router = useRouter()
-  if (router.pathname.startsWith('/student') && role.toLowerCase() !== "student") {
-    allowed = false
+  console.log(router.pathname);
+
+  console.log(role);
+
+  if (!role) {
+    if (router.pathname !== "/login" && router.pathname !== "/") {
+      // TODO a cheap trick to prevent overflow
+      router.push('/login')
+      return <div></div>
+    }
+  }
+
+  if (router.pathname.startsWith('/student')) {
+    if (role && role.toLowerCase() !== "student") {
+      allowed = false
+    } else {
+      const embeddingSigned = localStorage.getItem('embedding-signed')
+      if (!embeddingSigned) {
+        router.push("/sendEmbedding")
+        return <div>hello</div>
+      }
+    }
   }
   if (router.pathname.startsWith('/professor') && role.toLowerCase() !== "professor") {
     allowed = false

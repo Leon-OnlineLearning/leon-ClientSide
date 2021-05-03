@@ -1,7 +1,4 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { request } from "node:https";
-import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { StudentDashboard, StudentDashboardSelectedPage } from "../../../../components/student/dashboad/student-dashboard";
 import { useRouterQuery } from "../../../../hooks/useRouteQuery";

@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import dynamic from 'next/dynamic';
-import PageHeader from '../../../../components/examination/authenticate/layout/header';
+import PageHeader from '../../components/examination/authenticate/layout/header';
 import { useEffect, useState } from 'react';
-import { StudentDashboard, StudentDashboardSelectedPage } from '../../../../components/student/dashboad/student-dashboard';
+import { StudentDashboard, StudentDashboardSelectedPage } from '../../components/student/dashboad/student-dashboard';
 // SSR most be closed as loading it at node give has some problems and not required
-const CameraView = dynamic(() => import('../../../../components/examination/authenticate/CameraView'),
+const CameraView = dynamic(() => import('../../components/examination/authenticate/CameraView'),
     {
         ssr: false,
         loading: () => <p>loading ...</p>
@@ -20,11 +20,12 @@ export enum AuthInstructions {
 }
 
 
-function Authenticate() {
+export default function Authenticate() {
     // inidcate if vedio has been recorded and ready to leave page
     const [isDone, setIsDone] = useState(false);
     useEffect(() => {
         if (isDone) {
+            localStorage.setItem("embedding-signed", "1")
             setcurrentInstuction(AuthInstructions.authontication_finished)
         }
     }, [isDone])
@@ -47,7 +48,7 @@ function Authenticate() {
                 />
             </div>
             <div className="d-flex justify-content-center" style={{ width: "100%" }}>
-                <Link href="/student/examination/form_viewer/6cc2aa24-a155-4590-a4b5-e06c26eb78be">
+                <Link href="/student">
                     <a>
                         <button className="btn btn-primary mx-auto" hidden={!isDone}>done</button>
                     </a>
@@ -58,13 +59,5 @@ function Authenticate() {
 
 
 
-    )
-}
-
-export default function AuthenticationPage() {
-    return (
-        <StudentDashboard selectedPage={StudentDashboardSelectedPage.exams}>
-            <Authenticate />
-        </StudentDashboard>
     )
 }

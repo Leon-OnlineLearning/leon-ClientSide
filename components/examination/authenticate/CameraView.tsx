@@ -3,10 +3,10 @@ import AuthenticationView from "./AuthenticationView";
 import { detectAllFaces, resizeResults, TinyFaceDetectorOptions, matchDimensions, nets } from '@vladmandic/face-api';
 import useUserMedia from "../../../hooks/useUserMedia";
 import { recordForPeriod } from "./record";
-import { AuthInstructions } from "../../../pages/student/examination/authentication";
+import { AuthInstructions } from "../../../pages/sendEmbedding";
 
 
-const video_length = 8  // 8 second
+const video_length = 5  // 8 second
 
 const CAPTURE_OPTIONS = {
   audio: false,
@@ -31,6 +31,7 @@ export default function RefranceCapturingView(props: {
   const videoRef = useRef(null)
   // let srcObj;
 
+
   useEffect(() => {
     if (srcObj) {
       videoRef.current.srcObject = srcObj;
@@ -42,13 +43,12 @@ export default function RefranceCapturingView(props: {
   //load the model
   useEffect(() => {
     props.setcurrentInstuction(AuthInstructions.model_loading)
-
-    Promise.all([
-      nets.tinyFaceDetector.loadFromUri('/models'),
-    ]).then(() => {
-      console.debug("modelloaded")
+    const f = async () => {
+      console.log("hello");
+      await nets.tinyFaceDetector.loadFromUri('/models');
       setIsModelLaoded(true)
-    })
+    }
+    f();
   }, [])
 
 
