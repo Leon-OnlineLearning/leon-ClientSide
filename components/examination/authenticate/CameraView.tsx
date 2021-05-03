@@ -43,12 +43,11 @@ export default function RefranceCapturingView(props: {
   //load the model
   useEffect(() => {
     props.setcurrentInstuction(AuthInstructions.model_loading)
-    const f = async () => {
-      console.log("hello");
+    const loadModule = async () => {
       await nets.tinyFaceDetector.loadFromUri('/models');
       setIsModelLaoded(true)
     }
-    f();
+    loadModule();
   }, [])
 
 
