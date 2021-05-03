@@ -45,7 +45,7 @@ function ExamInfo(props: { id: string }) {
 }
 
 export default function ExamInfoPage() {
-  const [id, queryChecked] = useRouterQuery()
+  const [id, queryChecked] = useRouterQuery("id")
   return <StudentDashboard selectedPage={StudentDashboardSelectedPage.exams}>
     {
       queryChecked ?

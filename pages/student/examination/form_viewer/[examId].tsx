@@ -73,7 +73,7 @@ function FormViewer(props: { examId: string }) {
 // }
 
 export default function FormViewerPage() {
-  const [examId, queryChecked] = useRouterQuery()
+  const [examId, queryChecked] = useRouterQuery("examId")
   return <StudentDashboard selectedPage={StudentDashboardSelectedPage.exams}>
     {
       queryChecked ?
