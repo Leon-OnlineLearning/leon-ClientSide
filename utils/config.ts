@@ -1,5 +1,5 @@
 const config = {
-    serverBaseUrl: 'http://localhost:3333',
+    serverBaseUrl: '/backend',
     dbVersion: 1
 }
 

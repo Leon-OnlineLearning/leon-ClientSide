@@ -36,10 +36,14 @@
           "questionText": "question text needs single choice ",
           "questionType": "Image"
         }
-      ]
+      ],
+      "mark": 5,
+      "title": "Quiz on software engineering may 2020",
+      "startDate": "2021-05-03T03:40:19.363Z",
+      "endDate": "2021-05-03T06:40:48.437Z"
     },
     {
-      "id": 2,
+      "id": "9c637d24-0fbc-4b7c-ae97-46e04a275d81",
       "questions": [
         {
           "questionId": 1223,
@@ -47,7 +51,11 @@
           "questionType": "MultiChoice",
           "choices": ["choice one", "choice two", "choice three", "choice four"]
         }
-      ]
+      ],
+      "mark": 10,
+      "title": "Midterm",
+      "startDate": "2021-05-03T03:40:19.363Z",
+      "endDate": "2021-05-03T06:40:48.437Z"
     },
     {
       "id": 3,
@@ -58,7 +66,11 @@
           "questionType": "Code",
           "code_lang": "javascript"
         }
-      ]
+      ],
+      "mark": 5,
+      "title": "Quiz on design patterns may 2020",
+      "startDate": "2021-05-03T03:40:19.363Z",
+      "endDate": "2021-05-03T06:40:48.437Z"
     }
   ]
 }

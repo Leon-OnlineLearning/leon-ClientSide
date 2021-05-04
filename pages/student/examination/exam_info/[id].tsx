@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { Spinner } from "react-bootstrap";
+import { StudentDashboard, StudentDashboardSelectedPage } from "../../../../components/student/dashboad/student-dashboard";
+import { useRouterQuery } from "../../../../hooks/useRouteQuery";
 
-export default function ExamInfo() {
+function ExamInfo(props: { id: string }) {
   return (
     <>
       <div
@@ -39,4 +42,15 @@ export default function ExamInfo() {
       </div>
     </>
   );
+}
+
+export default function ExamInfoPage() {
+  const [id, queryChecked] = useRouterQuery("id")
+  return <StudentDashboard selectedPage={StudentDashboardSelectedPage.exams}>
+    {
+      queryChecked ?
+        <ExamInfo id={id} /> :
+        <Spinner animation="border" variant="primary" />
+    }
+  </StudentDashboard>
 }

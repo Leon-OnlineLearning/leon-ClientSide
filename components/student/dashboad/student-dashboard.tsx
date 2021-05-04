@@ -1,5 +1,5 @@
 
-import {logout} from "../../../controller/user/user";
+import { logout } from "../../../controller/user/user";
 import DashboardLayout from "../../dashboard-layout/dashboard-layout";
 import { SidebarElement } from "../../sidebar/sidebar";
 
@@ -8,6 +8,7 @@ export enum StudentDashboardSelectedPage {
     attendance,
     chat,
     grads,
+    exams,
     accountSettings
 }
 
@@ -28,6 +29,15 @@ export function StudentDashboard({ selectedPage, children }: StudentDashboardPro
                     } text={"Chat"} selected={selectedPage === StudentDashboardSelectedPage.chat}></SidebarElement>
                     <SidebarElement href="/student/grades" iconClassName={"bi-percent"
                     } text={"Grades"} selected={selectedPage === StudentDashboardSelectedPage.grads}></SidebarElement>
+                    <SidebarElement
+                        href="/student/examination"
+                        iconClassName={"bi bi-ui-checks"}
+                        text={"Exam"}
+                        selected={
+                            selectedPage === StudentDashboardSelectedPage.exams
+                        }
+                    >
+                    </SidebarElement>
                     <SidebarElement
                         href="/student/settings"
                         iconClassName={"bi-person-circle"}
