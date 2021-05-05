@@ -17,14 +17,14 @@ const CAPTURE_OPTIONS = {
  * @param props 
  * @returns 
  */
-export default function RefranceCapturingView(props: {
-  accaptableWidth: number
-  accaptableHieght: number
-  accaptableScore: number
+export default function ReferenceCapturingView(props: {
+  acceptableWidth: number
+  acceptableHeight: number
+  acceptableScore: number
   setIsDone: CallableFunction
-  setcurrentInstuction: CallableFunction
+  setCurrentInstruction: CallableFunction
 }) {
-  const [isModelLaoded, setIsModelLaoded] = useState(false);
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const srcObj = useUserMedia(CAPTURE_OPTIONS);
@@ -42,10 +42,10 @@ export default function RefranceCapturingView(props: {
 
   //load the model
   useEffect(() => {
-    props.setcurrentInstuction(AuthInstructions.model_loading)
+    props.setCurrentInstruction(AuthInstructions.model_loading)
     const loadModule = async () => {
       await nets.tinyFaceDetector.loadFromUri('/models');
-      setIsModelLaoded(true)
+      setIsModelLoaded(true)
     }
     loadModule();
   }, [])
@@ -54,20 +54,20 @@ export default function RefranceCapturingView(props: {
   // detect user face
   useEffect(() => {
 
-    if (isModelLaoded && isVideoLoaded) {
-      props.setcurrentInstuction(AuthInstructions.put_face)
+    if (isModelLoaded && isVideoLoaded) {
+      props.setCurrentInstruction(AuthInstructions.put_face)
       const displaySize = { width: videoRef.current.width, height: videoRef.current.height }
 
       let detection_interval = setInterval(async () => {
         const detections = await detectAllFaces(videoRef.current, new TinyFaceDetectorOptions())
         if (detections[0] &&
-          detections[0].box.width > props.accaptableWidth &&
-          detections[0].box.height > props.accaptableHieght) {
-          if (detections[0].score > props.accaptableScore) {
+          detections[0].box.width > props.acceptableWidth &&
+          detections[0].box.height > props.acceptableHeight) {
+          if (detections[0].score > props.acceptableScore) {
             console.debug(`score = ${detections[0].score}`)
 
             // FIXME this will send vedio twice sometimes ??
-            props.setcurrentInstuction(`${AuthInstructions.start_recording} wait for ${video_length}s`)
+            props.setCurrentInstruction(`${AuthInstructions.start_recording} wait for ${video_length}s`)
             recordForPeriod(srcObj, video_length, () => {
               props.setIsDone(true)
             })
@@ -77,7 +77,7 @@ export default function RefranceCapturingView(props: {
             console.debug(`score = ${detections[0].score}`)
 
             // give instucture for lightning
-            props.setcurrentInstuction(current => {
+            props.setCurrentInstruction(current => {
               if (current == AuthInstructions.bad_lighting) {
                 return current
               }
@@ -106,7 +106,7 @@ export default function RefranceCapturingView(props: {
             console.debug(`width = ${detections[0].box.width}`)
             console.debug(`hieght = ${detections[0].box.height}`)
             console.debug(`-----------------------------`)
-            props.setcurrentInstuction(current => {
+            props.setCurrentInstruction(current => {
               if (current == AuthInstructions.bad_lighting)
                 return AuthInstructions.put_face // return to put face message
               else
@@ -122,7 +122,7 @@ export default function RefranceCapturingView(props: {
 
     }
 
-  }, [isModelLaoded, isVideoLoaded])
+  }, [isModelLoaded, isVideoLoaded])
 
   return (
     <>
@@ -133,7 +133,7 @@ export default function RefranceCapturingView(props: {
         onCanPlay={() => { }}
         radius={170}
         srcObject={srcObj}
-        isLoading={!isModelLaoded}
+        isLoading={!isModelLoaded}
 
       />
       <video ref={videoRef} style={{ display: 'none' }} onCanPlay={() => { setIsVideoLoaded(true) }} autoPlay />
