@@ -13,6 +13,40 @@ function MyApp({ Component, pageProps }) {
   if (typeof window === 'undefined') {
     return <Component {...pageProps} />
   }
+  let allowed = true
+  const router = useRouter()
+  console.log(router.pathname);
+
+
+  const role = localStorage.getItem('role')
+
+  if (!role) {
+    if (router.pathname !== "/login" && router.pathname !== "/") {
+      // TODO a cheap trick to prevent overflow
+      router.push('/login')
+      return <Spinner animation="border" variant="primary" />
+    }
+  }
+
+
+  if (router.pathname.startsWith('/student')) {
+    if (role && role.toLowerCase() !== "student") {
+      allowed = false
+    } else {
+      const embeddingSigned = localStorage.getItem('embedding-signed')
+      if (!embeddingSigned) {
+        router.push("/sendEmbedding")
+        return <Spinner animation="border" variant="primary" />
+      }
+    }
+  }
+  if (router.pathname.startsWith('/professor') && role.toLowerCase() !== "professor") {
+    allowed = false
+  }
+  if (router.pathname.startsWith('/admin') && role.toLowerCase() !== "admin") {
+    allowed = false
+  }
+
   // local storage context content
   // added state not to override window.localStorage
   // if window is undefined it will be caught by a previous if statement
@@ -32,39 +66,6 @@ function MyApp({ Component, pageProps }) {
     localStorage.setItem(key, value);
   }
 
-  let allowed = true
-  const router = useRouter()
-  console.log(router.pathname);
-
-  console.log(localStorageState.role);
-
-  if (!localStorageState.role) {
-    if (router.pathname !== "/login" && router.pathname !== "/") {
-      // TODO a cheap trick to prevent overflow
-      router.push('/login')
-      return <Spinner animation="border" variant="primary" />
-    }
-  }
-
-  const role  = localStorageState.role
-
-  if (router.pathname.startsWith('/student')) {
-    if (role && role.toLowerCase() !== "student") {
-      allowed = false
-    } else {
-      const embeddingSigned = localStorageState.embeddingSigned
-      if (!embeddingSigned) {
-        router.push("/sendEmbedding")
-        return <Spinner animation="border" variant="primary" />
-      }
-    }
-  }
-  if (router.pathname.startsWith('/professor') && role.toLowerCase() !== "professor") {
-    allowed = false
-  }
-  if (router.pathname.startsWith('/admin') && role.toLowerCase() !== "admin") {
-    allowed = false
-  }
 
   return (
     <LocalStorageContext.Provider value={{
