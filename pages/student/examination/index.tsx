@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import ExamCard from "../../../components/exam/exam-card";
 import { StudentDashboard, StudentDashboardSelectedPage } from "../../../components/student/dashboad/student-dashboard";
@@ -5,9 +6,12 @@ import { getAllExams } from "../../../controller/exam/exam";
 
 const ExaminationPage: React.FC = () => {
     const [exams, setExams] = useState([])
+    const router = useRouter()
     useEffect(() => {
         const f = async () => {
-            const e = await getAllExams(localStorage.getItem('id'))
+            const e = await getAllExams(localStorage.getItem('id'), () => {
+                router.push('/sendEmbedding')
+            })
             setExams(e)
         }
         f();

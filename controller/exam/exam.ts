@@ -91,7 +91,19 @@ export async function sendRefranceVideo(
     .catch(console.log);
 }
 
-export async function getAllExams(studentId) {
+export async function getAllExams(studentId, onNoEmbeddingRecorded) {
+  // FIXME for testing purposes i will reject if we don't have a local storage entry 
+  // called "delete-this"  
+  // when real exams are added in the database it will check if the response from
+  // the page has a 403 code then fire "onNoEmbeddingRecorded"
+  ///////////////// This section will be deleted
+  const deleteThis = localStorage.getItem('delete-this')
+  if (!deleteThis) {
+    onNoEmbeddingRecorded()
+    localStorage.setItem('delete-this', "1")
+  }
+  ///////////////// till here
+
   // TODO use student id in the request
   return await Promise.resolve(data.exams);
 }
