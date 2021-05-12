@@ -1,7 +1,7 @@
 import { sendRefranceVideo } from "../../../controller/exam/exam";
 import { download } from "../recording/utils";
 
-export function recordForPeriod(stream, recordingTime:number,callback){
+export function recordForPeriod(userId: string, stream, recordingTime:number,callback){
     let options = { mimeType: "video/webm" };
     let recorder = new MediaRecorder(stream, options);
     
@@ -13,7 +13,7 @@ export function recordForPeriod(stream, recordingTime:number,callback){
             recordedChunks.push(event.data);
             // TODO make sure this returns true   
             sendRefranceVideo({
-                userId: localStorage.getItem('id'),
+                userId,
                 recordedChunks: recordedChunks
             })
         }

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AuthenticationView from "./AuthenticationView";
 import { detectAllFaces, resizeResults, TinyFaceDetectorOptions, matchDimensions, nets } from '@vladmandic/face-api';
 import useUserMedia from "../../../hooks/useUserMedia";
 import { recordForPeriod } from "./record";
 import { AuthInstructions } from "../../../pages/sendEmbedding";
+import LocalStorageContext from "../../../contexts/localStorageContext";
 
 
 const video_length = 5  // 8 second
@@ -31,6 +32,7 @@ export default function ReferenceCapturingView(props: {
   const videoRef = useRef(null)
   // let srcObj;
 
+  const localStorageContext = useContext(LocalStorageContext)
 
   useEffect(() => {
     if (srcObj) {
@@ -68,7 +70,7 @@ export default function ReferenceCapturingView(props: {
 
             // FIXME this will send vedio twice sometimes ??
             props.setCurrentInstruction(`${AuthInstructions.start_recording} wait for ${video_length}s`)
-            recordForPeriod(srcObj, video_length, () => {
+            recordForPeriod(localStorageContext.userId, srcObj, video_length, () => {
               props.setIsDone(true)
             })
           }
