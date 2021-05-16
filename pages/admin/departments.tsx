@@ -2,7 +2,7 @@ import {
   AdminDashboard,
   AdminDashboardSelectedPage,
 } from "../../components/admin/dashboard/admin-dashboard";
-import DepartmentLayout from "../../components/list-layout/list-layout";
+import DepartmentLayout from "../../components/admin/add-new-department/department-layout";
 import {
   editDepartment,
   deleteDepartment,

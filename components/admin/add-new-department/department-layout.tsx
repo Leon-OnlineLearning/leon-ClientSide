@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Table from "react-bootstrap/Table"
 import styles from "./list-layout.module.css"
-import Item from "../../model/Item"
 
 interface ItemModalTemplateProps {
   show : boolean,
@@ -55,14 +54,14 @@ function singular(input: string) {
  */
 export interface DepartmentLayoutProps {
   title: string;
-  onFetchItems?: (take?: number, skip?: number) => Promise<Item[]>;
-  onEditItem?: (oldInstance: Item, newInstance: Item) => Promise<void>;
-  onDeleteItem?: (instance: Item) => Promise<void>;
+  onFetchItems?: (take?: number, skip?: number) => Promise<any[]>;
+  onEditItem?: (oldInstance: any, newInstance: any) => Promise<void>;
+  onDeleteItem?: (instance: any) => Promise<void>;
   onAddNewItem?: (title: string) => Promise<any>;
 }
 
 const DepartmentLayout: React.FC<DepartmentLayoutProps> = ({ title, onAddNewItem, onFetchItems, onDeleteItem, onEditItem }) => {
-    const [items, setItems] = useState<Item[]>([])
+    const [items, setItems] = useState<any[]>([])
     const [newItemName, setNewItemName] = useState("")
     const [editModalShow, setEditingModalShow] = useState(false)
     const [addNewModalShow, setAddNewModelShow] = useState(false)
