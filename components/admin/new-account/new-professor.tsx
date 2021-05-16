@@ -6,6 +6,7 @@ import User from "../../../model/users/User";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "../../../controller/courses/courses";
 import styles from "./new-account.module.css";
+import { createNewProfessor } from "../../../controller/user/user";
 
 type NewStudentProps = {
   userDate: User;
@@ -25,7 +26,7 @@ function NewProfessor({ userDate }: NewStudentProps) {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    //await sendUserData({ ...userDate, year: yearName });
+    // await createNewProfessor({...userDate, })
   };
 
   const onSelectCourseChange = (e) => {
