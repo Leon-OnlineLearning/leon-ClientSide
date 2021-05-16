@@ -16,11 +16,11 @@ export async function editCourse(oldCourse: Item, newCourse: Item) {
   );
 }
 
-export async function addNewCourse(title: string) {
+export async function addNewCourse(course) {
   return await axios
     .post(
       `${config.serverBaseUrl}/courses/`,
-      { name: title },
+      { name: course.name, year: course.year, department: course.department },
       {
         withCredentials: true,
       }
