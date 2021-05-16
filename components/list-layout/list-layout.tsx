@@ -53,7 +53,7 @@ function singular(input: string) {
  * 
  * the `fetch` field prints all the resulting data
  */
-export interface ListLayoutProps {
+export interface DepartmentLayoutProps {
   title: string;
   onFetchItems?: (take?: number, skip?: number) => Promise<Item[]>;
   onEditItem?: (oldInstance: Item, newInstance: Item) => Promise<void>;
@@ -61,7 +61,7 @@ export interface ListLayoutProps {
   onAddNewItem?: (title: string) => Promise<any>;
 }
 
-const ListLayout: React.FC<ListLayoutProps> = ({ title, onAddNewItem, onFetchItems, onDeleteItem, onEditItem }) => {
+const DepartmentLayout: React.FC<DepartmentLayoutProps> = ({ title, onAddNewItem, onFetchItems, onDeleteItem, onEditItem }) => {
     const [items, setItems] = useState<Item[]>([])
     const [newItemName, setNewItemName] = useState("")
     const [editModalShow, setEditingModalShow] = useState(false)
@@ -192,4 +192,4 @@ const ListLayout: React.FC<ListLayoutProps> = ({ title, onAddNewItem, onFetchIte
     );
 }
 
-export default ListLayout;
+export default DepartmentLayout;
