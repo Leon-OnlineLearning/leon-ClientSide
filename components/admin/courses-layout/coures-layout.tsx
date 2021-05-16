@@ -3,10 +3,12 @@ import { Button, Dropdown, DropdownButton, Form, FormControl, FormGroup, Modal, 
 import { addNewCourse, editCourse, getAllCourses } from "../../../controller/courses/courses";
 import { getDepartments } from "../../../controller/departments";
 import janus from "../../../public/janus/janus";
+import { DeleteButton, EditButton } from "../../buttons";
 
 interface EditModalProps {
     departments: any[];
     show: boolean;
+    newEntity?: boolean;
     currentCourseState: any;
     currentCourseOnChange: Dispatch<SetStateAction<{ name: string; department: string; year: number; }>>
     onHide: () => void;
@@ -18,13 +20,14 @@ function EditModal({ departments,
     onHide,
     currentCourseState,
     currentCourseOnChange,
+    newEntity = false,
     onSubmit }: EditModalProps
 ) {
     const [selectedDepartment, setSelectedDepartment] = useState<any>({});
     return (
         <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
-                <Modal.Title>{currentCourseState.name !== "" ? `Edit course "${currentCourseState.name}"` : "Add new course"}</Modal.Title>
+                <Modal.Title>{!newEntity ? `Edit course "${currentCourseState.name}"` : "Add new course"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={(e) => {
@@ -113,7 +116,7 @@ const CoursesLayout: React.FC = () => {
             const c = await getAllCourses()
             let newCourses = {}
             c.forEach(course => {
-                newCourses = {...newCourses, [course.id] : course}
+                newCourses = { ...newCourses, [course.id]: course }
             });
             setCourses(newCourses)
         }
@@ -122,7 +125,7 @@ const CoursesLayout: React.FC = () => {
 
     const onCourseUpsertHandlerUi = (courseData) => {
         const newCourses = { ...courses, [courseData.id]: courseData }
-        console.log("new courses",newCourses);
+        console.log("new courses", newCourses);
         setCourses(newCourses)
     }
     return (
@@ -164,14 +167,15 @@ const CoursesLayout: React.FC = () => {
                                             dep => dep.id === courses[courseId].department
                                         )[0].name
                                     }</td>
-                                    <td><Button
-                                        onClick={() => {
-                                            setSelectedCourse(courses[courseId])
-                                            setShowEditingModal(true)
-                                        }}
-                                    >Edit</Button>
+                                    <td>
+                                        <EditButton
+                                            onClick={() => {
+                                                setSelectedCourse(courses[courseId])
+                                                setShowEditingModal(true)
+                                            }}
+                                        />
                                     </td>
-                                    <td><Button>Delete</Button></td>
+                                    <td><DeleteButton onClick={() => { }} /></td>
                                 </tr>
                             </Fragment>
                         )
@@ -190,14 +194,16 @@ const CoursesLayout: React.FC = () => {
                     setShowEditingModal(false)
                 }} />
             <EditModal
+                newEntity
                 departments={departments}
                 currentCourseState={scaffoldForNewState}
                 currentCourseOnChange={setScaffoldNewState}
                 onHide={() => setNewCourseModalShow(false)}
                 show={newCourseModalShow}
                 onSubmit={async (courseData) => {
-                    await addNewCourse(courseData)
-                    onCourseUpsertHandlerUi(courseData);
+                    let course = await addNewCourse(courseData)
+                    course.department = course.department.id
+                    onCourseUpsertHandlerUi(course);
                     setNewCourseModalShow(false)
                 }} />
         </>
