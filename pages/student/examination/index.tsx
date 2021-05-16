@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ExamCard from "../../../components/exam/exam-card";
 import { StudentDashboard, StudentDashboardSelectedPage } from "../../../components/student/dashboad/student-dashboard";
+import LocalStorageContext from "../../../contexts/localStorageContext";
 import { getAllExams } from "../../../controller/exam/exam";
 
 const ExaminationPage: React.FC = () => {
     const [exams, setExams] = useState([])
+    const localStorageContext = useContext(LocalStorageContext)
     useEffect(() => {
         const f = async () => {
-            const e = await getAllExams(localStorage.getItem('id'))
+            const e = await getAllExams(localStorageContext.userId)
             setExams(e)
         }
         f();

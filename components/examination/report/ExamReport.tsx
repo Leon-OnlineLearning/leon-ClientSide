@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import LocalStorageContext from "../../../contexts/localStorageContext";
 import { getExamReport } from "../../../controller/exam/report";
 import VideoIncidant from "./VideoIncidant";
 
@@ -9,8 +10,10 @@ export default function ExamReport() {
     const router = useRouter()
     const { examId } = router.query
 
+    const localStorageContext = useContext(LocalStorageContext)
+
     useEffect(() => {
-        getExamReport(localStorage.getItem('id'), examId).then(report => setExamReport(report))
+        getExamReport(localStorageContext.userId, examId).then(report => setExamReport(report))
     }, [])
 
     console.log(examReport)
