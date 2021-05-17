@@ -28,8 +28,8 @@ export async function addNewCourse(course) {
     .then((response) => response.data);
 }
 
-export async function deleteCourse(course: Item) {
-  await axios.delete(`${config.serverBaseUrl}/courses/${course.id}`, {
+export async function deleteCourse(courseId: string) {
+  await axios.delete(`${config.serverBaseUrl}/courses/${courseId}`, {
     withCredentials: true,
   });
 }

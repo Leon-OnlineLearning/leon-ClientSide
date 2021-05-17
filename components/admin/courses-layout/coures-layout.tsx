@@ -1,6 +1,6 @@
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import { Button, Dropdown, DropdownButton, Form, FormControl, FormGroup, Modal, Table } from "react-bootstrap"
-import { addNewCourse, editCourse, getAllCourses } from "../../../controller/courses/courses";
+import { addNewCourse, deleteCourse, editCourse, getAllCourses } from "../../../controller/courses/courses";
 import { getDepartments } from "../../../controller/departments";
 import janus from "../../../public/janus/janus";
 import { DeleteButton, EditButton } from "../../buttons";
@@ -128,6 +128,13 @@ const CoursesLayout: React.FC = () => {
         console.log("new courses", newCourses);
         setCourses(newCourses)
     }
+
+    const onCourseDeleteHandlerUi = (courseId: string) => {
+        let newCoursesState = {...courses}
+        delete newCoursesState[courseId]
+        setCourses(newCoursesState)
+    }
+
     return (
         <>
             <h1>Courses</h1>
@@ -175,7 +182,10 @@ const CoursesLayout: React.FC = () => {
                                             }}
                                         />
                                     </td>
-                                    <td><DeleteButton onClick={() => { }} /></td>
+                                    <td><DeleteButton onClick={() => { 
+                                        deleteCourse(courseId)
+                                        onCourseDeleteHandlerUi(courseId)
+                                     }} /></td>
                                 </tr>
                             </Fragment>
                         )

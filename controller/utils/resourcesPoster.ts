@@ -24,7 +24,7 @@ import Cookie from "js-cookie"
 async function resourcesPoster(resourceName: string, data: any) {
 	return await axios.post(`${config.serverBaseUrl}/${resourceName}`, { ...data }, {withCredentials: true})
 		.then(response => [null, response.data])
-		.catch(err => [err, null])
+		.catch(err => [err.response, null])
 }
 
 export default resourcesPoster;
