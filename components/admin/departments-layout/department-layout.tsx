@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Table from "react-bootstrap/Table"
 import { DeleteButton, EditButton } from "../../buttons";
@@ -9,7 +9,9 @@ interface ItemModalTemplateProps {
   onHide: () => void,
   title: string,
   itemName: string,
-  onSubmit: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>,
+  onSubmit: (e?:
+    React.MouseEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>
+  ) => Promise<void>, // button clicks or form submissions
   onItemNameChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -20,7 +22,10 @@ function ItemModalTemplate({ show, onHide, title, itemName, onSubmit, onItemName
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form onSubmit={(e) => {
+          e.preventDefault()
+          onSubmit(e)
+        }}>
           <Form.Label>Name</Form.Label>
           <Form.Control
             onChange={onItemNameChange}
@@ -30,7 +35,7 @@ function ItemModalTemplate({ show, onHide, title, itemName, onSubmit, onItemName
       </Modal.Body>
       <Modal.Footer>
         <Button
-          onClick={onSubmit}
+          type="submit"
         >
           submit
               </Button>
