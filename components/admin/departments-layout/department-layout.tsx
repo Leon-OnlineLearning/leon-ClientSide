@@ -9,9 +9,7 @@ interface ItemModalTemplateProps {
   onHide: () => void,
   title: string,
   itemName: string,
-  onSubmit: (e?:
-    React.MouseEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>
-  ) => Promise<void>, // button clicks or form submissions
+  onSubmit: () => Promise<void>, // button clicks or form submissions
   onItemNameChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -24,22 +22,22 @@ function ItemModalTemplate({ show, onHide, title, itemName, onSubmit, onItemName
       <Modal.Body>
         <Form onSubmit={(e) => {
           e.preventDefault()
-          onSubmit(e)
+          onSubmit()
         }}>
           <Form.Label>Name</Form.Label>
           <Form.Control
             onChange={onItemNameChange}
             value={itemName}
           ></Form.Control>
+          <div style={{ display: "flex", justifyContent: "flex-end", padding: "8px" }}>
+            <Button
+              type="submit"
+            >
+              submit
+              </Button>
+          </div>
         </Form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button
-          type="submit"
-        >
-          submit
-              </Button>
-      </Modal.Footer>
     </Modal>
   );
 }
@@ -96,8 +94,8 @@ const DepartmentLayout: React.FC<DepartmentLayoutProps> = ({ title, onAddNewItem
           <i className="bi bi-file-earmark-plus-fill"></i> Add new
           </Button>
         <ItemModalTemplate
-          onSubmit={async (e: React.MouseEvent<HTMLButtonElement>) => {
-            e.preventDefault();
+          onSubmit={async () => {
+            console.log("the modal itself is working something is not right in submission logic");
             try {
               const newItem = await onAddNewItem(newItemName);
               console.log(newItem)
@@ -161,8 +159,7 @@ const DepartmentLayout: React.FC<DepartmentLayoutProps> = ({ title, onAddNewItem
                     onItemNameChange={(e) =>
                       setSelectedItemName(e.target.value)
                     }
-                    onSubmit={async (e) => {
-                      e.preventDefault();
+                    onSubmit={async () => {
                       try {
                         await onEditItem(item, {
                           id: item.id,
