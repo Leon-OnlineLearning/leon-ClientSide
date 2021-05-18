@@ -2,6 +2,8 @@ import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import { Button, Dropdown, DropdownButton, Form, FormControl, FormGroup, Modal, Table } from "react-bootstrap"
 import { addNewCourse, deleteCourse, editCourse, getAllCourses } from "../../../controller/courses/courses";
 import { getDepartments } from "../../../controller/departments";
+import UserInputError from "../../../controller/utils/UserInputError";
+import { useError } from "../../../hooks/useError";
 import janus from "../../../public/janus/janus";
 import { DeleteButton, EditButton } from "../../buttons";
 
@@ -12,7 +14,10 @@ interface EditModalProps {
     currentCourseState: any;
     currentCourseOnChange: Dispatch<SetStateAction<{ name: string; department: string; year: number; }>>
     onHide: () => void;
-    onSubmit: (newCourse) => Promise<void>
+    onSubmit: (newCourse) => Promise<void>,
+    error?: boolean,
+    errorMessage?: string,
+    errorMessageSetter?: (errorMessage: string, errorState) => void
 }
 
 function EditModal({ departments,
@@ -21,7 +26,11 @@ function EditModal({ departments,
     currentCourseState,
     currentCourseOnChange,
     newEntity = false,
-    onSubmit }: EditModalProps
+    onSubmit,
+    error = false,
+    errorMessage = "",
+    errorMessageSetter
+}: EditModalProps
 ) {
     const [selectedDepartment, setSelectedDepartment] = useState<any>({});
     return (
@@ -38,11 +47,13 @@ function EditModal({ departments,
                     {
                         //TODO known issue: year should be set to a limit
                     }
+                    {error ? <div style={{ color: "red" }}>{errorMessage}</div> : ""}
                     <FormGroup controlId="courseName">
                         <Form.Label>Name</Form.Label>
                         <Form.Control
                             onChange={(e) => {
                                 currentCourseOnChange({ ...currentCourseState, name: e.target.value })
+                                errorMessageSetter("", false);
                             }}
                             value={currentCourseState.name}
                         />
@@ -86,7 +97,7 @@ function EditModal({ departments,
 const CoursesLayout: React.FC = () => {
     // Courses will be {id: course} to do fast upserts
     const [courses, setCourses] = useState({})
-
+    const [userError, userErrorMessage, userErrorSetter] = useError()
     const [showEditingModal, setShowEditingModal] = useState(false)
     const [showDeletionModal, setShowDeletionModal] = useState(false)
     const [newCourseModalShow, setNewCourseModalShow] = useState(false)
@@ -130,7 +141,7 @@ const CoursesLayout: React.FC = () => {
     }
 
     const onCourseDeleteHandlerUi = (courseId: string) => {
-        let newCoursesState = {...courses}
+        let newCoursesState = { ...courses }
         delete newCoursesState[courseId]
         setCourses(newCoursesState)
     }
@@ -182,10 +193,10 @@ const CoursesLayout: React.FC = () => {
                                             }}
                                         />
                                     </td>
-                                    <td><DeleteButton onClick={() => { 
+                                    <td><DeleteButton onClick={() => {
                                         deleteCourse(courseId)
                                         onCourseDeleteHandlerUi(courseId)
-                                     }} /></td>
+                                    }} /></td>
                                 </tr>
                             </Fragment>
                         )
@@ -193,17 +204,31 @@ const CoursesLayout: React.FC = () => {
                 </tbody>
             </Table>
             <EditModal
+                error={userError}
+                errorMessage={userErrorMessage}
+                errorMessageSetter={userErrorSetter}
                 departments={departments}
                 currentCourseState={selectedCourse}
                 currentCourseOnChange={setSelectedCourse}
                 onHide={() => setShowEditingModal(false)}
                 show={showEditingModal}
                 onSubmit={async (courseData) => {
-                    await editCourse(selectedCourse, courseData)
-                    onCourseUpsertHandlerUi(courseData);
-                    setShowEditingModal(false)
+                    try {
+                        await editCourse(selectedCourse, courseData)
+                        onCourseUpsertHandlerUi(courseData);
+                        setShowEditingModal(false)
+                    } catch (e) {
+                        if (e instanceof UserInputError) {
+                            userErrorSetter(e.message, true);
+                        } else {
+                            throw e;
+                        }
+                    }
                 }} />
             <EditModal
+                error={userError}
+                errorMessage={userErrorMessage}
+                errorMessageSetter={userErrorSetter}
                 newEntity
                 departments={departments}
                 currentCourseState={scaffoldForNewState}
@@ -211,10 +236,18 @@ const CoursesLayout: React.FC = () => {
                 onHide={() => setNewCourseModalShow(false)}
                 show={newCourseModalShow}
                 onSubmit={async (courseData) => {
-                    let course = await addNewCourse(courseData)
-                    course.department = course.department.id
-                    onCourseUpsertHandlerUi(course);
-                    setNewCourseModalShow(false)
+                    try {
+                        let course = await addNewCourse(courseData)
+                        course.department = course.department.id
+                        onCourseUpsertHandlerUi(course);
+                        setNewCourseModalShow(false)
+                    } catch (e) {
+                        if (e instanceof UserInputError) {
+                            userErrorSetter(e.message, true);
+                        } else {
+                            throw e;
+                        }
+                    }
                 }} />
         </>
     )

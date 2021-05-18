@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Table from "react-bootstrap/Table"
+import UserInputError from "../../../controller/utils/UserInputError";
+import { useError } from "../../../hooks/useError";
 import { DeleteButton, EditButton } from "../../buttons";
 import styles from "./list-layout.module.css"
 
@@ -10,10 +12,21 @@ interface ItemModalTemplateProps {
   title: string,
   itemName: string,
   onSubmit: () => Promise<void>, // button clicks or form submissions
-  onItemNameChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onItemNameChange?: (e: React.ChangeEvent<any>) => void,
+  error?: boolean,
+  errorMessage?: string,
+  errorMessageSetter?: (message: string, hasError: false) => void
 }
 
-function ItemModalTemplate({ show, onHide, title, itemName, onSubmit, onItemNameChange }: ItemModalTemplateProps) {
+function ItemModalTemplate({
+  errorMessageSetter,
+  show,
+  onHide,
+  title,
+  itemName,
+  onSubmit,
+  onItemNameChange,
+  error = false, errorMessage = "" }: ItemModalTemplateProps) {
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header>
@@ -24,9 +37,13 @@ function ItemModalTemplate({ show, onHide, title, itemName, onSubmit, onItemName
           e.preventDefault()
           onSubmit()
         }}>
+          {error ? <div style={{ color: "red" }}>{errorMessage}</div> : ""}
           <Form.Label>Name</Form.Label>
           <Form.Control
-            onChange={onItemNameChange}
+            onChange={(e) => {
+              onItemNameChange(e);
+              errorMessageSetter("", false);
+            }}
             value={itemName}
           ></Form.Control>
           <div style={{ display: "flex", justifyContent: "flex-end", padding: "8px" }}>
@@ -70,6 +87,7 @@ const DepartmentLayout: React.FC<DepartmentLayoutProps> = ({ title, onAddNewItem
   const [editModalShow, setEditingModalShow] = useState(false)
   const [addNewModalShow, setAddNewModelShow] = useState(false)
   const [selectedItemName, setSelectedItemName] = useState("")
+  const [userError, userErrorMessage, userErrorSetter] = useError()
   //TODO implement pagination
   useEffect(() => {
     onFetchItems()
@@ -94,6 +112,9 @@ const DepartmentLayout: React.FC<DepartmentLayoutProps> = ({ title, onAddNewItem
           <i className="bi bi-file-earmark-plus-fill"></i> Add new
           </Button>
         <ItemModalTemplate
+          error={userError}
+          errorMessage={userErrorMessage}
+          errorMessageSetter={userErrorSetter}
           onSubmit={async () => {
             console.log("the modal itself is working something is not right in submission logic");
             try {
@@ -102,7 +123,12 @@ const DepartmentLayout: React.FC<DepartmentLayoutProps> = ({ title, onAddNewItem
               setItems([...items, newItem]);
               setAddNewModelShow(false);
             } catch (err) {
-              console.error(err);
+              if (err instanceof UserInputError) {
+                userErrorSetter(err.message)
+              }
+              else {
+                throw new UserInputError(err.message);
+              }
             }
           }}
           title={`Add New ${singular(title)}`}
@@ -152,6 +178,9 @@ const DepartmentLayout: React.FC<DepartmentLayoutProps> = ({ title, onAddNewItem
                     }
                   />
                   <ItemModalTemplate
+                    error={userError}
+                    errorMessage={userErrorMessage}
+                    errorMessageSetter={userErrorSetter}
                     title={`Edit ${selectedItemName}`}
                     onHide={() => setEditingModalShow(false)}
                     show={editModalShow}
@@ -176,7 +205,12 @@ const DepartmentLayout: React.FC<DepartmentLayoutProps> = ({ title, onAddNewItem
                         );
                         setEditingModalShow(false);
                       } catch (err) {
-                        console.error(err);
+                        if (err instanceof UserInputError) {
+                          userErrorSetter(err.message)
+                        }
+                        else {
+                          throw new err;
+                        }
                       }
                     }}
                   />
