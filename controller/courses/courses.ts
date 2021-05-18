@@ -1,25 +1,27 @@
 import axios from "axios";
 import Item from "../../model/Item";
 import config from "../../utils/config";
+import { refreshToken } from "../tokens";
+import apiInstance from "../utils/api";
 
 export async function getAllCourses() {
-  return await axios
-    .get(`${config.serverBaseUrl}/courses`, { withCredentials: true })
+  return await apiInstance
+    .get(`/courses`, { withCredentials: true })
     .then((response) => response.data);
 }
 
 export async function editCourse(oldCourse: Item, newCourse: Item) {
-  await axios.put(
-    `${config.serverBaseUrl}/courses/${oldCourse.id}`,
+  await apiInstance.put(
+    `/courses/${oldCourse.id}`,
     newCourse,
     { withCredentials: true }
   );
 }
 
 export async function addNewCourse(course) {
-  return await axios
+  return await apiInstance
     .post(
-      `${config.serverBaseUrl}/courses/`,
+      `/courses/`,
       { name: course.name, year: course.year, department: course.department },
       {
         withCredentials: true,
@@ -29,7 +31,7 @@ export async function addNewCourse(course) {
 }
 
 export async function deleteCourse(courseId: string) {
-  await axios.delete(`${config.serverBaseUrl}/courses/${courseId}`, {
+  await apiInstance.delete(`/courses/${courseId}`, {
     withCredentials: true,
   });
 }
@@ -38,9 +40,9 @@ export async function assignLectureToCourse(
   lectureId: string,
   courseId: string
 ) {
-  await axios
+  await apiInstance
     .post(
-      `${config.serverBaseUrl}/courses/${courseId}/lectures`,
+      `/courses/${courseId}/lectures`,
       {
         lectureId: lectureId,
       },
@@ -52,9 +54,9 @@ export async function assignLectureToCourse(
 }
 
 export async function addStudentToCourse(courseId: string, studentId: string) {
-  return await axios
+  return await apiInstance
     .post(
-      `${config.serverBaseUrl}/students/${studentId}/courses`,
+      `/students/${studentId}/courses`,
       {
         courseId,
       },
@@ -66,23 +68,23 @@ export async function addStudentToCourse(courseId: string, studentId: string) {
 }
 
 export async function getLecturesToCourse(courseId: string) {
-  return axios
-    .get(`${config.serverBaseUrl}/courses/${courseId}/lectures`, {
+  return apiInstance
+    .get(`/courses/${courseId}/lectures`, {
       withCredentials: true,
     })
     .then((resp) => resp.data);
 }
 
 export async function getLecturesStatsByCourse(courseId: string) {
-  return await axios
-    .get(`${config.serverBaseUrl}/course/${courseId}/stats`)
+  return await apiInstance
+    .get(`/course/${courseId}/stats`)
     .then((resp) => resp.data);
 }
 
 export async function assignExamToCourse(courseId: string, examId: string) {
-  return await axios
+  return await apiInstance
     .post(
-      `${config.serverBaseUrl}/courses/${courseId}/exams`,
+      `/courses/${courseId}/exams`,
       {
         examId,
       },
@@ -92,8 +94,8 @@ export async function assignExamToCourse(courseId: string, examId: string) {
 }
 
 export async function getAllExamsByCourse(courseId: string) {
-  return await axios
-    .get(`${config.serverBaseUrl}/courses/${courseId}/exams`, {
+  return await apiInstance
+    .get(`/courses/${courseId}/exams`, {
       withCredentials: true,
     })
     .then((resp) => resp.data);
