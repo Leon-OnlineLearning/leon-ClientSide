@@ -2,6 +2,7 @@ import Cookie from "js-cookie"
 import jwtDecode from "jwt-decode"
 import config from "../utils/config"
 import apiInstance from "./utils/api"
+import { AxiosError } from "axios"
 
 export class InvalidTokenError extends Error {
     constructor() {
@@ -13,17 +14,18 @@ export class InvalidTokenError extends Error {
 
 export const refreshToken = async () => {
     const oldToken = Cookie.get('jwt')
-    const refreshToken = window.localStorage.getItem('refreshToken')
+    const refreshToken = window.localStorage.getItem('refreshToken') // not inside react component i can't use the context
     await apiInstance.post(`/auth/refreshToken`, {
         oldToken,
         refreshToken
     })
         .then(response => response.data)
         .then(data => {
-            storeUserSession(data.refreshToken, data.token)
+            storeUserSession(refreshToken, data.token)
         })
-        .catch(err => {
-            throw new InvalidTokenError();
+        .catch((err: AxiosError) => {
+            if (err.response.status >= 400 && err.response.status < 500)
+                throw new InvalidTokenError();
         })
 }
 
