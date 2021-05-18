@@ -5,9 +5,7 @@ import { SidebarElement } from "../../sidebar/sidebar";
 
 export enum AdminDashboardSelectedPage {
   accounts,
-  lectures,
   events,
-  exams,
   departments,
   courses
 }
@@ -31,18 +29,6 @@ export function AdminDashboard({
               iconClassName={"bi-person-circle"}
               text={"Home"}
               selected={selectedPage === AdminDashboardSelectedPage.accounts}
-            ></SidebarElement>
-            <SidebarElement
-              href="/admin/lectures"
-              iconClassName={"bi-play-fill"}
-              text={"Lectures"}
-              selected={selectedPage === AdminDashboardSelectedPage.lectures}
-            ></SidebarElement>
-            <SidebarElement
-              href="/admin/exams"
-              iconClassName={"bi-card-checklist"}
-              text={"Exams"}
-              selected={selectedPage === AdminDashboardSelectedPage.exams}
             ></SidebarElement>
             <SidebarElement
               href="/admin/departments"
