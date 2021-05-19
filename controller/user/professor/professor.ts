@@ -1,13 +1,14 @@
 import axios from "axios";
 import config from "../../../utils/config";
+import apiInstance from "../../utils/api";
 
 export async function assigningCourseToProfessor(
   professorId: string,
   courseId: string
 ) {
-  return await axios
+  return await apiInstance
     .post(
-      `${config.serverBaseUrl}/professors/${professorId}/courses`,
+      `/professors/${professorId}/courses`,
       {
         courseId,
       },
@@ -20,9 +21,9 @@ export async function assignLectureToProfessor(
   professorId: string,
   lectureId: string
 ) {
-  return await axios
+  return await apiInstance
     .post(
-      `${config.serverBaseUrl}/professors/${professorId}/lectures`,
+      `/professors/${professorId}/lectures`,
       {
         lectureId,
       },
@@ -32,8 +33,8 @@ export async function assignLectureToProfessor(
 }
 
 export async function getAllCoursesByProfessor(professorId: string) {
-  return await axios
-    .get(`${config.serverBaseUrl}/professors/${professorId}/lectures`, {
+  return await apiInstance
+    .get(`/professors/${professorId}/lectures`, {
       withCredentials: true,
     })
     .then((resp) => resp.data);

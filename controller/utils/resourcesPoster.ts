@@ -15,6 +15,7 @@
 import axios from "axios";
 import config from "../../utils/config";
 import Cookie from "js-cookie"
+import apiInstance from "./api";
 
 /**
  * Create new student 
@@ -22,9 +23,9 @@ import Cookie from "js-cookie"
  * @returns [err, data] 
  */
 async function resourcesPoster(resourceName: string, data: any) {
-	await axios.post(`${config.serverBaseUrl}/${resourceName}`, { ...data }, {withCredentials: true})
+	return await apiInstance.post(`/${resourceName}`, { ...data }, { withCredentials: true })
 		.then(response => [null, response.data])
-		.catch(err => [err, null])
+		.catch(err => [err.response, null])
 }
 
 export default resourcesPoster;

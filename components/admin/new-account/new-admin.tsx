@@ -2,7 +2,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import User from "../../../model/users/User";
-import { createNewStudent } from "../../../controller/user/user";
+import { createNewAdmin, createNewStudent } from "../../../controller/user/user";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "../../../controller/courses/courses";
 import styles from "./new-account.module.css";
@@ -13,8 +13,6 @@ type NewStudentProps = {
 
 //TODO make admin selection
 function NewAdmin({ userDate }: NewStudentProps) {
-  const [yearName, setYearName] = useState("Select student's year");
-  const [years, setYears] = useState([]);
 
   useEffect(() => {
     async function fetchYears() {
@@ -26,17 +24,21 @@ function NewAdmin({ userDate }: NewStudentProps) {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    await createNewStudent({ ...userDate, year: yearName });
-  };
-
-  const onYearsSelectedHandler = (eventkey: string) => {
-		console.log(eventkey)
-    setYearName(eventkey);
+    const [err, user] = await createNewAdmin({ ...userDate });
+    if (user) {
+      alert("user created successfully");
+    }
+    if (err) {
+      alert(err.message)
+      console.log(err);
+    }
   };
 
   return (
     <>
+      <Form onSubmit={onSubmitHandler}>
         <Button type="submit">Create new user</Button>
+      </Form>
     </>
   );
 }

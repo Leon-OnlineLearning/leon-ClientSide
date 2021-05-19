@@ -5,10 +5,11 @@ import {
 } from "../../model/examination/Recordings";
 import data from "../../db.json";
 import config from "../../utils/config";
+import apiInstance from "../utils/api";
 
 export async function assignExamToCourse(examId: string, courseId: string) {
-  return await axios.post(
-    `${config.serverBaseUrl}/courses/${courseId}/exams`,
+  return await apiInstance.post(
+    `/courses/${courseId}/exams`,
     { examId },
     {
       withCredentials: true,

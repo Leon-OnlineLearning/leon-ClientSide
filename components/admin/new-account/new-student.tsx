@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { getAllYears } from "../../../controller/years/yearsController";
 import styles from "./new-account.module.css";
 import { useError } from "../../../hooks/useError";
-import { Dropdown ,DropdownButton, FormControl } from "react-bootstrap";
-import {getDepartments} from "../../../controller/departments";
+import { Dropdown, DropdownButton, FormControl } from "react-bootstrap";
+import { getDepartments } from "../../../controller/departments";
 import Item from "../../../model/Item";
 
 type NewStudentProps = {
@@ -18,8 +18,8 @@ function NewStudent({ userDate }: NewStudentProps) {
 
   const [year, setYear] = useState(1);
   const [error, errorMsg, setError] = useError();
-  const [departments, setDepartments ] = useState([]);
-  const [selectedDepartment, setSelectedDepartment] = useState<Item| undefined>();
+  const [departments, setDepartments] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState<Item | undefined>();
 
   const yearChangingHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const writtenYear = parseInt(e.target.value)
@@ -30,22 +30,31 @@ function NewStudent({ userDate }: NewStudentProps) {
     }
   }
 
-  const onSubmitHandler = async (e : React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("here is user data",userDate);
-    await createNewStudent({ ...userDate, year, department: selectedDepartment.id });
+    console.log("here is user data", userDate);
+    const [err, user] = await createNewStudent({ ...userDate, year, department: selectedDepartment.id });
+    console.log("err", err, "user", user);
+    
+    if (user) {
+      alert("user created successfully!")
+    }
+    if (err) {
+      alert(err.message)
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     const _getD = async () => {
-     const departments = await getDepartments();
-     setDepartments(departments);
+      const departments = await getDepartments();
+      setDepartments(departments);
     }
     _getD();
-  }, []); 
-  
+  }, []);
 
-  const handleOnDepartmentSelected = (id :string) => {
+
+  const handleOnDepartmentSelected = (id: string) => {
     console.log("why are you e: ", id)
     setSelectedDepartment(
       departments.filter((dep) => {

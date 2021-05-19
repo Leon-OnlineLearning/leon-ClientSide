@@ -2,7 +2,7 @@ import {
   AdminDashboard,
   AdminDashboardSelectedPage,
 } from "../../components/admin/dashboard/admin-dashboard";
-import ListLayout from "../../components/list-layout/list-layout";
+import DepartmentLayout from "../../components/admin/departments-layout/department-layout";
 import {
   editDepartment,
   deleteDepartment,
@@ -13,7 +13,7 @@ import {
 export default function Dashboard() {
     return (
       <AdminDashboard selectedPage={AdminDashboardSelectedPage.departments}>
-        <ListLayout
+        <DepartmentLayout
           title="Departments"
           onFetchItems={getDepartments}
           onEditItem={editDepartment}
