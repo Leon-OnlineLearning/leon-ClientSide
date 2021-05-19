@@ -1,20 +1,32 @@
-import axios from "axios"
 import Cookie from "js-cookie"
 import jwtDecode from "jwt-decode"
 import config from "../utils/config"
+import apiInstance from "./utils/api"
+import { AxiosError } from "axios"
 
-export const refreshToken = () => {
-    const oldToken = Cookie.get('token')
-    const refreshToken = window.localStorage.getItem('refreshToken')
-    axios.post(`${config.serverBaseUrl}/auth/refreshToken`, {
+export class InvalidTokenError extends Error {
+    constructor() {
+        super("Invalid token")
+        this.message = "Invalid token"
+        this.name = "InvalidTokenError"
+    }
+}
+
+export const refreshToken = async () => {
+    const oldToken = Cookie.get('jwt')
+    const refreshToken = window.localStorage.getItem('refreshToken') // not inside react component i can't use the context
+    await apiInstance.post(`/auth/refreshToken`, {
         oldToken,
         refreshToken
     })
         .then(response => response.data)
         .then(data => {
-            storeUserSession(data.refreshToken, data.token)
+            storeUserSession(refreshToken, data.token)
         })
-        .catch(err => console.error(err))
+        .catch((err: AxiosError) => {
+            if (err.response.status >= 400 && err.response.status < 500)
+                throw new InvalidTokenError();
+        })
 }
 
 /**
@@ -24,9 +36,7 @@ export const refreshToken = () => {
  * @param cookieExpirationInterval 
  * @returns wether or not the tokens were stored successfully
  */
-export const storeUserSession = (refreshToken: string, token: string, cookieExpirationInterval: number = 0) => {
-    if (cookieExpirationInterval < 0) throw new Error("Expiration interval must be positive or zero");
-    Cookie.set('token', token, { expires: cookieExpirationInterval || undefined })
+export const storeUserSession = (refreshToken: string, token: string) => {
     if (typeof window !== 'undefined') {
         window.localStorage.setItem('refreshToken', refreshToken)
         const userData: any = jwtDecode(token)
@@ -38,3 +48,4 @@ export const storeUserSession = (refreshToken: string, token: string, cookieExpi
         return false
     }
 }
+

@@ -1,15 +1,16 @@
 import axios from "axios";
 import config from "../../utils/config";
+import apiInstance from "../utils/api";
 
 export async function getDepartments(): Promise<any[]> {
-  return await axios
-    .get(`${config.serverBaseUrl}/departments`, { withCredentials: true })
+  return await apiInstance
+    .get(`/departments`, { withCredentials: true })
     .then((response) => response.data);
 }
 
 export async function deleteDepartment(department: any): Promise<void> {
-  await axios
-    .delete(`${config.serverBaseUrl}/departments/${department.id}`, {
+  await apiInstance
+    .delete(`/departments/${department.id}`, {
       withCredentials: true,
     })
     .catch((err) => console.error(err));
@@ -19,9 +20,9 @@ export async function editDepartment(
   oldDepartment: any,
   newDepartment: any
 ): Promise<any> {
-  return await axios
+  return await apiInstance
     .put(
-      `${config.serverBaseUrl}/departments/${oldDepartment.id}`,
+      `/departments/${oldDepartment.id}`,
       newDepartment,
       {
         withCredentials: true,
@@ -31,9 +32,9 @@ export async function editDepartment(
 }
 
 export async function addNewDepartment(departmentTitle: string): Promise<any> {
-  return await axios
+  return await apiInstance
     .post(
-      `${config.serverBaseUrl}/departments`,
+      `/departments`,
       { name: departmentTitle },
       { withCredentials: true }
     )
@@ -44,8 +45,8 @@ export async function assignProfessorToDepartment(
   departmentId: string,
   professorId: string
 ) {
-  return await axios.post(
-    `${config.serverBaseUrl}/departments/${departmentId}/professors`,
+  return await apiInstance.post(
+    `/departments/${departmentId}/professors`,
     {
       professorId,
     },
@@ -57,8 +58,8 @@ export async function assignCourseToDepartment(
   departmentId: string,
   courseId: string
 ) {
-  return await axios.post(
-    `${config.serverBaseUrl}/departments/${departmentId}/courses`,
+  return await apiInstance.post(
+    `/departments/${departmentId}/courses`,
     {
       courseId,
     },
@@ -69,8 +70,8 @@ export async function assignCourseToDepartment(
 }
 
 export async function getCoursesForDepartment(departmentId: string) {
-  return await axios
-    .get(`${config.serverBaseUrl}/departments/${departmentId}/courses`, {
+  return await apiInstance
+    .get(`/departments/${departmentId}/courses`, {
       withCredentials: true,
     })
     .then((resp) => resp.data);
