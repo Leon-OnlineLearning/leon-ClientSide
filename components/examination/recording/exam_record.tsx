@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import LocalStorageContext from "../../../contexts/localStorageContext";
 import { sendExamRecording } from "../../../controller/exam/exam";
 import useUserMedia from "../../../hooks/useUserMedia";
 
@@ -6,6 +7,7 @@ let counter = 0;
 const record_slice = 10 * 1000 //10 seconds
 export default function Recorder(props:{examId:string}) {
 
+    const localStorageContext = useContext(LocalStorageContext)
 
     function handleDataAvailable(event) {
         let recordedChunks = []
@@ -15,7 +17,7 @@ export default function Recorder(props:{examId:string}) {
             sendExamRecording({
                 // TODO get exam id
                 examId: props.examId,
-                userId: localStorage.getItem('id'),
+                userId: localStorageContext.userId,
                 chunckIndex: counter++,
                 recordedChunks: recordedChunks
             })

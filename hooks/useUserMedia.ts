@@ -13,7 +13,9 @@ export default function useUserMedia(requestedMedia) {
           );
           setMediaStream(stream);
         } catch (err) {
-          // Removed for brevity
+          if (err instanceof DOMException && err.message === "Permission denied") {
+           alert("We must grant camera permission to get your embedding") 
+          }
         }
       }
   
