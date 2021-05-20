@@ -158,7 +158,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({ submis
                             })}
                         </FormControl>
                     </Form.Group>
-                    : ""}
+                    : <br />}
                 <Button type="submit">Send</Button>
                 {state.filesSent ?
                     <div data-testid="send-successfully">Send successfully</div>
