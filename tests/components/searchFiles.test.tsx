@@ -5,7 +5,9 @@ import userEvent from "@testing-library/user-event"
 import "@testing-library/jest-dom/extend-expect"
 import { SearchForTrainingFiles } from '../../components/add-content/addContent'
 import axios from 'axios'
+import LocalStorageMock from '../mocks/LocalstorageMock'
 
+const lsMock = new LocalStorageMock()
 
 describe("search files test suite", () => {
     // This work around is inspired by 
@@ -18,7 +20,7 @@ describe("search files test suite", () => {
             fileAreCorrect = req.body["files"][0] === "1" && req.body["files"][1] === "2"
             courseNameIsCorrect = req.body["courseId"] === "courseId"
             classNameIsCorrect = req.body["className"] === "Any text"
-            return res(ctx.json({ success: true }))
+            return res(ctx.json({ success: true, sessionId: "12345" }))
         }),
         rest.get('/searchFile', (req, res, ctx) => {
             return res(ctx.json([
@@ -33,13 +35,17 @@ describe("search files test suite", () => {
     afterEach(() => server.resetHandlers())
     afterAll(() => server.close())
 
-    const searchForTrainingFilesSubmit = async (url, courseId, className, files) => {
+    const searchForTrainingFilesSubmit = async (url, courseId, className, files, sessionId) => {
         try {
-            await axios.post(url, {
+            const resp = await axios.post(url, {
                 className,
                 courseId,
-                files
-            })
+                files,
+                sessionId
+            }).then(resp => resp.data)
+
+            if (resp.sessionId)
+                lsMock.setItem('sessionId', resp.sessionId)
         } catch (e) {
             console.error(e)
         }
@@ -61,6 +67,7 @@ describe("search files test suite", () => {
             onSearch={searchForTrainingFilesSearch}
             onSubmit={searchForTrainingFilesSubmit}
             originalCourseId="courseId"
+            sessionStorage={lsMock}
         />
         )
         userEvent.type(screen.getByPlaceholderText("Course code"), "Any text")
@@ -79,12 +86,14 @@ describe("search files test suite", () => {
             onSearch={searchForTrainingFilesSearch}
             onSubmit={searchForTrainingFilesSubmit}
             originalCourseId="courseId"
+            sessionStorage={lsMock}
         />)
         expect(screen.getByText("Search For related content")).toBeVisible()
     })
 
     test("it should render valid non-related state", () => {
         render(<SearchForTrainingFiles
+            sessionStorage={lsMock}
             submissionUrl='/training/related/existing'
             onSearch={searchForTrainingFilesSearch}
             onSubmit={searchForTrainingFilesSubmit}
@@ -95,6 +104,7 @@ describe("search files test suite", () => {
 
     test("it should send the selected files correctly", async () => {
         render(<SearchForTrainingFiles
+            sessionStorage={lsMock}
             submissionUrl='/training/related/existing'
             onSearch={searchForTrainingFilesSearch}
             onSubmit={searchForTrainingFilesSubmit}
@@ -112,6 +122,7 @@ describe("search files test suite", () => {
         expect(courseNameIsCorrect).toBeTruthy()
         expect(classNameIsCorrect).toBeTruthy()
         expect(screen.getByText("Send successfully")).toBeVisible()
+        expect(lsMock.getItem('sessionId')).toEqual("12345")
     })
 
 })

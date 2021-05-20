@@ -5,6 +5,9 @@ import userEvent from "@testing-library/user-event"
 import "@testing-library/jest-dom/extend-expect"
 import { UploadTrainingFiles } from '../../components/add-content/addContent'
 import axios from 'axios'
+import LocalStorageMock from "../mocks/LocalstorageMock";
+
+const lsMock = new LocalStorageMock()
 
 describe("upload files test suite", () => {
 
@@ -19,7 +22,7 @@ describe("upload files test suite", () => {
             courseIdCorrectlySent = form.get('courseId') === "courseId"
             const files = form.getAll('files')
             filesCorrectlySent = (files[0].name === "important.pdf") && (files[1].name === "chucknorris.pdf")
-            return res(ctx.json({ success: true }))
+            return res(ctx.json({ success: true, sessionId: "12345" }))
         }),
     )
 
@@ -34,15 +37,14 @@ describe("upload files test suite", () => {
         files.forEach((file) => {
             formData.append(`files`, file);
         })
-        console.log(url);
-        console.log(formData.keys());
-        await axios.post(url, formData)
+        return await axios.post(url, formData)
             .then(resp => resp.data)
             .catch(err => console.error(err))
     }
 
     test("it should render valid related state", () => {
         render(<UploadTrainingFiles
+            sessionStorage={lsMock}
             related
             courseId="courseId"
             submissionUrl="/training/related/upload"
@@ -54,6 +56,7 @@ describe("upload files test suite", () => {
 
     test("it should render valid related state", () => {
         render(<UploadTrainingFiles
+            sessionStorage={lsMock}
             courseId="courseId"
             submissionUrl="/training/related/upload"
             onSubmit={trainingFileUploader}
@@ -64,6 +67,7 @@ describe("upload files test suite", () => {
 
     test("it should upload files", async () => {
         render(<UploadTrainingFiles
+            sessionStorage={lsMock}
             courseId="courseId"
             related
             submissionUrl="/training/related/upload"
@@ -89,5 +93,6 @@ describe("upload files test suite", () => {
         expect(classNameCorrectlySent).toBeTruthy()
         expect(filesCorrectlySent).toBeTruthy()
         expect(courseIdCorrectlySent).toBeTruthy()
+        expect(lsMock.getItem('sessionId')).toEqual("12345")
     })
 })

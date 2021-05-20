@@ -6,16 +6,18 @@ import apiInstance from "../../controller/utils/api";
 import config from "../../utils/config";
 
 interface AddContentProps {
-    courseId: string
+    courseId: string,
+    sessionStorage?: any
 }
 
-const AddContent: FC<AddContentProps> = ({ courseId }) => {
+const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage = window.localStorage }) => {
     return (
         <UploadTrainingFiles
             courseId={courseId}
             related
             submissionUrl="placeholder"
             onSubmit={trainingFileUploader}
+            sessionStorage={sessionStorage}
         />
     )
 }
@@ -23,23 +25,28 @@ const AddContent: FC<AddContentProps> = ({ courseId }) => {
 interface UploadTrainingFilesProps {
     related?: boolean,
     submissionUrl: string,
-    onSubmit: (url: string, courseId: string, className: string, files: any[]) => Promise<any>,
-    courseId: string
+    onSubmit: (url: string, courseId: string, className: string, files: any[], sessionId?: string) => Promise<any>,
+    courseId: string,
+    sessionStorage: any,
 }
 
-const trainingFileUploader = async (url, courseId: string, className: string, files: any[]) => {
+const trainingFileUploader = async (url, courseId: string, className: string, files: any[], sessionId?: string) => {
     const formData = new FormData()
     formData.append('className', className)
     formData.append('courseId', courseId)
     files.forEach((file) => {
         formData.append(`files`, file);
     })
-    await apiInstance.post(url, formData)
+
+    if (sessionId)
+        formData.append('sessionId', sessionId)
+
+    return await apiInstance.post(url, formData)
         .then(resp => resp.data)
         .catch(err => console.error(err))
 }
 
-export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({ courseId, related = false, onSubmit, submissionUrl: url }) => {
+export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({ sessionStorage, courseId, related = false, onSubmit, submissionUrl: url }) => {
     const [files, setFiles] = useState([])
     const [className, setClassName] = useState("")
     const [done, setDone] = useState(false)
@@ -49,7 +56,8 @@ export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({ courseId, re
             <Form
                 onSubmit={async (e) => {
                     e.preventDefault();
-                    await onSubmit(url, courseId, className, files)
+                    const result = await onSubmit(url, courseId, className, files, sessionStorage.getItem('sessionId'))
+                    if (result.sessionId) { sessionStorage.setItem('sessionId', result.sessionId) }
                     setDone(true)
                 }}
             >
@@ -77,9 +85,30 @@ interface SearchForTrainingFilesProps {
     submissionUrl: string,
     related?: boolean,
     onSearch: (courseName: string, fileName: string) => Promise<any[]>,
-    onSubmit: (url: string, courseName: string, className: string, files: string[]) => Promise<any>, // url is for related / non related 
-    originalCourseId: string
+    onSubmit: (url: string, courseName: string, className: string, files: string[], sessionId?: string) => Promise<any>, // url is for related / non related 
+    originalCourseId: string,
+    sessionStorage: any,
 }
+
+const assignExistingItems = async (url, className, courseId, files, sessionId) => {
+    try {
+        const resp = await axios.post(url, {
+            className,
+            courseId,
+            files,
+            sessionId
+        }).
+            then(resp => resp.data)
+
+        console.log("response is",resp);
+
+        if (resp.sessionId)
+            sessionStorage.setItem('sessionId', resp.sessionId)
+    } catch (e) {
+        console.error(e)
+    }
+}
+
 
 // this may look like over engineering and it probably is
 // i just wanted my component to look less uglier 😅 
@@ -108,7 +137,7 @@ function useCourseFileState() {
     }
 }
 
-export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({ submissionUrl: url, originalCourseId, related = false, onSearch, onSubmit }) => {
+export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({ sessionStorage, submissionUrl: url, originalCourseId, related = false, onSearch, onSubmit }) => {
     const state = useCourseFileState()
 
     return (
@@ -117,7 +146,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({ submis
             <Form onSubmit={async (e) => {
                 e.preventDefault()
                 if (state.files.length > 0)
-                    await onSubmit(url, originalCourseId, state.className, state.selectedFiles.map(f => f.id))
+                    await onSubmit(url, originalCourseId, state.className, state.selectedFiles.map(f => f.id), sessionStorage.getItem('sessionId'))
                 state.setFilesSent(true);
             }}>
                 <FormControl
@@ -166,6 +195,24 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({ submis
             </Form>
         </>
     );
+}
+
+interface ContentConfigProps {
+
+}
+
+export const ContentConfig: FC<ContentConfigProps> = () => {
+    return (
+        <>
+            <Form onSubmit={
+                (e) => {
+                    e.preventDefault();
+                }
+            }>
+
+            </Form>
+        </>
+    )
 }
 
 export default AddContent;
