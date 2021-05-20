@@ -34,14 +34,9 @@ const trainingFileUploader = async (url, courseId: string, className: string, fi
     files.forEach((file) => {
         formData.append(`files`, file);
     })
-    // TODO change back to apiInstance
-    await axios.post("http://localhost:5000/bruh", formData)
+    await apiInstance.post(url, formData)
         .then(resp => resp.data)
         .catch(err => console.error(err))
-
-    // await apiInstance.post(url, formData)
-    //     .then(resp => resp.data)
-    //     .catch(err => console.error(err))
 }
 
 export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({ courseId, related = false, onSubmit, submissionUrl: url }) => {
