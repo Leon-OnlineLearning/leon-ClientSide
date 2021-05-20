@@ -25,14 +25,16 @@ const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage = window.loc
 interface UploadTrainingFilesProps {
     related?: boolean,
     submissionUrl: string,
-    onSubmit: (url: string, courseId: string, className: string, files: any[], sessionId?: string) => Promise<any>,
+    onSubmit: (url: string, courseId: string, files: any[], className?: string, sessionId?: string) => Promise<any>,
     courseId: string,
     sessionStorage: any,
+    testing?: boolean
 }
 
-const trainingFileUploader = async (url, courseId: string, className: string, files: any[], sessionId?: string) => {
+const trainingFileUploader = async (url, courseId: string, files: any[], className: string, sessionId?: string) => {
     const formData = new FormData()
-    formData.append('className', className)
+    if (className)
+        formData.append('className', className)
     formData.append('courseId', courseId)
     files.forEach((file) => {
         formData.append(`files`, file);
@@ -46,31 +48,51 @@ const trainingFileUploader = async (url, courseId: string, className: string, fi
         .catch(err => console.error(err))
 }
 
-export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({ sessionStorage, courseId, related = false, onSubmit, submissionUrl: url }) => {
+export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = (
+    {
+        testing = false,
+        sessionStorage,
+        courseId,
+        related = false,
+        onSubmit,
+        submissionUrl: url
+    }
+) => {
     const [files, setFiles] = useState([])
     const [className, setClassName] = useState("")
     const [done, setDone] = useState(false)
     return (
         <>
-            <h1>{`Upload ${related ? "related" : "non-related"} content`}</h1>
+            <section data-testid="title-container">
+                {testing ?
+                    <h1>{`Upload your testing file`}</h1>
+                    :
+                    <h1>{`Upload ${related ? "related" : "non-related"} content`}</h1>
+                }</section>
             <Form
                 onSubmit={async (e) => {
                     e.preventDefault();
-                    const result = await onSubmit(url, courseId, className, files, sessionStorage.getItem('sessionId'))
+                    const result = await onSubmit(url, courseId, files, className, sessionStorage.getItem('sessionId'))
                     if (result.sessionId) { sessionStorage.setItem('sessionId', result.sessionId) }
                     setDone(true)
                 }}
             >
-                <Form.Group>
-                    <Form.Label htmlFor="className">Class name</Form.Label>
-                    <FormControl
-                        onChange={e => {
-                            setClassName(e.target.value);
-                        }}
-                        value={className}
-                        id="className"
-                        placeholder="E.g. Dynamic programming" />
-                </Form.Group>
+                {
+                    <div data-testid="class-name-place">
+                        {!testing ?
+                            <Form.Group>
+                                <Form.Label htmlFor="className">Class name</Form.Label>
+                                <FormControl
+                                    onChange={e => {
+                                        setClassName(e.target.value);
+                                    }}
+                                    value={className}
+                                    id="className"
+                                    placeholder="E.g. Dynamic programming" />
+                            </Form.Group>
+                            : ""}
+                    </div>
+                }
                 <input type="file" name="courseFiles" data-testid="training-upload-file" multiple onChange={(e) => {
                     setFiles(Array.from(e.target.files))
                 }} />
@@ -97,10 +119,8 @@ const assignExistingItems = async (url, className, courseId, files, sessionId) =
             courseId,
             files,
             sessionId
-        }).
-            then(resp => resp.data)
-
-        console.log("response is",resp);
+        })
+            .then(resp => resp.data)
 
         if (resp.sessionId)
             sessionStorage.setItem('sessionId', resp.sessionId)
@@ -198,18 +218,59 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({ sessio
 }
 
 interface ContentConfigProps {
-
+    courseId: string,
+    sessionStorage: any,
+    onSubmit: (
+        sessionId: string,
+        data: { ignoreCase: boolean, ignoreCommonWords: boolean },
+        originalCourseId: string
+    ) => Promise<any>
 }
 
-export const ContentConfig: FC<ContentConfigProps> = () => {
+function useContentConfig() {
+    const [ignoreCase, setIgnoreCase] = useState(false);
+    const [ignoreCommonWords, setIgnoreCommonWords] = useState(false);
+    return {
+        ignoreCase,
+        setIgnoreCase,
+        ignoreCommonWords,
+        setIgnoreCommonWords
+    }
+}
+
+/**
+ * NOTE: this was intended to be the last step notice the 
+ * the sessionId setter to undefined
+ * @param param0 
+ * @returns 
+ */
+export const ContentConfig: FC<ContentConfigProps> = ({ courseId, sessionStorage, onSubmit }) => {
+    const state = useContentConfig()
     return (
         <>
             <Form onSubmit={
-                (e) => {
+                async (e) => {
                     e.preventDefault();
+                    try {
+                        await onSubmit(
+                            sessionStorage.getItem('sessionId'),
+                            { ignoreCase: state.ignoreCase, ignoreCommonWords: state.ignoreCommonWords },
+                            courseId
+                        )
+                        sessionStorage.setItem('sessionId', undefined)
+                    } catch (e) {
+                        throw e;
+                    }
                 }
             }>
-
+                <Form.Check label="ignore case"
+                    checked={state.ignoreCase} onChange={(e) => {
+                        state.setIgnoreCase(e.target.checked);
+                    }} />
+                <Form.Check label="ignore common words"
+                    checked={state.ignoreCommonWords} onChange={(e) => {
+                        state.setIgnoreCommonWords(e.target.checked);
+                    }} />
             </Form>
         </>
     )
