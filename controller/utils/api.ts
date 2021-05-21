@@ -6,7 +6,6 @@ import UserInputError from "./UserInputError";
 
 const apiInstance = axios.create({
     baseURL: config.serverBaseUrl,
-    timeout: 5000,
 });
 
 apiInstance.interceptors.response.use((response: AxiosResponse) => response,
