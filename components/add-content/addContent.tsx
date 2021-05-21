@@ -134,6 +134,9 @@ const assignExistingItems = async (url, className, courseId, files, sessionId) =
 // i just wanted my component to look less uglier 😅 
 // i'm just trying a new way of managing the state that might work
 // this may look like the class state if you remember it 
+// Q1: Why this approach over keeping all the state in a single object?
+// A1: Because i don't want the whole tree to get updated whenever a 
+//     single state property got changed.
 function useCourseFileState() {
     const [courseSearchTerm, setCourseSearchTerm] = useState<string>("")
     const [fileSearchTerm, setFileSearchTerm] = useState<string>("")
