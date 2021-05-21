@@ -13,11 +13,11 @@ const ExaminationPage: React.FC = () => {
             setExams(e)
         }
         f();
-    })
+    },[])
     return (
         <StudentDashboard selectedPage={StudentDashboardSelectedPage.exams}>
             <h1>Exams</h1>
-            {exams.map(e => {
+            {exams && exams.map(e => {
                 return (
                     <ExamCard
                         endDate={new Date(e.endDate)}
@@ -25,6 +25,7 @@ const ExaminationPage: React.FC = () => {
                         id={e.id}
                         title={e.title}
                         mark={e.mark}
+                        key={e.id}
                     />
                 )
             })}
