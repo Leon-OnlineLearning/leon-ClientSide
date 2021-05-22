@@ -6,6 +6,7 @@ import {
 import data from "../../db.json";
 import config from "../../utils/config";
 import apiInstance from "../utils/api";
+import { Event } from "../../model/event";
 
 export async function assignExamToCourse(examId: string, courseId: string) {
   return await apiInstance.post(
@@ -92,7 +93,15 @@ export async function sendRefranceVideo(
     .catch(console.log);
 }
 
-export async function getAllExams(studentId) {
-  // TODO use student id in the request
-  return await Promise.resolve(data.exams);
+export async function getAllExams(studentId): Promise<Array<Event>> {
+  
+  // TODO throw  error that effect ui
+  const res = await apiInstance.get(
+    `/exams/student/${studentId}`,  
+  )
+
+  res.data.map(exam => {
+    exam.startDate = exam.startTime;
+    exam.endDate = exam.endTime} )
+  return res.data as Event[]
 }
