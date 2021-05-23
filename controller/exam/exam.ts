@@ -3,10 +3,10 @@ import {
   ExamRecordingInterface,
   RefranceRecordingInterface,
 } from "../../model/examination/Recordings";
-import data from "../../db.json";
 import config from "../../utils/config";
 import apiInstance from "../utils/api";
 import { Event } from "../../model/event";
+import { Exam } from "../../model/Exam";
 
 export async function assignExamToCourse(examId: string, courseId: string) {
   return await apiInstance.post(
@@ -104,4 +104,11 @@ export async function getAllExams(studentId): Promise<Array<Event>> {
     exam.startDate = exam.startTime;
     exam.endDate = exam.endTime} )
   return res.data as Event[]
+}
+
+export async function getExamById(examId:string) : Promise<Exam>{
+  const res = await apiInstance.get(
+    `/exams/${examId}`
+  )
+  return res.data
 }
