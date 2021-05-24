@@ -89,6 +89,9 @@ function MyApp({ Component, pageProps }) {
       },
       setUserId(userId: string) {
         setter('id', userId)
+      },
+      setRole(role: string) {
+        setter('role', role)
       }
     }}>
       { allowed ? <Component {...pageProps} /> : <AccessDenied />}
