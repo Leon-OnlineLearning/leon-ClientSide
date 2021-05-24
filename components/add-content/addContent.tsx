@@ -104,6 +104,7 @@ interface UploadTrainingFilesProps {
 // conditionally rendered elements. But the similar items (class name text input
 // and the upload files fields will remain unchanged. This isn't very intuitive
 // that's why i made the hidden field "hack" trying to solve this issue
+// To see the effect i'm referencing run checkout c9b4efe53e333efc23d5018009222960317dbcea
 
 export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({
   testing = false,
@@ -115,11 +116,10 @@ export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({
   // react will detect the similarity between the element in the page and
   // only update what changes, as this
   const [files, setFiles] = useState([]);
-  // const [unrelatedFiles, setUnrelatedFiles] = useState([]);
+  const [unrelatedFiles, setUnrelatedFiles] = useState([]);
   const [className, setClassName] = useState("");
-  // const [unRelatedClassName, setUnrelatedClassName] = useState("");
+  const [unrelatedClassName, setUnrelatedClassName] = useState("");
   const [done, setDone] = useState(false);
-  const [filesList, setFilesList] = useState(new FileList());
   return (
     <>
       <section data-testid="title-container">
@@ -134,8 +134,8 @@ export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({
           e.preventDefault();
           const result = await onSubmit(
             courseId,
-            files,
-            className,
+            related ? files : unrelatedFiles,
+            related ? className : unrelatedClassName,
             sessionStorage.getItem("sessionId")
           );
           if (result) {
@@ -153,32 +153,56 @@ export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({
         {
           <div data-testid="class-name-place">
             {!testing ? (
-              <Form.Group>
-                <Form.Label htmlFor="className">Class name</Form.Label>
-                <FormControl
-                  onChange={(e) => {
-                    setClassName(e.target.value);
-                  }}
-                  value={className}
-                  id="className"
-                  placeholder="E.g. Dynamic programming"
-                />
-              </Form.Group>
+              related ? (
+                <Form.Group>
+                  <Form.Label htmlFor="className">Class name</Form.Label>
+                  <FormControl
+                    onChange={(e) => {
+                      setClassName(e.target.value);
+                    }}
+                    value={className}
+                    id="className"
+                    placeholder="E.g. Dynamic programming"
+                  />
+                </Form.Group>
+              ) : (
+                <Form.Group>
+                  <Form.Label htmlFor="className">Class name</Form.Label>
+                  <FormControl
+                    onChange={(e) => {
+                      setUnrelatedClassName(e.target.value);
+                    }}
+                    value={unrelatedClassName}
+                    id="className"
+                    placeholder="E.g. Dynamic programming"
+                  />
+                </Form.Group>
+              )
             ) : (
               ""
             )}
           </div>
         }
-        <input
-          type="file"
-          name="courseFiles"
-          data-testid="training-upload-file"
-          multiple
-          onChange={(e) => {
-            setFilesList(e.target.files);
-            setFiles(Array.from(e.target.files));
-          }}
-        />
+          <input
+            type="file"
+            name="courseFiles"
+            data-testid="training-upload-file"
+            multiple
+            hidden={!related}
+            onChange={(e) => {
+              setFiles(Array.from(e.target.files));
+            }}
+          />
+          <input
+            hidden={related}
+            type="file"
+            name="courseFiles"
+            data-testid="training-upload-file"
+            multiple
+            onChange={(e) => {
+              setUnrelatedFiles(Array.from(e.target.files));
+            }}
+          />
         <Button type="submit">Add</Button>
         {done ? <div data-testid="training-upload-files-done">done</div> : ""}
       </Form>
