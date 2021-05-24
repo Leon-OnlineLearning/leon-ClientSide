@@ -3,7 +3,7 @@ import { rest } from "msw";
 import { render, waitFor, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
-import { UploadTrainingFiles } from "../../components/add-content/addContent";
+import { UploadFiles } from "../../components/add-content/addContent";
 import axios from "axios";
 import LocalStorageMock from "../mocks/LocalstorageMock";
 import { formatWithValidation } from "next/dist/next-server/lib/utils";
@@ -56,7 +56,7 @@ describe("upload files test suite", () => {
 
   test("it should render valid related state", () => {
     render(
-      <UploadTrainingFiles
+      <UploadFiles
         sessionStorage={lsMock}
         related
         courseId="courseId"
@@ -68,7 +68,7 @@ describe("upload files test suite", () => {
 
   test("it should render valid related state", () => {
     render(
-      <UploadTrainingFiles
+      <UploadFiles
         sessionStorage={lsMock}
         courseId="courseId"
         onSubmit={trainingFileUploader}
@@ -79,7 +79,7 @@ describe("upload files test suite", () => {
 
   test("it should upload files", async () => {
     render(
-      <UploadTrainingFiles
+      <UploadFiles
         sessionStorage={lsMock}
         courseId="courseId"
         related
@@ -114,7 +114,7 @@ describe("upload files test suite", () => {
 
   test("it should deal with tests correctly", async () => {
     render(
-      <UploadTrainingFiles
+      <UploadFiles
         courseId="courseId"
         sessionStorage={lsMock}
         onSubmit={async (courseId, files, _, sessionId) => {

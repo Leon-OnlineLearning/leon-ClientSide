@@ -19,13 +19,13 @@ interface AddContentProps {
 const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const steps = [
-    <UploadTrainingFiles
+    <UploadFiles
       sessionStorage={sessionStorage}
       related
       courseId={courseId}
       onSubmit={trainingRelatedFileUploader}
     />,
-    <UploadTrainingFiles
+    <UploadFiles
       sessionStorage={sessionStorage}
       courseId={courseId}
       onSubmit={trainingNonRelatedFileUploader}
@@ -42,6 +42,12 @@ const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage }) => {
       onSubmit={searchForNonRelatedTrainingFilesSubmit}
       originalCourseId="courseId"
       sessionStorage={sessionStorage}
+    />,
+    <UploadFiles
+      sessionStorage={sessionStorage}
+      courseId={courseId}
+      onSubmit={trainingNonRelatedFileUploader}
+      testing
     />,
   ];
 
@@ -106,7 +112,7 @@ interface UploadTrainingFilesProps {
 // that's why i made the hidden field "hack" trying to solve this issue
 // To see the effect i'm referencing run checkout c9b4efe53e333efc23d5018009222960317dbcea
 
-export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({
+export const UploadFiles: FC<UploadTrainingFilesProps> = ({
   testing = false,
   sessionStorage,
   courseId,
@@ -183,26 +189,41 @@ export const UploadTrainingFiles: FC<UploadTrainingFilesProps> = ({
             )}
           </div>
         }
+        {testing ? (
           <input
+            hidden={!testing}
             type="file"
-            name="courseFiles"
-            data-testid="training-upload-file"
-            multiple
-            hidden={!related}
-            onChange={(e) => {
-              setFiles(Array.from(e.target.files));
-            }}
-          />
-          <input
-            hidden={related}
-            type="file"
-            name="courseFiles"
+            name="testingFile"
             data-testid="training-upload-file"
             multiple
             onChange={(e) => {
               setUnrelatedFiles(Array.from(e.target.files));
             }}
           />
+        ) : (
+          <>
+            <input
+              type="file"
+              name="courseFiles"
+              data-testid="training-upload-file"
+              multiple
+              hidden={!related}
+              onChange={(e) => {
+                setFiles(Array.from(e.target.files));
+              }}
+            />
+            <input
+              hidden={related}
+              type="file"
+              name="courseFiles"
+              data-testid="training-upload-file"
+              multiple
+              onChange={(e) => {
+                setUnrelatedFiles(Array.from(e.target.files));
+              }}
+            />
+          </>
+        )}
         <Button type="submit">Add</Button>
         {done ? <div data-testid="training-upload-files-done">done</div> : ""}
       </Form>
