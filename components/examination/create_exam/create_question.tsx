@@ -31,7 +31,7 @@ export default function CreateQuestion(props: { question: QuestionInterface, set
          />
         <QuestionText text={props.question.questionText} setText={changeText}/>
         <AdoptiveArea 
-        selected_type={props.question.questionType} 
+        question={props.question} 
         setQuestion={props.setQuestion}/>
     </>
 
@@ -68,9 +68,16 @@ const QuestionText = ({text,setText}) => (<>
 
 
 // this part would change acording to selected question
-const AdoptiveArea = (props: { selected_type: Q_type ,setQuestion }) => {
+const AdoptiveArea = (props: { question: QuestionInterface ,setQuestion }) => {
     const [choices, setChoices] = useState<string[]>(['', ''])
 
+    const selectedLang = props.question.code_lang
+
+    const setCodeLang = (new_lang => props.setQuestion(question => {
+        let new_question = {...question}
+        new_question.code_lang = new_lang
+        return new_question
+    }))
     useEffect(() => {
         props.setQuestion(question => {
             let new_question = {...question}
@@ -79,14 +86,33 @@ const AdoptiveArea = (props: { selected_type: Q_type ,setQuestion }) => {
         })
         
     }, [choices])
-    switch (props.selected_type) {
+    switch (props.question.questionType) {
         case Q_type.MultiChoice:
         case Q_type.SingleChoice:
             return <CreateChoices choices={choices} setChoices={setChoices} />
-
+        case Q_type.Code:
+            return <CreateCodeLang selectedlang={selectedLang} setCodeLang={setCodeLang} />
         default:
             return <div></div>
 
     }
 
+}
+
+
+
+const CreateCodeLang = ({selectedlang,setCodeLang}) =>{
+    // TODO get this from codeMirror
+    const available_languges = ['c','python','js'];
+    
+    return  (
+    <Form.Group>
+    <Form.Label>coding language</Form.Label>
+    <Form.Control as="select" 
+    onChange={e => setCodeLang(e.target.value)} 
+    value={selectedlang}>
+        {available_languges.map(type_name => <option key={type_name}>{type_name}</option>)}
+    </Form.Control>
+</Form.Group>
+    )
 }
