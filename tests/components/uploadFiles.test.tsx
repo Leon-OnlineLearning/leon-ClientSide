@@ -41,7 +41,7 @@ describe("upload files test suite", () => {
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
-  const trainingFileUploader = async (url, courseId, files, className) => {
+  const trainingFileUploader = async (courseId, files, className) => {
     const formData = new FormData();
     formData.append("className", className);
     formData.append("courseId", courseId);
@@ -49,7 +49,7 @@ describe("upload files test suite", () => {
       formData.append(`files`, file);
     });
     return await axios
-      .post(url, formData)
+      .post("/training/related/upload", formData)
       .then((resp) => resp.data)
       .catch((err) => console.error(err));
   };
@@ -60,7 +60,6 @@ describe("upload files test suite", () => {
         sessionStorage={lsMock}
         related
         courseId="courseId"
-        submissionUrl="/training/related/upload"
         onSubmit={trainingFileUploader}
       />
     );
@@ -72,7 +71,6 @@ describe("upload files test suite", () => {
       <UploadTrainingFiles
         sessionStorage={lsMock}
         courseId="courseId"
-        submissionUrl="/training/related/upload"
         onSubmit={trainingFileUploader}
       />
     );
@@ -85,7 +83,6 @@ describe("upload files test suite", () => {
         sessionStorage={lsMock}
         courseId="courseId"
         related
-        submissionUrl="/training/related/upload"
         onSubmit={trainingFileUploader}
       />
     );
@@ -120,13 +117,12 @@ describe("upload files test suite", () => {
       <UploadTrainingFiles
         courseId="courseId"
         sessionStorage={lsMock}
-        submissionUrl="/testing"
-        onSubmit={async (url, courseId, files, _, sessionId) => {
+        onSubmit={async (courseId, files, _, sessionId) => {
           const form = new FormData();
           form.append("courseId", courseId);
           form.append("file", files[0]);
           form.append("sessionId", sessionId);
-          return await axios.post(url, form).then((resp) => resp.data);
+          return await axios.post("/testing", form).then((resp) => resp.data);
         }}
         testing
       />
