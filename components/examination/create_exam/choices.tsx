@@ -1,21 +1,32 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import { XCircle } from 'react-bootstrap-icons';
 
 
 
+type updateCallBack = (oldChoices: string[]) => string[];
 
-export default function CreateChoices(props: { choices: string[], setChoices: Dispatch<SetStateAction<string[]>> }) {
+interface createChoicePropsInterface {
+     choices: string[],
+    updateChoices: (callback: updateCallBack )=>void
+}
 
+export default function CreateChoices(props: createChoicePropsInterface) {
 
-    const addEmptyChoice = () => props.setChoices(choices => choices.concat(""))
+    // create two empty choices on first mount
+    useEffect(() => {
+        props.updateChoices(_ => ['',''])
 
-    const removeChoice = (index_to_remove) => props.setChoices(choices => (
+    }, [])
+
+    const addEmptyChoice = () => props.updateChoices(choices => choices.concat(""))
+
+    const removeChoice = (index_to_remove) => props.updateChoices(choices => (
         choices.filter((_, index) => index !== index_to_remove)
     ))
 
     const editChoice = (new_value, index) => {
-        props.setChoices(choices => {
+        props.updateChoices(choices => {
             let newChoices = [...choices]
             newChoices[index] = new_value
             return newChoices
@@ -26,7 +37,7 @@ export default function CreateChoices(props: { choices: string[], setChoices: Di
         <Form.Group>
             <Form.Label>choices </Form.Label>
             {
-                props.choices.map((choice, index) => (
+                props.choices && props.choices.map((choice, index) => (
 
                     <Form.Group as={Row} key={['goup', index].join('_')}>
                         <Col>

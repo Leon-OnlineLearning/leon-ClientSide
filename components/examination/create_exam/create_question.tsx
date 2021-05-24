@@ -5,10 +5,17 @@ import CreateChoices from "./choices";
 
 
 
-export default function CreateQuestion(props: { question: QuestionInterface, setQuestion: CallableFunction }) {
+type updateCallBack = (oldQuestion: QuestionInterface) => QuestionInterface;
 
-    
-    const changeType = (newType) => (props.setQuestion(question => {
+
+interface propsQuestionInterface  { 
+    question: QuestionInterface, 
+    updateQuestion: (callBack: updateCallBack) => void
+}
+
+export default function CreateQuestion(props: propsQuestionInterface)  
+    {
+    const changeType = (newType) => (props.updateQuestion(question => {
         // TODO remove adoptive area fields
         let newQuestion = {...question }
         newQuestion.questionType = newType
@@ -16,7 +23,7 @@ export default function CreateQuestion(props: { question: QuestionInterface, set
     }))
 
 
-    const changeText = (newText) => (props.setQuestion(question => {
+    const changeText = (newText) => (props.updateQuestion(question => {
         // TODO remove adoptive area fields
         let newQuestion = {...question }
         newQuestion.questionText = newText
@@ -32,7 +39,7 @@ export default function CreateQuestion(props: { question: QuestionInterface, set
         <QuestionText text={props.question.questionText} setText={changeText}/>
         <AdoptiveArea 
         question={props.question} 
-        setQuestion={props.setQuestion}/>
+        updateQuestion={props.updateQuestion}/>
     </>
 
 
@@ -68,28 +75,27 @@ const QuestionText = ({text,setText}) => (<>
 
 
 // this part would change acording to selected question
-const AdoptiveArea = (props: { question: QuestionInterface ,setQuestion }) => {
-    const [choices, setChoices] = useState<string[]>(['', ''])
-
+const AdoptiveArea = (props: propsQuestionInterface) => {
     const selectedLang = props.question.code_lang
 
-    const setCodeLang = (new_lang => props.setQuestion(question => {
+    const setCodeLang = (new_lang => props.updateQuestion(question => {
         let new_question = {...question}
         new_question.code_lang = new_lang
         return new_question
     }))
-    useEffect(() => {
-        props.setQuestion(question => {
+
+    function updateChoices(updateCallback) {
+        props.updateQuestion(question => {
             let new_question = {...question}
-            new_question.choices = choices
+            new_question.choices = updateCallback(question.choices)
             return new_question
         })
-        
-    }, [choices])
+    }
+
     switch (props.question.questionType) {
         case Q_type.MultiChoice:
         case Q_type.SingleChoice:
-            return <CreateChoices choices={choices} setChoices={setChoices} />
+            return <CreateChoices choices={props.question.choices} updateChoices={updateChoices} />
         case Q_type.Code:
             return <CreateCodeLang selectedlang={selectedLang} setCodeLang={setCodeLang} />
         default:
