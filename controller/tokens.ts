@@ -22,6 +22,7 @@ export const refreshToken = async () => {
         .then(response => response.data)
         .then(data => {
             storeUserSession(refreshToken, data.token)
+            // TODO we need to update the context here
         })
         .catch((err: AxiosError) => {
             if (err.response.status >= 400 && err.response.status < 500)
