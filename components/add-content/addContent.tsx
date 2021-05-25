@@ -194,7 +194,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
             hidden={!testing}
             type="file"
             name="testingFile"
-            data-testid="training-upload-file"
+            data-testid="testing-upload-file"
             multiple
             onChange={(e) => {
               setUnrelatedFiles(Array.from(e.target.files));
@@ -205,7 +205,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
             <input
               type="file"
               name="courseFiles"
-              data-testid="training-upload-file"
+              data-testid="training-related-upload-file"
               multiple
               hidden={!related}
               onChange={(e) => {
@@ -216,7 +216,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
               hidden={related}
               type="file"
               name="courseFiles"
-              data-testid="training-upload-file"
+              data-testid="training-non-related-upload-file"
               multiple
               onChange={(e) => {
                 setUnrelatedFiles(Array.from(e.target.files));
@@ -238,7 +238,6 @@ interface SearchForTrainingFilesProps {
     courseId: string,
     className: string,
     files: string[],
-    sessionId: string,
     sessionStorage: any
   ) => Promise<any>; // url is for related / non related
   originalCourseId: string;
@@ -304,18 +303,23 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
 }) => {
   const state = useCourseFileState();
 
+  console.log(
+    "sessionStorage inside search for training files",
+    sessionStorage
+  );
+
   return (
     <>
       <h1>{`Search For ${related ? "related" : "non-related"} content`}</h1>
       <Form
         onSubmit={async (e) => {
+          console.log("related is", related, "session storage", sessionStorage);
           e.preventDefault();
           if (state.files.length > 0)
             await onSubmit(
               originalCourseId,
               state.className,
               state.selectedFiles.map((f) => f.id),
-              sessionStorage.getItem("sessionId"),
               sessionStorage
             );
           state.setFilesSent(true);

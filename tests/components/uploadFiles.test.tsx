@@ -96,7 +96,7 @@ describe("upload files test suite", () => {
     ];
 
     userEvent.upload(
-      screen.getByTestId("training-upload-file"),
+      screen.getByTestId("training-related-upload-file"),
       importantPdfFiles
     );
     userEvent.type(
@@ -131,7 +131,10 @@ describe("upload files test suite", () => {
     const testingFile = new File(["hello world"], "test.txt", {
       type: "text/plain",
     });
-    userEvent.upload(screen.getByTestId("training-upload-file"), testingFile);
+    userEvent.upload(
+      screen.getByTestId("testing-upload-file"),
+      testingFile
+    );
     userEvent.click(screen.getByText("Add"));
     await waitFor(() => screen.getByTestId("training-upload-files-done"));
     expect(testFileIsSent).toBeTruthy();

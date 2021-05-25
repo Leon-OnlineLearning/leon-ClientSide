@@ -4,7 +4,6 @@ export const searchForNonRelatedTrainingFilesSubmit = async (
   courseId: string,
   className: string,
   files: any[],
-  sessionId: string,
   sessionStorage: any
 ) => {
   return searchForTrainingFilesSubmit(
@@ -12,7 +11,6 @@ export const searchForNonRelatedTrainingFilesSubmit = async (
     courseId,
     className,
     files,
-    sessionId,
     sessionStorage
   );
 };
@@ -21,7 +19,6 @@ export const searchForRelatedTrainingFilesSubmit = async (
   courseId: string,
   className: string,
   files: any[],
-  sessionId: string,
   sessionStorage: any
 ) => {
   return searchForTrainingFilesSubmit(
@@ -29,7 +26,6 @@ export const searchForRelatedTrainingFilesSubmit = async (
     courseId,
     className,
     files,
-    sessionId,
     sessionStorage
   );
 };
@@ -39,7 +35,6 @@ const searchForTrainingFilesSubmit = async (
   courseId: string,
   className: string,
   files: any[],
-  sessionId: string,
   sessionStorage: any
 ) => {
   try {
@@ -48,7 +43,7 @@ const searchForTrainingFilesSubmit = async (
         className,
         courseId,
         files,
-        sessionId,
+        sessionId: sessionStorage.getItem("sessionId")
       })
       .then((resp) => resp.data);
 

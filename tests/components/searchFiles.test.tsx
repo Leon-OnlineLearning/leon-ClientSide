@@ -17,6 +17,8 @@ describe("search files test suite", () => {
   let classNameIsCorrect = false;
   const server = setupServer(
     rest.post("/training/related/existing", (req, res, ctx) => {
+      console.log("files?", req.body["files"]);
+
       fileAreCorrect =
         req.body["files"][0] === "1" && req.body["files"][1] === "2";
       courseNameIsCorrect = req.body["courseId"] === "courseId";
@@ -44,6 +46,8 @@ describe("search files test suite", () => {
     files,
     sessionStorage
   ) => {
+    console.log("session storage is", sessionStorage);
+
     try {
       const resp = await axios
         .post("/training/related/existing", {
@@ -115,6 +119,8 @@ describe("search files test suite", () => {
   });
 
   test("it should send the selected files correctly", async () => {
+    console.log("lsMock?", lsMock);
+
     render(
       <SearchForTrainingFiles
         sessionStorage={lsMock}
