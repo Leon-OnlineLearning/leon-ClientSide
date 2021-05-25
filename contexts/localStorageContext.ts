@@ -5,7 +5,25 @@
  */
 import { createContext } from "react"
 
-const LocalStorageContext = createContext({
+export interface userDataInterface {
+    firstName: string,
+    lastName: string,
+    embeddingSigned : string
+    refreshToken : string
+    userId : string
+    role : string
+}
+
+interface dataSetter {
+    setFirstName: (firstName: string) => void,
+    setLastName: (lastName: string) => void,
+    setEmbeddingSigned: (embeddingSigned: string) => void,
+    setRefreshToken: (refreshToken: string) => void,
+    setUserId: (userId: string) => void,
+    setRole:(role: string) => void
+}
+
+const LocalStorageContext = createContext<userDataInterface&dataSetter>({
     firstName: '',
     lastName: '',
     embeddingSigned: '',
@@ -16,7 +34,8 @@ const LocalStorageContext = createContext({
     setLastName: (lastName: string) => {},
     setEmbeddingSigned: (embeddingSigned: string) => {},
     setRefreshToken: (refreshToken: string) => {},
-    setUserId: (userId: string) => {}
+    setUserId: (userId: string) => {},
+    setRole:(role: string) => {}
 })
 
 export default LocalStorageContext;

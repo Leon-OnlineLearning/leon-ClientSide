@@ -20,9 +20,20 @@ import axios from "axios"
 import config from "../utils/config";
 import styles from "../styles/login.module.css";
 import { storeUserSession } from "../controller/tokens";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/router"
 import { useError } from "../hooks/useError"
+import LocalStorageContext, { userDataInterface } from "../contexts/localStorageContext";
+
+export const getUserDataLocalStorage = ():userDataInterface => ({
+    firstName: localStorage.getItem('firstName'),
+    lastName: localStorage.getItem('lastName'),
+    refreshToken: localStorage.getItem('refreshToken'),
+    userId: localStorage.getItem('id'),
+    embeddingSigned: localStorage.getItem('embedding-signed'),
+    role: localStorage.getItem('role')
+})
+
 
 // login logic
 // in case of google
@@ -58,6 +69,17 @@ export default function LoginPage() {
             .catch(err => console.error(err))
     }
 
+    const localStorageContext = useContext(LocalStorageContext)
+    const updateContext = (data:userDataInterface)=>{
+        localStorageContext.setEmbeddingSigned(data.embeddingSigned)
+        localStorageContext.setFirstName(data.firstName)
+        localStorageContext.setLastName(data.lastName)
+        localStorageContext.setRefreshToken(data.refreshToken)
+        localStorageContext.setUserId(data.userId)
+        localStorageContext.setRole(data.role)
+    }
+
+
     const handleLogin = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault()
         //TODO validate the form fields
@@ -65,6 +87,7 @@ export default function LoginPage() {
             .then(response => response.data)
             .then(data => {
                 storeUserSession(data.refreshToken, data.token)
+                updateContext(getUserDataLocalStorage())
             }).then(_ => { handleRedirection(localStorage.getItem('role')) })
             .catch(err => {
                 const response = err.response
