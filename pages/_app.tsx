@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }) {
       allowed = false
     } else {
       const embeddingSigned = localStorage.getItem('embedding-signed')
-      if (!embeddingSigned) {
+      if (!embeddingSigned || embeddingSigned == "null") {
         router.push("/sendEmbedding")
         return <Spinner animation="border" variant="primary" />
       }
