@@ -1,6 +1,7 @@
 import axios from "axios";
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Button, Form, FormControl, Spinner } from "react-bootstrap";
+import LocalStorageContext from "../../contexts/localStorageContext";
 import {
   searchFiles,
   searchForNonRelatedTrainingFilesSubmit,
@@ -18,17 +19,20 @@ interface AddContentProps {
 
 const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage }) => {
   const [currentPage, setCurrentPage] = useState(0);
+  const localStorageContext = useContext(LocalStorageContext);
   const steps = [
     <UploadFiles
       sessionStorage={sessionStorage}
       related
       courseId={courseId}
       onSubmit={trainingRelatedFileUploader}
+      professorId={localStorageContext.userId}
     />,
     <UploadFiles
       sessionStorage={sessionStorage}
       courseId={courseId}
       onSubmit={trainingNonRelatedFileUploader}
+      professorId={localStorageContext.userId}
     />,
     <SearchForTrainingFiles
       related
@@ -36,18 +40,21 @@ const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage }) => {
       onSubmit={searchForRelatedTrainingFilesSubmit}
       originalCourseId="courseId"
       sessionStorage={sessionStorage}
+      professorId={localStorageContext.userId}
     />,
     <SearchForTrainingFiles
       onSearch={searchFiles}
       onSubmit={searchForNonRelatedTrainingFilesSubmit}
       originalCourseId="courseId"
       sessionStorage={sessionStorage}
+      professorId={localStorageContext.userId}
     />,
     <UploadFiles
       sessionStorage={sessionStorage}
       courseId={courseId}
       onSubmit={trainingNonRelatedFileUploader}
       testing
+      professorId={localStorageContext.userId}
     />,
   ];
 
@@ -94,11 +101,13 @@ interface UploadTrainingFilesProps {
   onSubmit: (
     courseId: string,
     files: any[],
+    professorId: string,
     className?: string,
     sessionId?: string
   ) => Promise<any>;
   courseId: string;
   sessionStorage: any;
+  professorId: string;
   testing?: boolean;
 }
 
@@ -118,6 +127,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
   courseId,
   related = false,
   onSubmit,
+  professorId,
 }) => {
   // react will detect the similarity between the element in the page and
   // only update what changes, as this
@@ -141,6 +151,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
           const result = await onSubmit(
             courseId,
             related ? files : unrelatedFiles,
+            professorId,
             related ? className : unrelatedClassName,
             sessionStorage.getItem("sessionId")
           );
@@ -237,13 +248,16 @@ interface SearchForTrainingFilesProps {
   onSubmit: (
     courseId: string,
     className: string,
+    professorId: string,
     files: string[],
     sessionStorage: any
   ) => Promise<any>; // url is for related / non related
   originalCourseId: string;
   sessionStorage: any;
+  professorId: string;
 }
 
+// TODO move to controller
 const assignExistingItems = async (
   url,
   className,
@@ -300,25 +314,21 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
   related = false,
   onSearch,
   onSubmit,
+  professorId,
 }) => {
   const state = useCourseFileState();
-
-  console.log(
-    "sessionStorage inside search for training files",
-    sessionStorage
-  );
 
   return (
     <>
       <h1>{`Search For ${related ? "related" : "non-related"} content`}</h1>
       <Form
         onSubmit={async (e) => {
-          console.log("related is", related, "session storage", sessionStorage);
           e.preventDefault();
           if (state.files.length > 0)
             await onSubmit(
               originalCourseId,
               state.className,
+              professorId,
               state.selectedFiles.map((f) => f.id),
               sessionStorage
             );

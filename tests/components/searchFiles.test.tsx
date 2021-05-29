@@ -17,8 +17,6 @@ describe("search files test suite", () => {
   let classNameIsCorrect = false;
   const server = setupServer(
     rest.post("/training/related/existing", (req, res, ctx) => {
-      console.log("files?", req.body["files"]);
-
       fileAreCorrect =
         req.body["files"][0] === "1" && req.body["files"][1] === "2";
       courseNameIsCorrect = req.body["courseId"] === "courseId";
@@ -43,16 +41,16 @@ describe("search files test suite", () => {
   const searchForTrainingFilesSubmit = async (
     courseId,
     className,
+    professorId,
     files,
     sessionStorage
   ) => {
-    console.log("session storage is", sessionStorage);
-
     try {
       const resp = await axios
         .post("/training/related/existing", {
           className,
           courseId,
+          professorId,
           files,
           sessionId: sessionStorage.getItem("sessionId"),
         })
@@ -78,6 +76,7 @@ describe("search files test suite", () => {
     render(
       <SearchForTrainingFiles
         related
+        professorId="12345"
         onSearch={searchForTrainingFilesSearch}
         onSubmit={searchForTrainingFilesSubmit}
         originalCourseId="courseId"
@@ -97,6 +96,7 @@ describe("search files test suite", () => {
     render(
       <SearchForTrainingFiles
         related
+        professorId="12345"
         onSearch={searchForTrainingFilesSearch}
         onSubmit={searchForTrainingFilesSubmit}
         originalCourseId="courseId"
@@ -109,6 +109,7 @@ describe("search files test suite", () => {
   test("it should render valid non-related state", () => {
     render(
       <SearchForTrainingFiles
+        professorId="12345"
         sessionStorage={lsMock}
         onSearch={searchForTrainingFilesSearch}
         onSubmit={searchForTrainingFilesSubmit}
@@ -123,6 +124,7 @@ describe("search files test suite", () => {
 
     render(
       <SearchForTrainingFiles
+        professorId="12345"
         sessionStorage={lsMock}
         onSearch={searchForTrainingFilesSearch}
         onSubmit={searchForTrainingFilesSubmit}

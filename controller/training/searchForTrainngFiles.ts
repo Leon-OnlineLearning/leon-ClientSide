@@ -3,6 +3,7 @@ import apiInstance from "../utils/api";
 export const searchForNonRelatedTrainingFilesSubmit = async (
   courseId: string,
   className: string,
+  professorId: string,
   files: any[],
   sessionStorage: any
 ) => {
@@ -10,6 +11,7 @@ export const searchForNonRelatedTrainingFilesSubmit = async (
     false,
     courseId,
     className,
+    professorId,
     files,
     sessionStorage
   );
@@ -18,6 +20,7 @@ export const searchForNonRelatedTrainingFilesSubmit = async (
 export const searchForRelatedTrainingFilesSubmit = async (
   courseId: string,
   className: string,
+  professorId: string,
   files: any[],
   sessionStorage: any
 ) => {
@@ -25,6 +28,7 @@ export const searchForRelatedTrainingFilesSubmit = async (
     true,
     courseId,
     className,
+    professorId,
     files,
     sessionStorage
   );
@@ -34,6 +38,7 @@ const searchForTrainingFilesSubmit = async (
   related: boolean,
   courseId: string,
   className: string,
+  professorId: string,
   files: any[],
   sessionStorage: any
 ) => {
@@ -43,6 +48,7 @@ const searchForTrainingFilesSubmit = async (
         className,
         courseId,
         files,
+        professorId,
         sessionId: sessionStorage.getItem("sessionId")
       })
       .then((resp) => resp.data);
