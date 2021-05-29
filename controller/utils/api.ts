@@ -6,18 +6,17 @@ import UserInputError from "./UserInputError";
 
 const apiInstance = axios.create({
     baseURL: config.serverBaseUrl,
-    timeout: 5000,
 });
 
 apiInstance.interceptors.response.use((response: AxiosResponse) => response,
     async (err: AxiosError) => {
         const response = err.response;
         const originalRequest = err.config;
-        if (response.status === 401 && response.data.message === "Invalid or expired Token") {
+        if (response?.status === 401 && response?.data?.message === "Invalid or expired Token") {
             await refreshToken()
             return apiInstance(originalRequest);
         }
-        else if (response.status === 400) {
+        else if (response?.status === 400) {
             throw new UserInputError(response.data.message);
         } 
         else {

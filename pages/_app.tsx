@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }) {
       allowed = false
     } else {
       const embeddingSigned = localStorage.getItem('embedding-signed')
-      if (!embeddingSigned) {
+      if (!embeddingSigned || embeddingSigned == "null") {
         router.push("/sendEmbedding")
         return <Spinner animation="border" variant="primary" />
       }
@@ -54,8 +54,8 @@ function MyApp({ Component, pageProps }) {
     firstName: localStorage.getItem('firstName'),
     lastName: localStorage.getItem('lastName'),
     refreshToken: localStorage.getItem('refreshToken'),
-    userId: localStorage.getItem('id'),
-    embeddingSigned: localStorage.getItem('embedding-signed'),
+    id: localStorage.getItem('id'),
+    'embedding-signed': localStorage.getItem('embedding-signed'),
     role: localStorage.getItem('role')
   });
 
@@ -69,11 +69,11 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <LocalStorageContext.Provider value={{
-      embeddingSigned: localStorageState.embeddingSigned,
+      embeddingSigned: localStorageState['embedding-signed'],
       firstName: localStorageState.firstName,
       refreshToken: localStorageState.refreshToken,
       lastName: localStorageState.lastName,
-      userId: localStorageState.userId,
+      userId: localStorageState.id,
       role: localStorageState.role,
       setEmbeddingSigned(embeddingSigned: string) {
         setter('embedding-signed', embeddingSigned)
@@ -88,7 +88,10 @@ function MyApp({ Component, pageProps }) {
         setter('refreshToken', refreshToken)
       },
       setUserId(userId: string) {
-        setter('userId', userId)
+        setter('id', userId)
+      },
+      setRole(role: string) {
+        setter('role', role)
       }
     }}>
       { allowed ? <Component {...pageProps} /> : <AccessDenied />}
