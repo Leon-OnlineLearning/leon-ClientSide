@@ -27,19 +27,27 @@ export default function Recorder(props:{examId:string}) {
     }
 
     const mediaStream = useUserMedia({ audio: true, video: true });
-
+    const [recordingStarted, setRecordingStarted] = useState(false);
     useEffect(() => {
-        if (mediaStream) {
-            /**
-             * TODO handle unsupported mimeType 
-             * https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/isTypeSupported
-             */
-            let options = { mimeType: "video/webm" };
-            let recorder = new MediaRecorder(mediaStream, options);
-            recorder.ondataavailable = handleDataAvailable
-
-            recorder.start(record_slice)
+        console.log(mediaStream)
+        if (mediaStream){
+            if (!recordingStarted)
+            {
+                /**
+                 * TODO handle unsupported mimeType 
+                 * https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/isTypeSupported
+                 */
+                let options = { mimeType: "video/webm" };
+                let recorder = new MediaRecorder(mediaStream, options);
+                recorder.ondataavailable = handleDataAvailable
+    
+                recorder.start(record_slice)
+                console.log("recording")
+                setRecordingStarted(true)
+                recorderRef.current = recorder
+            }
         }
+    
     }, [mediaStream])
 
     console.log("iam alive")
