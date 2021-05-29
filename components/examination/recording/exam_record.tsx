@@ -8,10 +8,12 @@ const record_slice = 10 * 1000 //10 seconds
 export default function Recorder(props:{examId:string}) {
 
     const localStorageContext = useContext(LocalStorageContext)
+    const [remaining_chunks, setRemaining_chunks] = useState(0);
 
     function handleDataAvailable(event) {
+        setRemaining_chunks(rem => rem+1)
         let recordedChunks = []
-
+        console.debug(`sending ${event.data.size}`)
         if (event.data.size > 0) {
             recordedChunks.push(event.data);
             sendExamRecording({
@@ -20,7 +22,7 @@ export default function Recorder(props:{examId:string}) {
                 userId: localStorageContext.userId,
                 chunckIndex: counter++,
                 recordedChunks: recordedChunks
-            })
+            }).then(res => {setRemaining_chunks(rem => rem-1)})
         }
     }
 
@@ -43,5 +45,5 @@ export default function Recorder(props:{examId:string}) {
     console.log("iam alive")
 
 
-    return <p>recorder</p>
+    return <p>remaining chunks {String(remaining_chunks)}</p>
 }
