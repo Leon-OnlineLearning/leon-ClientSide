@@ -8,6 +8,7 @@ import {
   searchForRelatedTrainingFilesSubmit,
 } from "../../controller/training/searchForTrainngFiles";
 import {
+  testingFileUploader,
   trainingNonRelatedFileUploader,
   trainingRelatedFileUploader,
 } from "../../controller/training/trainingFileUploader";
@@ -52,7 +53,7 @@ const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage }) => {
     <UploadFiles
       sessionStorage={sessionStorage}
       courseId={courseId}
-      onSubmit={trainingNonRelatedFileUploader}
+      onSubmit={testingFileUploader}
       testing
       professorId={localStorageContext.userId}
     />,

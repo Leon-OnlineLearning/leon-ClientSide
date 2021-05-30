@@ -1,6 +1,5 @@
 import Cookie from "js-cookie"
 import jwtDecode from "jwt-decode"
-import config from "../utils/config"
 import apiInstance from "./utils/api"
 import { AxiosError } from "axios"
 

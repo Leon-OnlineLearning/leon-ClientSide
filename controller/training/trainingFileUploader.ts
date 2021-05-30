@@ -12,15 +12,15 @@ export const trainingNonRelatedFileUploader = async (
     files,
     professorId,
     className,
-    sessionId,
-    false
+    "training/nonrelated",
+    sessionId
   );
 };
 
 export const trainingRelatedFileUploader = async (
   courseId: string,
   files: any[],
-  professorId,
+  professorId: string,
   className: string,
   sessionId?: string
 ) => {
@@ -29,31 +29,49 @@ export const trainingRelatedFileUploader = async (
     files,
     professorId,
     className,
-    sessionId,
-    true
+    "training/related",
+    sessionId
+  );
+};
+
+export const testingFileUploader = async (
+  courseId: string,
+  files: any[],
+  professorId: string,
+  className: string,
+  sessionId?: string
+) => {
+  return await trainingFileUploader(
+    courseId,
+    files,
+    professorId,
+    className,
+    "training/testing",
+    sessionId
   );
 };
 
 const trainingFileUploader = async (
   courseId: string,
-  files: any[],
+  files: any,
   professorId: string,
   className: string,
-  sessionId?: string,
-  related: boolean = false
+  relation: string,
+  sessionId?: string
 ) => {
   const formData = new FormData();
   if (className) formData.append("className", className);
   formData.append("professorId", professorId);
   formData.append("courseId", courseId);
-  files.forEach((file) => {
+
+  files.forEach((file: any) => {
     formData.append(`files`, file);
   });
 
   if (sessionId) formData.append("sessionId", sessionId);
 
   return await apiInstance
-    .post(`/training/${related ? "related" : "nonrelated" }/upload`, formData)
+    .post(`/${relation}/upload`, formData)
     .then((resp) => resp.data)
     .catch((err) => console.error(err));
 };
