@@ -1,6 +1,6 @@
 import axios from "axios";
-import { FC, useContext, useEffect, useState } from "react";
-import { Button, Form, FormControl, Spinner } from "react-bootstrap";
+import { FC, useContext, useState } from "react";
+import { Button, Form, FormControl } from "react-bootstrap";
 import LocalStorageContext from "../../contexts/localStorageContext";
 import {
   searchFiles,
@@ -21,6 +21,7 @@ interface AddContentProps {
 const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const localStorageContext = useContext(LocalStorageContext);
+  sessionStorage.removeItem("sessionId");
   const steps = [
     <UploadFiles
       sessionStorage={sessionStorage}
@@ -337,6 +338,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
         }}
       >
         <FormControl
+          key={`className${related ? "related" : "nonrelated"}`}
           placeholder="Class name"
           value={state.className}
           onChange={(e) => {
@@ -344,6 +346,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
           }}
         />
         <FormControl
+          key={`topic${related ? "related" : "nonrelated"}`}
           placeholder="Topic"
           value={state.fileSearchTerm}
           onChange={(e) => {
@@ -352,9 +355,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
         />
         <Button
           onClick={async () => {
-            const files = await onSearch(
-              state.fileSearchTerm
-            );
+            const files = await onSearch(state.fileSearchTerm);
             state.setFiles(files);
           }}
         >
@@ -362,6 +363,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
         </Button>
         {state.files.length > 0 ? (
           <Form.Group
+            key={`files${related ? "related" : "nonrelated"}`}
             data-testid="fileNames"
             onChange={(e) => {
               const selectedFilesNames = Array.from(
@@ -370,7 +372,9 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
               );
               state.setSelectedFiles(
                 state.files.filter((file) => {
-                  return selectedFilesNames.find((name) => name === file.filePath.split("/")[1]);
+                  return selectedFilesNames.find(
+                    (name) => name === file.filePath.split("/")[1]
+                  );
                 })
               );
             }}
@@ -378,7 +382,9 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
             <Form.Label>Files</Form.Label>
             <FormControl multiple as="select" data-testid="select-multi-files">
               {state.files.map((file) => {
-                return <option key={file.id}>{file.filePath.split("/")[1]}</option>;
+                return (
+                  <option key={file.id}>{file.filePath.split("/")[1]}</option>
+                );
               })}
             </FormControl>
           </Form.Group>
