@@ -83,7 +83,6 @@ describe("search files test suite", () => {
         sessionStorage={lsMock}
       />
     );
-    userEvent.type(screen.getByPlaceholderText("Course code"), "Any text");
     userEvent.type(screen.getByPlaceholderText("Topic"), "Any text");
     userEvent.click(screen.getByText("Search"));
     await waitFor(() => screen.getByTestId("fileNames"));
@@ -132,7 +131,6 @@ describe("search files test suite", () => {
       />
     );
     userEvent.type(screen.getByPlaceholderText("Class name"), "Any text");
-    userEvent.type(screen.getByPlaceholderText("Course code"), "Any text");
     userEvent.type(screen.getByPlaceholderText("Topic"), "Any text");
     userEvent.click(screen.getByText("Search"));
     await waitFor(() => screen.getByTestId("fileNames"));

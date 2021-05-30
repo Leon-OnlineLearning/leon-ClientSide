@@ -245,7 +245,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
 
 interface SearchForTrainingFilesProps {
   related?: boolean;
-  onSearch: (courseName: string, fileName: string) => Promise<any[]>;
+  onSearch: (fileName: string) => Promise<any[]>;
   onSubmit: (
     courseId: string,
     className: string,
@@ -344,13 +344,6 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
           }}
         />
         <FormControl
-          placeholder="Course code"
-          value={state.courseSearchTerm}
-          onChange={(e) => {
-            state.setCourseSearchTerm(e.target.value);
-          }}
-        />
-        <FormControl
           placeholder="Topic"
           value={state.fileSearchTerm}
           onChange={(e) => {
@@ -360,7 +353,6 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
         <Button
           onClick={async () => {
             const files = await onSearch(
-              state.courseSearchTerm,
               state.fileSearchTerm
             );
             state.setFiles(files);
@@ -378,7 +370,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
               );
               state.setSelectedFiles(
                 state.files.filter((file) => {
-                  return selectedFilesNames.find((name) => name === file.name);
+                  return selectedFilesNames.find((name) => name === file.filePath.split("/")[1]);
                 })
               );
             }}
@@ -386,7 +378,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
             <Form.Label>Files</Form.Label>
             <FormControl multiple as="select" data-testid="select-multi-files">
               {state.files.map((file) => {
-                return <option key={file.id}>{file.name}</option>;
+                return <option key={file.id}>{file.filePath.split("/")[1]}</option>;
               })}
             </FormControl>
           </Form.Group>

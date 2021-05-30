@@ -44,12 +44,12 @@ const searchForTrainingFilesSubmit = async (
 ) => {
   try {
     const resp = await apiInstance
-      .post(`/training/{ related ? "related" : "nonRelated" }/existing`, {
+      .post(`/training/${related ? "related" : "nonRelated"}/existing`, {
         className,
         courseId,
         files,
         professorId,
-        sessionId: sessionStorage.getItem("sessionId")
+        sessionId: sessionStorage.getItem("sessionId"),
       })
       .then((resp) => resp.data);
 
@@ -61,10 +61,10 @@ const searchForTrainingFilesSubmit = async (
   }
 };
 
-export const searchFiles = async (courseName: string, fileName: string) => {
+export const searchFiles = async (fileName: string) => {
   try {
     return await apiInstance
-      .get(`/searchFile?courseName=${courseName}&topic=${fileName}`)
+      .get(`/training/files?searchTerm=${fileName}`)
       .then((resp) => resp.data);
   } catch (e) {
     console.error(e);
