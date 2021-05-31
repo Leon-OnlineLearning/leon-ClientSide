@@ -16,9 +16,10 @@ import {
 interface AddContentProps {
   courseId: string;
   sessionStorage: any;
+  onFinish: (professorId: string) => Promise<void>
 }
 
-const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage }) => {
+const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage, onFinish }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const localStorageContext = useContext(LocalStorageContext);
   sessionStorage.removeItem("sessionId");
@@ -91,7 +92,9 @@ const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage }) => {
             Next
           </Button>
         ) : (
-          <Button>Finish</Button>
+          <Button onClick={async () => {
+            await onFinish(localStorageContext.userId)
+          }}>Finish</Button>
         )}
       </div>
     </>
@@ -206,6 +209,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
           <input
             hidden={!testing}
             type="file"
+            accept=".pdf"
             name="testingFile"
             data-testid="testing-upload-file"
             multiple
@@ -216,6 +220,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
         ) : (
           <>
             <input
+              accept=".pdf"
               type="file"
               name="courseFiles"
               data-testid="training-related-upload-file"
@@ -226,6 +231,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
               }}
             />
             <input
+              accept=".pdf"
               hidden={related}
               type="file"
               name="courseFiles"
@@ -373,7 +379,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
               state.setSelectedFiles(
                 state.files.filter((file) => {
                   return selectedFilesNames.find(
-                    (name) => name === file.filePath.split("/")[1]
+                    (name) => name === file.filePath.split("/")[3]
                   );
                 })
               );
@@ -383,7 +389,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
             <FormControl multiple as="select" data-testid="select-multi-files">
               {state.files.map((file) => {
                 return (
-                  <option key={file.id}>{file.filePath.split("/")[1]}</option>
+                  <option key={file.id}>{file.filePath.split("/")[3]}</option>
                 );
               })}
             </FormControl>

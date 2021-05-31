@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import AddContent from "../../components/add-content/addContent";
+import finishSendingTC from "../../controller/training/finish";
 
 export default function AddContentPage() {
   const [isWindowLoaded, setIsWindowLoaded] = useState(false);
@@ -20,7 +21,11 @@ export default function AddContentPage() {
         }}
       />
       {isWindowLoaded ? (
-        <AddContent sessionStorage={window.localStorage} courseId={courseId} />
+        <AddContent
+          onFinish={finishSendingTC}
+          sessionStorage={window.localStorage}
+          courseId={courseId}
+        />
       ) : (
         <Spinner animation="border" variant="primary" />
       )}
