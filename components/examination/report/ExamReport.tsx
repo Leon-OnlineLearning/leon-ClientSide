@@ -4,11 +4,7 @@ import LocalStorageContext from "../../../contexts/localStorageContext";
 import { getExamReport } from "../../../controller/exam/report";
 import VideoIncidant from "./VideoIncidant";
 
-export default function ExamReport() {
-    const [examReport, setExamReport] = useState([])
-
-    const router = useRouter()
-    const { examId } = router.query
+export default function ExamReport({examId}) {
 
     const localStorageContext = useContext(LocalStorageContext)
 
