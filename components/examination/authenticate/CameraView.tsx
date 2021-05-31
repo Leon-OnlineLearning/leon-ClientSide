@@ -5,6 +5,7 @@ import useUserMedia from "../../../hooks/useUserMedia";
 import { recordForPeriod } from "./record";
 import { AuthInstructions } from "../../../pages/sendEmbedding";
 import LocalStorageContext from "../../../contexts/localStorageContext";
+import { cleanStream } from "../recording/utils";
 
 
 const video_length = 5  // 8 second
@@ -24,11 +25,15 @@ export default function ReferenceCapturingView(props: {
   acceptableScore: number
   setIsDone: CallableFunction
   setCurrentInstruction: CallableFunction
+  isDone : boolean
 }) {
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const srcObj = useUserMedia(CAPTURE_OPTIONS);
+  const onFinish = () => {
+    cleanStream(srcObj)
+  }
   const videoRef = useRef(null)
   // let srcObj;
 
@@ -72,6 +77,7 @@ export default function ReferenceCapturingView(props: {
             props.setCurrentInstruction(`${AuthInstructions.start_recording} wait for ${video_length}s`)
             recordForPeriod(localStorageContext.userId, srcObj, video_length, () => {
               props.setIsDone(true)
+              onFinish()
             })
           }
           else {
@@ -128,6 +134,7 @@ export default function ReferenceCapturingView(props: {
 
   return (
     <>
+    { !props.isDone &&
       <AuthenticationView
         borderColor="#efefef"
         width={480}
@@ -138,6 +145,7 @@ export default function ReferenceCapturingView(props: {
         isLoading={!isModelLoaded}
 
       />
+    }
       <video ref={videoRef} style={{ display: 'none' }} onCanPlay={() => { setIsVideoLoaded(true) }} autoPlay />
     </>
   );
