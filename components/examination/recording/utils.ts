@@ -11,3 +11,9 @@ export function download(recordedChunks) {
     a.click();
     window.URL.revokeObjectURL(url);
 }
+
+export function cleanStream(stream:MediaStream) {
+    stream.getTracks().forEach((track) => {
+        track.stop();
+      });
+}

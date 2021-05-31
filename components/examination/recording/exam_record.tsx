@@ -1,17 +1,44 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import LocalStorageContext from "../../../contexts/localStorageContext";
 import { sendExamRecording } from "../../../controller/exam/exam";
 import useUserMedia from "../../../hooks/useUserMedia";
 
+import { cleanStream } from "./utils";
+
 let counter = 0;
-const record_slice = 10 * 1000 //10 seconds
-export default function Recorder(props:{examId:string}) {
+const record_slice = 6 * 1000 //4 seconds
+export default function Recorder(props: { examId: string, shouldStop: boolean, onFinish: CallableFunction }) {
 
     const localStorageContext = useContext(LocalStorageContext)
+    const [remaining_chunks, setRemaining_chunks] = useState(0);
+    const recorderRef = useRef(null)
+
+    const [isRecordDone, setIsRecordDone] = useState(false);
+    // stop recording
+    useEffect(() => {
+        if (props.shouldStop && recorderRef.current.state == "recording") {
+            console.log(recorderRef.current)
+            recorderRef.current.stop()
+            cleanStream(recorderRef.current.stream)
+            setTimeout(() => {
+                setIsRecordDone(true)
+            }, 1000)
+            console.log("recording stoped")
+        }
+    }, [props.shouldStop])
+
+    // call on recording finish
+    useEffect(() => {
+        if (remaining_chunks == 0 && isRecordDone) {
+            console.log("sending report")
+            props.onFinish()
+        }
+    }, [remaining_chunks, isRecordDone])
 
     function handleDataAvailable(event) {
+        setRemaining_chunks(rem => rem + 1)
         let recordedChunks = []
-
+        console.debug(`sending ${event.data.size}`)
         if (event.data.size > 0) {
             recordedChunks.push(event.data);
             sendExamRecording({
@@ -20,28 +47,37 @@ export default function Recorder(props:{examId:string}) {
                 userId: localStorageContext.userId,
                 chunckIndex: counter++,
                 recordedChunks: recordedChunks
-            })
+            }).then(res => { setRemaining_chunks(rem => rem - 1) })
         }
     }
 
     const mediaStream = useUserMedia({ audio: true, video: true });
-
+    const [recordingStarted, setRecordingStarted] = useState(false);
     useEffect(() => {
         if (mediaStream) {
-            /**
-             * TODO handle unsupported mimeType 
-             * https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/isTypeSupported
-             */
-            let options = { mimeType: "video/webm" };
-            let recorder = new MediaRecorder(mediaStream, options);
-            recorder.ondataavailable = handleDataAvailable
-
-            recorder.start(record_slice)
+            if (!recordingStarted) {
+                if (mediaStream.active == false) {
+                    console.error("media stram is not active")
+                }
+                /**
+                 * TODO handle unsupported mimeType 
+                 * https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/isTypeSupported
+                 */
+                let options = { mimeType: "video/webm" };
+                let recorder = new MediaRecorder(mediaStream, options);
+                recorder.ondataavailable = handleDataAvailable
+                recorder.onerror = console.error
+                recorder.onstart = () => {
+                    console.debug("recording started")
+                    setRecordingStarted(true)
+                }
+                recorder.start(record_slice)
+                recorderRef.current = recorder
+            }
         }
+
     }, [mediaStream])
 
-    console.log("iam alive")
 
-
-    return <p>recorder</p>
+    return <p>remaining chunks {String(remaining_chunks)}</p>
 }
