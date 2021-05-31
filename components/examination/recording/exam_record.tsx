@@ -29,10 +29,12 @@ export default function Recorder(props:{examId:string}) {
     const mediaStream = useUserMedia({ audio: true, video: true });
     const [recordingStarted, setRecordingStarted] = useState(false);
     useEffect(() => {
-        console.log(mediaStream)
         if (mediaStream){
             if (!recordingStarted)
             {
+                if (mediaStream.active == false){
+                    console.error("media stram is not active")
+                }
                 /**
                  * TODO handle unsupported mimeType 
                  * https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/isTypeSupported
@@ -40,17 +42,17 @@ export default function Recorder(props:{examId:string}) {
                 let options = { mimeType: "video/webm" };
                 let recorder = new MediaRecorder(mediaStream, options);
                 recorder.ondataavailable = handleDataAvailable
-    
+                recorder.onerror = console.error
+                recorder.onstart = ()=>{
+                    console.debug("recording started")
+                    setRecordingStarted(true)
+                }
                 recorder.start(record_slice)
-                console.log("recording")
-                setRecordingStarted(true)
                 recorderRef.current = recorder
             }
         }
     
     }, [mediaStream])
-
-    console.log("iam alive")
 
 
     return <p>remaining chunks {String(remaining_chunks)}</p>
