@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 
 
-export default function useUserMedia(requestedMedia) {
+export default function useUserMedia(requestedMedia): MediaStream {
   const [mediaStream, setMediaStream] = useState(null);
 
   const [isMediaReqested, setIsMediaReqested] = useState(false);
@@ -19,8 +19,9 @@ export default function useUserMedia(requestedMedia) {
         }
       }
     }
-
+    // FIXME this will prevent getting new stream when requestedMedia change
     if (!isMediaReqested) {
+      console.debug("media is requested")
       setIsMediaReqested(true)
       enableStream();
     }
