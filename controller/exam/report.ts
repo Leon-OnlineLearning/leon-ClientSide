@@ -1,8 +1,7 @@
-import axios from "axios";
-import config from "../../utils/config";
+import apiInstance from "../utils/api";
 
 export async function getExamReport(userId, examId){
-    const res = await axios.get(`${config.serverBaseUrl}/exams/report`,
+    const res = await apiInstance.get(`/exams/report`,
                 {
                     params : {
                         userId: userId,
