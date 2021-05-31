@@ -17,11 +17,13 @@ export default function FormViewer() {
   const [examId, queryChecked] = useRouterQuery("examId")
   const [questions, setQuestions] = useState([])
   useEffect(() => {
-    const _getExam = async ()=>{
-      const exam =await getExamById(examId)
+    const _getExam = async () => {
+      const exam = await getExamById(examId)
       setQuestions(exam.questions)
     }
-    _getExam()
+    if (examId){
+      _getExam()
+    }
   }, [examId])
 
 
