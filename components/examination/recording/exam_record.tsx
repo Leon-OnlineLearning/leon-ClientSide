@@ -1,14 +1,39 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import LocalStorageContext from "../../../contexts/localStorageContext";
 import { sendExamRecording } from "../../../controller/exam/exam";
 import useUserMedia from "../../../hooks/useUserMedia";
 
+import { cleanStream } from "./utils";
+
 let counter = 0;
-const record_slice = 10 * 1000 //10 seconds
-export default function Recorder(props:{examId:string}) {
+const record_slice = 6 * 1000 //4 seconds
+export default function Recorder(props:{examId:string,shouldStop:boolean,onFinish:CallableFunction}) {
 
     const localStorageContext = useContext(LocalStorageContext)
     const [remaining_chunks, setRemaining_chunks] = useState(0);
+    const recorderRef = useRef(null)
+    
+    const [isRecordDone, setIsRecordDone] = useState(false);
+    // stop recording
+    useEffect(()=>{
+        if(props.shouldStop && recorderRef.current.state == "recording"){
+            console.log(recorderRef.current)
+            recorderRef.current.stop()
+            cleanStream(recorderRef.current.stream)
+            setTimeout(()=>{
+                setIsRecordDone(true)
+            },1000)
+            console.log("recording stoped")
+        }
+    },[props.shouldStop])
+
+    // call on finish
+    useEffect(()=>{
+        if (remaining_chunks==0 && isRecordDone){
+            console.log("sending report")
+            props.onFinish()
+        }
+    },[remaining_chunks,isRecordDone])
 
     function handleDataAvailable(event) {
         setRemaining_chunks(rem => rem+1)

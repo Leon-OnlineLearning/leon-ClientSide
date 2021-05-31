@@ -35,7 +35,11 @@ export default function FormViewer() {
     console.log(new_answers)
   }
   let questions_comp = questions.map((question, index) => {
-    return <Question_view question={question} key={question.questionId} onChange={(answer) => handleChange(index, answer)} />
+    return <Question_view 
+    question={question} 
+    key={question.id} 
+    onChange={(answer) => 
+    handleChange(index, answer)} />
   })
   
   const router = useRouter()
@@ -43,21 +47,22 @@ export default function FormViewer() {
   // TODO auto submit when times up (ALMOST DONE see `onTimerFinish`)
   // TODO add submit button
 
-  function onExamFinish(){
+  const [isExamFinished, setIsExamFinished] = useState(false);
+  function onTimeFinish() {
     console.log("exam finished")
-    // TODO redirect only when 
-    // router.push('/student/report')
+    setIsExamFinished(true)
+    // TODO send answers
   }
+  // TODO only show exam when recorder is ready
   return (
     <>
       <div className="position-sticky bg-primary d-flex justify-content-center" style={{ top: 0, zIndex: 1000 }}>
-        <Timer onTimerFinish={onExamFinish} timerLength={12} />
+        <Timer onTimerFinish={onTimeFinish} timerLength={20} />
       </div>
-
-      <ExamContainer>{questions_comp}</ExamContainer>
+      {!isExamFinished && <ExamContainer>{questions_comp}</ExamContainer>}
       {
         queryChecked ?
-          <Recorder examId={examId} /> :
+          <Recorder examId={examId} shouldStop={isExamFinished} onFinish={()=>{router.push(`/student/examination/report/${examId}`)}}/> :
           <Spinner animation="border" variant="primary" />
       }
 
