@@ -8,7 +8,7 @@ export enum Q_type {
 }
 
 export interface QuestionInterface {
-    questionId?: number;
+    id?: number;
     questionType: Q_type;
     questionText?: string; 
     fig_url?: string; // figure image related to question
