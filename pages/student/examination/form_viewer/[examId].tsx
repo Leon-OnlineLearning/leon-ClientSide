@@ -4,9 +4,7 @@ import ExamContainer from '../../../../components/examination/exam_container/Exa
 import Question_view from '../../../../components/examination/Question_view';
 import Recorder from '../../../../components/examination/recording/exam_record';
 import Timer from '../../../../components/examination/timer/timer';
-import { QuestionInterface } from '../../../../model/examination/question';
 import { useRouterQuery } from '../../../../hooks/useRouteQuery';
-import { StudentDashboard, StudentDashboardSelectedPage } from '../../../../components/student/dashboad/student-dashboard';
 import { Spinner } from 'react-bootstrap';
 import { getExamById } from '../../../../controller/exam/exam';
 
@@ -21,7 +19,7 @@ export default function FormViewer() {
       const exam = await getExamById(examId)
       setQuestions(exam.questions)
     }
-    if (examId){
+    if (examId) {
       _getExam()
     }
   }, [examId])
@@ -35,13 +33,13 @@ export default function FormViewer() {
     console.log(new_answers)
   }
   let questions_comp = questions.map((question, index) => {
-    return <Question_view 
-    question={question} 
-    key={question.id} 
-    onChange={(answer) => 
-    handleChange(index, answer)} />
+    return <Question_view
+      question={question}
+      key={question.id}
+      onChange={(answer) =>
+        handleChange(index, answer)} />
   })
-  
+
   const router = useRouter()
   // TODO get test length
   // TODO auto submit when times up (ALMOST DONE see `onTimerFinish`)
@@ -62,7 +60,7 @@ export default function FormViewer() {
       {!isExamFinished && <ExamContainer>{questions_comp}</ExamContainer>}
       {
         queryChecked ?
-          <Recorder examId={examId} shouldStop={isExamFinished} onFinish={()=>{router.push(`/student/examination/report/${examId}`)}}/> :
+          <Recorder examId={examId} shouldStop={isExamFinished} onFinish={() => { router.push(`/student/examination/report/${examId}`) }} /> :
           <Spinner animation="border" variant="primary" />
       }
 

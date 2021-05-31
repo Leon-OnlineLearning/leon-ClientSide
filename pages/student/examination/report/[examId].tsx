@@ -3,11 +3,11 @@ import { StudentDashboard, StudentDashboardSelectedPage } from "../../../../comp
 import { useRouterQuery } from "../../../../hooks/useRouteQuery";
 
 export default function Report() {
-    
+
     const [examId] = useRouterQuery("examId")
-    
-    
+
+
     return (<StudentDashboard selectedPage={StudentDashboardSelectedPage.exams}>
-        {examId && <ExamReport examId={examId}/>}
+        {examId && <ExamReport examId={examId} />}
     </StudentDashboard>);
 }
