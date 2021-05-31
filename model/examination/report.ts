@@ -1,6 +1,6 @@
-export interface incidant {
+export interface IncidantInterface {
     type?: string,
-    startTime: number
-    endTime: number
+    startingFrom: number
+    endingAt: number
     relatedMedia?: string
 }
