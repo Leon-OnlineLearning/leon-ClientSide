@@ -54,7 +54,7 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface):P
   fd.append("userId", examRecording.userId);
   fd.append("examId", examRecording.examId);
   // TODO add last chunk
-  fd.append("lastChunk", String(false));
+  fd.append("lastChunk", String(examRecording.isLastChunk));
   // TODO calculate this with dynamic resloation
   fd.append("chunkStartTime", String(examRecording.startingFrom));
   fd.append("chunkEndTime", String((examRecording.endingAt)));

@@ -9,6 +9,8 @@ import { Spinner } from 'react-bootstrap';
 import { getExamById } from '../../../../controller/exam/exam';
 
 
+// TODO obtain the the length form db
+const exam_length = 20 // exam length in secs
 export default function FormViewer() {
 
 
@@ -55,12 +57,15 @@ export default function FormViewer() {
   return (
     <>
       <div className="position-sticky bg-primary d-flex justify-content-center" style={{ top: 0, zIndex: 1000 }}>
-        <Timer onTimerFinish={onTimeFinish} timerLength={20} />
+        <Timer onTimerFinish={onTimeFinish} timerLength={exam_length} />
       </div>
       {!isExamFinished && <ExamContainer>{questions_comp}</ExamContainer>}
       {
         queryChecked ?
-          <Recorder examId={examId} shouldStop={isExamFinished} onFinish={() => { router.push(`/student/examination/report/${examId}`) }} /> :
+          <Recorder examId={examId} 
+          shouldStop={isExamFinished} 
+          onFinish={() => { router.push(`/student/examination/report/${examId}`) }}
+          examDuration= {exam_length} /> :
           <Spinner animation="border" variant="primary" />
       }
 

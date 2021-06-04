@@ -13,6 +13,7 @@ export default function Recorder(props: {
     examId: string,
     shouldStop: boolean,
     onFinish: CallableFunction
+    examDuration: number
 }) {
 
     const localStorageContext = useContext(LocalStorageContext)
@@ -56,6 +57,7 @@ export default function Recorder(props: {
                 recordedChunks: recordedChunks,
                 startingFrom: chunk_start,
                 endingAt: chunk_end,
+                isLastChunk:  chunk_end == props.examDuration
             }).then(res => { setRemaining_chunks(rem => rem - 1) })
             counter++
         }

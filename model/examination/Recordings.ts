@@ -7,6 +7,7 @@ export interface ExamRecordingInterface {
     chunckIndex: number
     startingFrom: number
     endingAt: number
+    isLastChunk: boolean
 }
 
 export interface RefranceRecordingInterface{
