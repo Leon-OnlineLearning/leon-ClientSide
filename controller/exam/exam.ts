@@ -54,10 +54,10 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface):P
   fd.append("userId", examRecording.userId);
   fd.append("examId", examRecording.examId);
   // TODO add last chunk
-  fd.append("lastChunk", String(false));
+  fd.append("lastChunk", String(examRecording.isLastChunk));
   // TODO calculate this with dynamic resloation
-  fd.append("chunkStartTime", String(examRecording.chunckIndex * 10));
-  fd.append("chunkEndTime", String((examRecording.chunckIndex + 1) * 10));
+  fd.append("chunkStartTime", String(examRecording.startingFrom));
+  fd.append("chunkEndTime", String((examRecording.endingAt)));
 
   const url = `${config.serverBaseUrl}/exams/record`;
   try{
@@ -86,16 +86,16 @@ export async function sendRefranceVideo(
   fd.append("chuck", blob, `upl.webm`);
   fd.append("userId", refranceRecording.userId);
 
-  console.log("sent");
+  console.debug("sent");
   const url = `${config.serverBaseUrl}/students/refrance`;
   fetch(url, {
     method: "put",
     body: fd,
   })
     .then((res) => {
-      console.log("Promise resolved", res);
+      console.debug("Promise resolved", res);
     })
-    .catch(console.log);
+    .catch(console.error);
 }
 
 export async function getAllExams(studentId): Promise<Array<Event>> {
