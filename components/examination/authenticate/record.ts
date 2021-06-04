@@ -5,13 +5,13 @@ export function recordForPeriod(userId: string, stream, recordingTime:number,cal
     let options = { mimeType: "video/webm" };
     let recorder = new MediaRecorder(stream, options);
     
-    console.debug("start recording")
     function handleDataAvailable(event) {
         let recordedChunks = []
 
         if (event.data.size > 0) {
             recordedChunks.push(event.data);
-            // TODO make sure this returns true   
+            // FIXME make sure this returns true   
+            console.debug(`sending ${event.data.size}`)
             sendRefranceVideo({
                 userId,
                 recordedChunks: recordedChunks
@@ -22,10 +22,11 @@ export function recordForPeriod(userId: string, stream, recordingTime:number,cal
     recorder.ondataavailable = handleDataAvailable
 
     recorder.start()
+    recorder.onstart = ()=>{console.debug("recording started") }
 
     setTimeout(() => {
-    recorder.stop()
-    console.log("recoding stoped")
-    callback()
+        recorder.stop()
+        console.log("recoding stoped")
+        callback()
     }, recordingTime * 1000)
 }

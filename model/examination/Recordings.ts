@@ -10,7 +10,7 @@ export interface ExamRecordingInterface {
     isLastChunk: boolean
 }
 
-export interface RefranceRecordingInterface{
-    recordedChunks : Blob[]
-    userId : string
+export interface RefranceRecordingInterface {
+    recordedChunks: Blob[]
+    userId: string
 }

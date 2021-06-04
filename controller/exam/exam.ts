@@ -86,16 +86,16 @@ export async function sendRefranceVideo(
   fd.append("chuck", blob, `upl.webm`);
   fd.append("userId", refranceRecording.userId);
 
-  console.log("sent");
+  console.debug("sent");
   const url = `${config.serverBaseUrl}/students/refrance`;
   fetch(url, {
     method: "put",
     body: fd,
   })
     .then((res) => {
-      console.log("Promise resolved", res);
+      console.debug("Promise resolved", res);
     })
-    .catch(console.log);
+    .catch(console.error);
 }
 
 export async function getAllExams(studentId): Promise<Array<Event>> {
