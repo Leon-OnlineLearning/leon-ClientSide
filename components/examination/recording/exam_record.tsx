@@ -5,9 +5,15 @@ import useUserMedia from "../../../hooks/useUserMedia";
 
 import { cleanStream } from "./utils";
 
+// FIXME re-obtain the counter value after refresh
 let counter = 0;
-const record_slice = 6 * 1000 //4 seconds
-export default function Recorder(props: { examId: string, shouldStop: boolean, onFinish: CallableFunction }) {
+const record_slice_sec = 6
+const record_slice_ms = record_slice_sec * 1000
+export default function Recorder(props: {
+    examId: string,
+    shouldStop: boolean,
+    onFinish: CallableFunction
+}) {
 
     const localStorageContext = useContext(LocalStorageContext)
     const [remaining_chunks, setRemaining_chunks] = useState(0);
@@ -41,13 +47,17 @@ export default function Recorder(props: { examId: string, shouldStop: boolean, o
         console.debug(`sending ${event.data.size}`)
         if (event.data.size > 0) {
             recordedChunks.push(event.data);
+            const chunk_start = counter * record_slice_sec
+            const chunk_end = chunk_start + record_slice_sec
             sendExamRecording({
-                // TODO get exam id
                 examId: props.examId,
                 userId: localStorageContext.userId,
-                chunckIndex: counter++,
-                recordedChunks: recordedChunks
+                chunckIndex: counter,
+                recordedChunks: recordedChunks,
+                startingFrom: chunk_start,
+                endingAt: chunk_end,
             }).then(res => { setRemaining_chunks(rem => rem - 1) })
+            counter++
         }
     }
 
@@ -71,7 +81,7 @@ export default function Recorder(props: { examId: string, shouldStop: boolean, o
                     console.debug("recording started")
                     setRecordingStarted(true)
                 }
-                recorder.start(record_slice)
+                recorder.start(record_slice_ms)
                 recorderRef.current = recorder
             }
         }
