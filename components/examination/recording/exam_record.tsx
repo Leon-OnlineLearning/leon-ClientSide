@@ -49,7 +49,10 @@ export default function Recorder(props: {
         if (event.data.size > 0) {
             recordedChunks.push(event.data);
             const chunk_start = counter * record_slice_sec
-            const chunk_end = chunk_start + record_slice_sec
+            let chunk_end = chunk_start + record_slice_sec
+            if (chunk_end >= props.examDuration){
+                chunk_end = props.examDuration
+            }
             sendExamRecording({
                 examId: props.examId,
                 userId: localStorageContext.userId,
@@ -57,7 +60,7 @@ export default function Recorder(props: {
                 recordedChunks: recordedChunks,
                 startingFrom: chunk_start,
                 endingAt: chunk_end,
-                isLastChunk:  chunk_end == props.examDuration
+                isLastChunk:  chunk_end >= props.examDuration
             }).then(res => { setRemaining_chunks(rem => rem - 1) })
             counter++
         }
