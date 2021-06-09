@@ -1,6 +1,6 @@
 import React from 'react'
 import { UserRole } from '../../../model/users/User'
-import { PdfRole } from '../viewer/pdfRole'
+import { PdfRole } from './pdfViewer/pdfRole'
 
 
 interface callControlsView {

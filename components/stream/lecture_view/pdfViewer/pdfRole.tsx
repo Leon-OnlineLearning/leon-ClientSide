@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { UserRole } from "../../../model/users/User";
-import { dataControlView } from "../lecture_view/ViewManager";
+import { UserRole } from "../../../../model/users/User";
+import { dataControlView } from "../ViewManager";
 import AdminViewer from "./adminViewer";
 import StudentViewer from "./studentViewer";
 
