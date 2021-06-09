@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 
 import { useEffect, useRef, useMemo } from 'react';
-import Pointer_canvas from './pointer_canvas';
 
 export default function PdfViewer({onMouseMove,pointerCanvasGenerator,pageNumber,
   setPageNumber}) {

@@ -1,6 +1,6 @@
-import { forwardRef } from 'react'
+import React from 'react'
 import { UserRole } from '../../../model/users/User'
-
+import { PdfRole } from '../viewer/pdfRole'
 
 
 interface callControlsView {
@@ -14,7 +14,7 @@ interface callControlsView {
     participants: Array<any>
 }
 
-interface dataControlView {
+export interface dataControlView {
     setDataToSend: (data: string) => void,
     dataRecived: string,
     role: UserRole,
@@ -37,6 +37,8 @@ export default function ViewManager(props: callControlsView & dataControlView) {
                 </>
             }
             <p>i am lecture view</p>
+            <h1>{props.dataRecived}</h1>
+            <PdfRole {...props}/>
         </>
     )
 }

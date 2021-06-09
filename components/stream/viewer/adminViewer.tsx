@@ -1,6 +1,11 @@
-import PdfViewer from "./viewerload";
-import { useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import Pointer_canvas from "./pointer_canvas";
+const PdfViewer = dynamic(
+  () => import('./viewerload'),
+  { ssr: false }
+)
+
+
 export default function AdminViewer({
   pointerPositionX,
   setPointerPositionX,
