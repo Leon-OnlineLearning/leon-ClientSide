@@ -63,6 +63,10 @@ export function debug_msg(msg,event) {
   Janus.debug("Event: ", event);
 }
 
+export function debug_data(data) {
+  Janus.debug(" ::: Got a data :::", data);
+}
+
 export function log_joining(msg) {
   Janus.log(
     "Successfully joined room " + msg["room"] + " with ID " + msg["id"]
