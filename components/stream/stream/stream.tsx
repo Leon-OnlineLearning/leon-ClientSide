@@ -17,9 +17,9 @@ import {
   handleParticipants,
   handleRemoteFeed,
   publishMyAudioStream,
-} from "./utils";
+} from "./audioRoomUtils";
 // import { Janus } from 'janus-gateway';
-import { publishOwnFeed } from './utils';
+import { publishOwnFeed } from './audioRoomUtils';
 
 var server = "/janus_back";
 

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import Janus from "../../../public/janus/janus";
 import { alert_msgError, alert_pluginError, alert_roomDestroy, debug_msg, log_consentDialog, log_iceState, log_joining, log_mediaState, log_plugAttach, log_roomChange, log_webrtcState } from "./callback_logger";
-import { handleParticipants, publishMyAudioStream } from "./utils";
+import { handleParticipants, publishMyAudioStream } from "./audioRoomUtils";
 import { participantInfo_stream } from "./stream_manager"
 import { addToList, removeFromListUsingId } from "./StateMutation";
 
