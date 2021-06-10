@@ -25,8 +25,8 @@ export default function AdminViewer({
 
   let onMouseMove = (refrance_element) => (e) => {
     const viewerRect = refrance_element.getBoundingClientRect();
-    setPointerPositionX(e.clientX - viewerRect.x);
-    setPointerPositionY(e.clientY - viewerRect.y);
+    setPointerPositionX(Math.floor(e.clientX - viewerRect.x));
+    setPointerPositionY(Math.floor(e.clientY - viewerRect.y));
   };
 
   return (
