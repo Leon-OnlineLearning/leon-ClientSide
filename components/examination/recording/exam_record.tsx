@@ -53,6 +53,10 @@ export default function Recorder(props: {
             if (chunk_end >= props.examDuration){
                 chunk_end = props.examDuration
             }
+            
+            const isLastChunk = event.target.state == "inactive"
+            // TODO check if we can use time code
+            console.log(event.timecode)
             sendExamRecording({
                 examId: props.examId,
                 userId: localStorageContext.userId,
@@ -60,7 +64,7 @@ export default function Recorder(props: {
                 recordedChunks: recordedChunks,
                 startingFrom: chunk_start,
                 endingAt: chunk_end,
-                isLastChunk:  chunk_end >= props.examDuration
+                isLastChunk:  isLastChunk
             }).then(res => { setRemaining_chunks(rem => rem - 1) })
             counter++
         }

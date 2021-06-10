@@ -17,6 +17,6 @@ export default function ExamReport({examId}) {
     console.log(examReport)
 
     return <>{examReport && examReport.map((incidant, index) =>
-        <VideoIncidant key={`incident_${index}`} incident={incidant} />)}</>
+        <VideoIncidant key={`incident_${index}`} incident={incidant} examId={examId} userId={localStorageContext.userId}/>)}</>
 
 }
