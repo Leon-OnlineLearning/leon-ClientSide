@@ -22,7 +22,7 @@ export interface callControls_stream {
  * 4. attach remote stream to audioplayer
  * 5. send our stream muted 
  *  [ with user interaction ]
- * play remote stream (props.muteRemote)
+ * play remote stream (props.muteRemote) //TODO unimplemented
  * user can unmute local stream (props.muteLocal)
  */
 export default function AudioPlugin(props: callControls_stream & { janus: Janus } & participantInfo_stream) {

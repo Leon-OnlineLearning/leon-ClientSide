@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Janus from "../../../public/janus/janus";
 import AudioPlugin from "./audioPlugin";
 import { callControls_stream } from "./audioPlugin"
+import DataPlugin from "./dataPlugin";
 
 // TODO use variable from env
 const server = "/janus_back";
@@ -14,7 +15,7 @@ export interface participantInfo_stream {
 }
 
 
-interface dataControl_stream {
+export interface dataControl_stream {
   dataToSend: string,
   setDataRecived: (data: string) => void
 }
@@ -56,11 +57,11 @@ export default function StreamManager(props: callControls_stream & dataControl_s
           {...props}
           janus={jan.current}
         />
-{/*         
+        
         <DataPlugin
           {...props}
           janus={jan.current}
-          />   */}
+          />  
       </>
       }
     </>
