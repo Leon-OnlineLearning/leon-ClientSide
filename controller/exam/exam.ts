@@ -98,7 +98,7 @@ export async function sendRefranceVideo(
     .catch(console.error);
 }
 
-export async function getAllExams(studentId): Promise<Array<Event>> {
+export async function getAllExams(studentId): Promise<Array<Exam>> {
   
   // TODO throw  error that effect ui
   const res = await apiInstance.get(
@@ -106,9 +106,10 @@ export async function getAllExams(studentId): Promise<Array<Event>> {
   )
 
   res.data.map(exam => {
-    exam.startDate = exam.startTime;
-    exam.endDate = exam.endTime} )
-  return res.data as Event[]
+    exam.startDate = new Date(exam.startTime);
+    exam.endDate = new Date( exam.endTime)} )
+  return res.data as Exam[]
+
 }
 
 export async function getExamById(examId:string) : Promise<Exam>{

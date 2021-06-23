@@ -3,9 +3,10 @@ import ExamCard from "../../../components/exam/exam-card";
 import { StudentDashboard, StudentDashboardSelectedPage } from "../../../components/student/dashboad/student-dashboard";
 import LocalStorageContext from "../../../contexts/localStorageContext";
 import { getAllExams } from "../../../controller/exam/exam";
+import { Exam } from "../../../model/Exam";
 
 const ExaminationPage: React.FC = () => {
-    const [exams, setExams] = useState([])
+    const [exams, setExams] = useState<Exam[]>([])
     const localStorageContext = useContext(LocalStorageContext)
     useEffect(() => {
         const f = async () => {
@@ -20,8 +21,8 @@ const ExaminationPage: React.FC = () => {
             {exams && exams.map(e => {
                 return (
                     <ExamCard
-                        endDate={new Date(e.endDate)}
-                        startDate={new Date(e.startDate)}
+                        endTime={new Date(e.endTime)}
+                        startTime={new Date(e.startTime)}
                         id={e.id}
                         title={e.title}
                         mark={e.mark}

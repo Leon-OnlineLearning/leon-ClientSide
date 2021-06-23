@@ -14,7 +14,7 @@ export default function EventCard({ event: e }: EventCardProps) {
                 </Card.Title>
                 <hr></hr>
                 <Card.Text>
-                    <i className="bi bi-calendar-event"></i> From: <strong>{dateFormatter(e.startDate)}</strong> To: <strong>{dateFormatter(e.endDate)}</strong>
+                    <i className="bi bi-calendar-event"></i> From: <strong>{dateFormatter(e.startTime)}</strong> To: <strong>{dateFormatter(e.endTime)}</strong>
                     <hr></hr>
                     <strong>Description:</strong> <br />
                     {e.description}
