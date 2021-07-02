@@ -6,6 +6,7 @@ import styles from "./lectures.module.css";
 import { Lecture } from "../../../model/lecture"
 import ProgressBar from "react-bootstrap/ProgressBar"
 import { createNewLecture, editLecture } from "../../../controller/upload-lectures"
+import router from "next/router";
 
 type ProfessorLecturesProps = {
     lectures: Lecture[]
@@ -40,6 +41,9 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
         return result;
     }
 
+    const startLectureHandler = (lec:Lecture)=>{
+        router.push(`/lecture/${lec.id}`)
+    }
     const editLectureHandler = ({ title, startTime, course, id }: Lecture) => {
 
         setLectureName(title)
@@ -128,6 +132,7 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                             lectureTitle={lec.title} 
                             onEditHandler={() => editLectureHandler(lec)} 
                             onDeleteHandler={() => deleteLectureHandler(lec)}
+                            onStartHandler= {() => startLectureHandler(lec)} />
                         })
                     }
                     <Modal show={deleteDialogShown} onHide={() => setDeleteDialogShown(false)}>
