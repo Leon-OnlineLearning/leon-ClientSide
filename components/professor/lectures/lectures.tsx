@@ -40,18 +40,18 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
         return result;
     }
 
-    const editLectureHandler = ({ lectureTitle, lectureDate, course, id }: Lecture) => {
+    const editLectureHandler = ({ title, startTime, course, id }: Lecture) => {
 
-        setLectureName(lectureTitle)
-        setLectureDate(dateToInputDateStringValue(lectureDate))
-        setLectureTime(dateToInputTimeStringValue(lectureDate))
-        setSelectedCourse(course)
+        setLectureName(title)
+        setLectureDate(dateToInputDateStringValue(startTime))
+        setLectureTime(dateToInputTimeStringValue(startTime))
+        setSelectedCourse(course.name)
         setLectureId(id)
         edit = true
     }
 
-    const deleteLectureHandler = ({ lectureTitle, id }: Lecture) => {
-        setDeletionMessage(`Are you sure you want to delete ${lectureTitle}?`)
+    const deleteLectureHandler = ({ title, id }: Lecture) => {
+        setDeletionMessage(`Are you sure you want to delete ${title}?`)
         setDeleteDialogShown(true)
         setLectureIdDelete(id)
     }
@@ -94,6 +94,7 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
 
     const submitLecturesForm = () => {
         const formDate = new FormData()
+        // REVIEW does backend expect those fields
         formDate.append('lectureName', lectureName)
         formDate.append('lectureDate', lectureDate)
         formDate.append('lectureTime', lectureTime)
@@ -121,7 +122,12 @@ export default function ProfessorLectures({ lectures }: ProfessorLecturesProps) 
                 <div className={styles["professor-current-lectures"]}>
                     {
                         lectures.map(lec => {
-                            return <LectureCard key={lec.lectureTitle + lec.lectureDate.toString()} lectureDate={lec.lectureDate} lectureTitle={lec.lectureTitle} onEditHandler={() => editLectureHandler(lec)} onDeleteHandler={() => deleteLectureHandler(lec)} />
+                            return <LectureCard 
+                            key={lec.title + lec.startTime.toString()} 
+                            lectureDate={lec.startTime} 
+                            lectureTitle={lec.title} 
+                            onEditHandler={() => editLectureHandler(lec)} 
+                            onDeleteHandler={() => deleteLectureHandler(lec)}
                         })
                     }
                     <Modal show={deleteDialogShown} onHide={() => setDeleteDialogShown(false)}>

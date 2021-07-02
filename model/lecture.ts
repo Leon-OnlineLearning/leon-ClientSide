@@ -1,7 +1,8 @@
+import { Course } from "./course/Course";
 
 export type Lecture = {
-    lectureTitle: string,
-    lectureDate: Date,
-    course: string,
+    title: string,
+    startTime: Date,
+    course: Course,
     id?: string
 }
