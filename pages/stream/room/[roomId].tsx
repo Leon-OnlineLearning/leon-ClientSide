@@ -13,27 +13,19 @@ import LocalStorageContext from '../../../contexts/localStorageContext';
  * @returns react component
  */
 export default function room() {
-    // TODO make this an id and get room number from backend
-    const [user, setUser] = useState<User>();
-    const localStorageContext = useContext(LocalStorageContext)
+    const user = useUser();
 
-
-    // TODO make this useUser hook
+    const [lectureId,queryChecked] = useRouterQuery("lectureId")
+    
+    const [room, setRoom] = useState<LiveRoom>()
     useEffect(() => {
-        const firstName = localStorageContext.firstName
-        const lastName = localStorageContext.lastName
-        // TODO add email to localStorage
-        const email = "not yet implemented"
-        const role = localStorageContext.role
-        const id = localStorageContext.userId
-        let user = new User(firstName, lastName, email, "", id)
-        user.role = role as UserRole
-        setUser(user)
+        if (lectureId){
+            getRoomByLectureId(lectureId as string)
+                .then(room => setRoom(room))
+        }
+    }
+    , [queryChecked])
 
-    }, [])
-
-    const router = useRouter()
-    const { roomId } = router.query
 
     console.log(user)
     return (<>
