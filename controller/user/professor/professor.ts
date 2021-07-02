@@ -1,5 +1,4 @@
-import axios from "axios";
-import config from "../../../utils/config";
+import { Lecture } from "../../../model/lecture";
 import apiInstance from "../../utils/api";
 
 export async function assigningCourseToProfessor(
@@ -38,4 +37,16 @@ export async function getAllCoursesByProfessor(professorId: string) {
       withCredentials: true,
     })
     .then((resp) => resp.data);
+}
+
+export async function getAllLectureByProfessor(professorId: string) :Promise<Lecture[]>{
+  return await apiInstance
+    .get(`/professors/${professorId}/lectures`)
+    .then(res => res.data as Lecture[])
+    .then(data=> {
+      return data.map(lec => {
+        lec.startTime = new Date(lec.startTime)
+        return lec
+      })
+    })
 }
