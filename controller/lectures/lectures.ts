@@ -1,6 +1,4 @@
-import axios from "axios";
 import { LiveRoom } from "../../model/LiveRoom";
-import config from "../../utils/config";
 import apiInstance from "../utils/api";
 
 export async function createNewLectures(lecture) {
