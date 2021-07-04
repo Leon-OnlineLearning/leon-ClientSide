@@ -18,11 +18,15 @@ export default function room() {
     const [room, setRoom] = useState<LiveRoom>()
     useEffect(() => {
         if (lectureId){
-            getRoomByLectureId(lectureId as string)
-                .then(room => setRoom(room))
+            try {                
+                getRoomByLectureId(lectureId as string)
+                    .then(room => setRoom(room))
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
-    , [queryChecked])
+    , [lectureId])
 
 
     return (<>
