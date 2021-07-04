@@ -1,5 +1,4 @@
-import axios from "axios";
-import config from "../../utils/config";
+import { LiveRoom } from "../../model/LiveRoom";
 import apiInstance from "../utils/api";
 
 export async function createNewLectures(lecture) {
@@ -20,4 +19,9 @@ export async function deleteLecture(lectureId: string) {
   await apiInstance.delete(`/lectures/${lectureId}`, {
     withCredentials: true,
   });
+}
+
+export async function getRoomByLectureId(lectureId: string) : Promise<LiveRoom>{
+  return await apiInstance.get(`/lectures/enter/${lectureId}`)
+  .then(res => res.data as LiveRoom)
 }

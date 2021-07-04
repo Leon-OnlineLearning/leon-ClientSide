@@ -7,7 +7,7 @@ import User, { UserRole } from '../../../model/users/User'
 
 
 
-export default function LectureManager(props:{ userData:User, roomId :string}) {
+export default function LectureManager(props:{ userData:User, roomId :number}) {
 
 
     /* ------------------------------ callControls ------------------------------ */
@@ -55,7 +55,7 @@ export default function LectureManager(props:{ userData:User, roomId :string}) {
                 setParticipants={setParticipants}
 
                 userName={props.userData.fullName}
-                room={parseInt(props.roomId)}
+                room={props.roomId}
             />
 
             <ViewManager

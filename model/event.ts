@@ -8,27 +8,27 @@ export enum EventType {
 export type EventRepresentation = {
     title: string,
     description: string,
-    startDate: Date,
+    startTime: Date,
     type: EventType,
-    endDate: Date,
+    endTime: Date,
     id: string
 }
 
 export class Event {
-    private _startDate: Date;
-    private _endDate: Date;
+    private _startTime: Date;
+    private _endTime: Date;
 
-    public get endDate(): Date {
-        return this._endDate;
+    public get endTime(): Date {
+        return this._endTime;
     }
-    public set endDate(value: Date) {
-        this._endDate = value;
+    public set endTime(value: Date) {
+        this._endTime = value;
     }
-    public get startDate(): Date {
-        return this._startDate;
+    public get startTime(): Date {
+        return this._startTime;
     }
-    public set startDate(value: Date) {
-        this._startDate = value;
+    public set startTime(value: Date) {
+        this._startTime = value;
     }
     public get description(): string {
         return this._description;
@@ -42,23 +42,23 @@ export class Event {
     public set title(value: string) {
         this._title = value;
     }
-    constructor(private _title: string, private _description: string, public type: EventType, public id, startDate: Date, endDate: Date) {
-        console.log(startDate, endDate)
-        if (endDate <= startDate) {
+    constructor(private _title: string, private _description: string, public type: EventType, public id, startTime: Date, endTime: Date) {
+        console.log(startTime, endTime)
+        if (endTime <= startTime) {
             throw new Error("End date must be after start date");
         }
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
     static fromJSON({
         title,
         description,
-        startDate,
+        startTime: startTime,
         type,
-        endDate,
+        endTime: endDate,
         id,
     }: EventRepresentation) {
-        return new Event(title, description, type, id, startDate, endDate)
+        return new Event(title, description, type, id, startTime, endDate)
     }
 
 }

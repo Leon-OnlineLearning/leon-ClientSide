@@ -22,7 +22,7 @@ export function CalendarEvent({ events }: CalendarEventProps) {
             <Modal scrollable show={showEventDialog} onHide={hideEvents}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {events[0].startDate.getFullYear() + "/" + (events[0].startDate.getMonth() + 1) + "/" + events[0].startDate.getDate()}
+                        {events[0].startTime.getFullYear() + "/" + (events[0].startTime.getMonth() + 1) + "/" + events[0].startTime.getDate()}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Header>
