@@ -34,7 +34,7 @@ export async function assignLectureToProfessor(
 
 export async function getAllCoursesByProfessor(professorId: string) {
   return await apiInstance
-    .get(`/professors/${professorId}/lectures`, {
+    .get(`/professors/${professorId}/courses`, {
       withCredentials: true,
     })
     .then((resp) => resp.data);
