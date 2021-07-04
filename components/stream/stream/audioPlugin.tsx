@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-import Janus from "../../../public/janus/janus";
+import Janus,{JanusJS} from "../../../public/janus/janus";
 import { alert_msgError, alert_pluginError, alert_roomDestroy, debug_msg, log_consentDialog, log_iceState, log_joining, log_mediaState, log_plugAttach, log_roomChange, log_webrtcState } from "./callback_logger";
-import { handleParticipants, publishMyAudioStream } from "./utils";
+import { handleParticipants, publishMyAudioStream } from "./audioRoomUtils";
 import { participantInfo_stream } from "./stream_manager"
 import { addToList, removeFromListUsingId } from "./StateMutation";
 
@@ -22,7 +22,7 @@ export interface callControls_stream {
  * 4. attach remote stream to audioplayer
  * 5. send our stream muted 
  *  [ with user interaction ]
- * play remote stream (props.muteRemote)
+ * play remote stream (props.muteRemote) //TODO unimplemented
  * user can unmute local stream (props.muteLocal)
  */
 export default function AudioPlugin(props: callControls_stream & { janus: Janus } & participantInfo_stream) {
@@ -31,18 +31,29 @@ export default function AudioPlugin(props: callControls_stream & { janus: Janus 
     const audioSourceDeviceRef = useRef(null)
     const [webrtcUp, setWebrtcUp] = useState(false);
 
+    // mute or unmute our stream
     useEffect(() => {
         if (audioHandler.current) {
             props.muteLocal ? audioHandler.current.muteAudio() : audioHandler.current.unmuteAudio()
         }
     }, [props.muteLocal])
+    
     /**
+     * handle messages from the remote plugin as following
      * 
-     * REVIEW to read updates in any state variable we need to make  
-     * this inside effect otherwise it doesn't update
+     * event --> action
+     * a joining response --> [log, setweprtcup, send own audio,set participants]
+     * room change --> [log,set participants] //this SHOULD NOT  happen
+     * room destroied --> [send alert] // TODO handle UI and redirect user
+     * 
+     * error msg --> [log] //TODO check expected errors
+     * participant left --> [log,update participants]
+     * 
+     * REVIEW to read updates in any state variable such as `webrtcup` we need to
+     *  make this outside init effect otherwise it doesn't update
      * as it use the one passed at onInit effect
      */
-    function handleControlMsg(handler, msg) {
+    function handleControlMsgAudio(handler : JanusJS.PluginHandle, msg: JanusJS.Message) {
         var event = msg["audiobridge"];
 
         if (event) {
@@ -93,6 +104,7 @@ export default function AudioPlugin(props: callControls_stream & { janus: Janus 
         props.janus.attach({
             plugin: "janus.plugin.audiobridge",
             success: function (pluginHandle) {
+                // send join request to room
                 audioHandler.current = pluginHandle;
                 props.setIsReadyToJoin(true);
                 log_plugAttach(audioHandler.current);
@@ -109,7 +121,7 @@ export default function AudioPlugin(props: callControls_stream & { janus: Janus 
                 if (msg) {
                     // debug msg and event
                     debug_msg(msg, msg['audiobridge']);
-                    handleControlMsg(audioHandler.current, msg)
+                    handleControlMsgAudio(audioHandler.current, msg)
                 }
                 if (jsep) {
                     Janus.debug("Handling SDP as well...", jsep);

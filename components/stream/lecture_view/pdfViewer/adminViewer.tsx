@@ -1,6 +1,11 @@
-import PdfViewer from "./viewerload";
-import { useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import Pointer_canvas from "./pointer_canvas";
+const PdfViewer = dynamic(
+  () => import('./viewerload'),
+  { ssr: false }
+)
+
+
 export default function AdminViewer({
   pointerPositionX,
   setPointerPositionX,
@@ -20,8 +25,8 @@ export default function AdminViewer({
 
   let onMouseMove = (refrance_element) => (e) => {
     const viewerRect = refrance_element.getBoundingClientRect();
-    setPointerPositionX(e.clientX - viewerRect.x);
-    setPointerPositionY(e.clientY - viewerRect.y);
+    setPointerPositionX(Math.floor(e.clientX - viewerRect.x));
+    setPointerPositionY(Math.floor(e.clientY - viewerRect.y));
   };
 
   return (

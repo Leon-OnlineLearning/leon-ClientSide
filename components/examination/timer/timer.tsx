@@ -8,23 +8,25 @@ const Timer: FC<TimerProps> = ({ timerLength, onTimerFinish }) => {
   const [time_secs, setTime_secs] = useState(timerLength)
   const [time_formatted, setTime_formatted] = useState(secondsToTime(timerLength))
 
+
   useEffect(() => {
     let interval = setInterval(() => {
       setTime_secs(time => {
         setTime_formatted(secondsToTime(time - 1))
         const _time = Math.max(time - 1, 0)
-        console.log("non clipped time",time);
         if (_time === 0) {
-          console.log("time is", _time);
-          
           clearInterval(interval);
-          onTimerFinish();
         }
         return _time
       })
     }, 1000)
   }, [])
 
+  useEffect(()=>{
+    if (time_secs == 0){
+      onTimerFinish();
+    }
+  },[time_secs])
   return <h1 style={{ color: 'white' }}>{`${time_formatted.h}:${time_formatted.m}:${time_formatted.s}`}</h1>
 }
 

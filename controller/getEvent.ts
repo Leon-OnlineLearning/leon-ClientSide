@@ -1,16 +1,18 @@
-import axios from "axios"
 import { Event } from "../model/event"
-import config from "../utils/config"
+import apiInstance from "./utils/api"
 
-export async function getEvents(year: number, month: number): Promise<Event[]> {
+export async function getEvents(year: number, month: number) : Promise<Event[]>{  
   const startingFrom = `${year}-${month}-01`
   const endingAt = `${year}-${month + 1}-01`
-  const response = await axios
-    .get(
-      `${config.serverBaseUrl}/students/${localStorage.getItem('id')
-      }/events?startingFrom=${startingFrom}&endingAt=${endingAt}`,
-      { withCredentials: true }
-    )
-  console.log(response.data)
-  return response.data
+
+  const url = `/events/timed?startingFrom=${startingFrom}&endingAt=${endingAt}`
+  const res = await apiInstance.get(url)
+
+  
+  res.data.map(exam => {
+    exam.startTime = new Date(exam.startTime);
+    exam.endTime = new Date (exam.endTime)})
+    
+  console.debug(res.data)
+  return res.data as Event[]
 }

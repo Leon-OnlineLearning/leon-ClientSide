@@ -117,7 +117,7 @@ function _CalendarDays({ year, month, events }: CalenderDaysProps): Array<JSX.El
                 let counterDate = indexDateMapper(i - 1, j, firstDayIndex, firstDay)
                 for (let e of events) {
                     // FIXME the time in backend is saved as startTime not startDate 
-                    if (e.startDate?.getFullYear() === counterDate.getFullYear() && e.startDate?.getMonth() === counterDate.getMonth() && e.startDate?.getDate() === counterDate.getDate()) {
+                    if (e.startTime.getFullYear() === counterDate.getFullYear() && e.startTime?.getMonth() === counterDate.getMonth() && e.startTime?.getDate() === counterDate.getDate()) {
                         eves.push(e)
                     }
                 }

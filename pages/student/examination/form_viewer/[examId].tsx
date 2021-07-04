@@ -4,24 +4,26 @@ import ExamContainer from '../../../../components/examination/exam_container/Exa
 import Question_view from '../../../../components/examination/Question_view';
 import Recorder from '../../../../components/examination/recording/exam_record';
 import Timer from '../../../../components/examination/timer/timer';
-import { QuestionInterface } from '../../../../model/examination/question';
 import { useRouterQuery } from '../../../../hooks/useRouteQuery';
-import { StudentDashboard, StudentDashboardSelectedPage } from '../../../../components/student/dashboad/student-dashboard';
 import { Spinner } from 'react-bootstrap';
 import { getExamById } from '../../../../controller/exam/exam';
 
 
+// TODO obtain the the length form db
+const exam_length = 20 // exam length in secs
 export default function FormViewer() {
 
 
   const [examId, queryChecked] = useRouterQuery("examId")
   const [questions, setQuestions] = useState([])
   useEffect(() => {
-    const _getExam = async ()=>{
-      const exam =await getExamById(examId)
+    const _getExam = async () => {
+      const exam = await getExamById(examId)
       setQuestions(exam.questions)
     }
-    _getExam()
+    if (examId) {
+      _getExam()
+    }
   }, [examId])
 
 
@@ -33,29 +35,37 @@ export default function FormViewer() {
     console.log(new_answers)
   }
   let questions_comp = questions.map((question, index) => {
-    return <Question_view question={question} key={question.questionId} onChange={(answer) => handleChange(index, answer)} />
+    return <Question_view
+      question={question}
+      key={question.id}
+      onChange={(answer) =>
+        handleChange(index, answer)} />
   })
-  
+
   const router = useRouter()
   // TODO get test length
   // TODO auto submit when times up (ALMOST DONE see `onTimerFinish`)
   // TODO add submit button
 
-  function onExamFinish(){
+  const [isExamFinished, setIsExamFinished] = useState(false);
+  function onTimeFinish() {
     console.log("exam finished")
-    // TODO redirect only when 
-    // router.push('/student/report')
+    setIsExamFinished(true)
+    // TODO send answers
   }
+  // TODO only show exam when recorder is ready
   return (
     <>
       <div className="position-sticky bg-primary d-flex justify-content-center" style={{ top: 0, zIndex: 1000 }}>
-        <Timer onTimerFinish={onExamFinish} timerLength={12} />
+        <Timer onTimerFinish={onTimeFinish} timerLength={exam_length} />
       </div>
-
-      <ExamContainer>{questions_comp}</ExamContainer>
+      {!isExamFinished && <ExamContainer>{questions_comp}</ExamContainer>}
       {
         queryChecked ?
-          <Recorder examId={examId} /> :
+          <Recorder examId={examId} 
+          shouldStop={isExamFinished} 
+          onFinish={() => { router.push(`/student/examination/report/${examId}`) }}
+          examDuration= {exam_length} /> :
           <Spinner animation="border" variant="primary" />
       }
 

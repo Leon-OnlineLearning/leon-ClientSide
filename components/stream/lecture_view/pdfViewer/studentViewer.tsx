@@ -1,6 +1,12 @@
-import PdfViewer from "./viewerload";
+
 import Pointer_canvas from './pointer_canvas';
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
+const PdfViewer = dynamic(
+  () => import('./viewerload'),
+  { ssr: false }
+)
+
 
 export default function StudentViewer({pointerPositionX,pointerPositionY,pageNumber,
   setPageNumber}){

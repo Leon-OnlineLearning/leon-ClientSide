@@ -44,6 +44,7 @@ export default function Authenticate() {
                     acceptableWidth={230}
                     acceptableHeight={230}
                     acceptableScore={0.95}
+                    isDone={isDone}
                     setIsDone={setIsDone}
                     setCurrentInstruction={setCurrentInstruction}
                 />

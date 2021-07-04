@@ -43,7 +43,7 @@ export async function createExam(examData: any) {
  * TODO handle lost connection
  * TODO handle closing browser
  */
-export async function sendExamRecording(examRecording: ExamRecordingInterface) {
+export async function sendExamRecording(examRecording: ExamRecordingInterface):Promise<boolean> {
   var blob = new Blob(examRecording.recordedChunks, {
     type: "video/webm",
   });
@@ -54,20 +54,25 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface) {
   fd.append("userId", examRecording.userId);
   fd.append("examId", examRecording.examId);
   // TODO add last chunk
-  fd.append("lastChunk", String(false));
+  fd.append("lastChunk", String(examRecording.isLastChunk));
   // TODO calculate this with dynamic resloation
-  fd.append("chunkStartTime", String(examRecording.chunckIndex * 10));
-  fd.append("chunkEndTime", String((examRecording.chunckIndex + 1) * 10));
+  fd.append("chunkStartTime", String(examRecording.startingFrom));
+  fd.append("chunkEndTime", String((examRecording.endingAt)));
 
   const url = `${config.serverBaseUrl}/exams/record`;
-  fetch(url, {
-    method: "put",
-    body: fd,
-  })
-    .then((res) => {
-      console.log("Promise resolved", res);
+  try{
+    const res = await fetch(url, {
+      method: "put",
+      body: fd,
     })
-    .catch(console.log);
+    console.debug("vedio send succefully");
+    return true
+  }
+  catch(err){
+    console.log(err)
+    return false
+  }
+
 }
 
 export async function sendRefranceVideo(
@@ -81,19 +86,19 @@ export async function sendRefranceVideo(
   fd.append("chuck", blob, `upl.webm`);
   fd.append("userId", refranceRecording.userId);
 
-  console.log("sent");
+  console.debug("sent");
   const url = `${config.serverBaseUrl}/students/refrance`;
   fetch(url, {
     method: "put",
     body: fd,
   })
     .then((res) => {
-      console.log("Promise resolved", res);
+      console.debug("Promise resolved", res);
     })
-    .catch(console.log);
+    .catch(console.error);
 }
 
-export async function getAllExams(studentId): Promise<Array<Event>> {
+export async function getAllExams(studentId): Promise<Array<Exam>> {
   
   // TODO throw  error that effect ui
   const res = await apiInstance.get(
@@ -101,9 +106,10 @@ export async function getAllExams(studentId): Promise<Array<Event>> {
   )
 
   res.data.map(exam => {
-    exam.startDate = exam.startTime;
-    exam.endDate = exam.endTime} )
-  return res.data as Event[]
+    exam.startDate = new Date(exam.startTime);
+    exam.endDate = new Date( exam.endTime)} )
+  return res.data as Exam[]
+
 }
 
 export async function getExamById(examId:string) : Promise<Exam>{
