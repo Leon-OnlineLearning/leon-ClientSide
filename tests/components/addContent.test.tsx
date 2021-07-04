@@ -8,7 +8,13 @@ const lsMock = new LocalStorageMock();
 
 describe("Add content paging test suite", () => {
   test("should do paging correctly", () => {
-    render(<AddContent sessionStorage={lsMock} courseId="12345" />);
+    render(
+      <AddContent
+        sessionStorage={lsMock}
+        courseId="12345"
+        onFinish={async () => console.log("finished")}
+      />
+    );
     expect(screen.getByText(/related/)).toBeVisible();
     let previousShown = true;
     try {
@@ -29,9 +35,9 @@ describe("Add content paging test suite", () => {
     expect(screen.getByText(/testing/)).toBeVisible();
     let nextShown = true;
     try {
-        screen.getByText("Next")
-    } catch(e) {
-        nextShown = false;
+      screen.getByText("Next");
+    } catch (e) {
+      nextShown = false;
     }
     expect(nextShown).toBeFalsy();
     expect(screen.getByText("Finish")).toBeVisible();

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { FC, useContext, useState } from "react";
-import { Button, Form, FormControl } from "react-bootstrap";
+import { Button, Card, Form, FormControl } from "react-bootstrap";
 import LocalStorageContext from "../../contexts/localStorageContext";
 import {
   searchFiles,
@@ -16,10 +16,14 @@ import {
 interface AddContentProps {
   courseId: string;
   sessionStorage: any;
-  onFinish: (professorId: string) => Promise<void>
+  onFinish: (professorId: string) => Promise<void>;
 }
 
-const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage, onFinish }) => {
+const AddContent: FC<AddContentProps> = ({
+  courseId,
+  sessionStorage,
+  onFinish,
+}) => {
   const [currentPage, setCurrentPage] = useState(0);
   const localStorageContext = useContext(LocalStorageContext);
   sessionStorage.removeItem("sessionId");
@@ -63,40 +67,46 @@ const AddContent: FC<AddContentProps> = ({ courseId, sessionStorage, onFinish })
 
   return (
     <>
-      {steps[currentPage]}
-      <div>
-        step {currentPage + 1} of {steps.length}
-      </div>
-      <div>
-        {currentPage !== 0 ? (
-          <Button
-            onClick={() => {
-              setCurrentPage((prev) => {
-                return Math.max(prev - 1, 0);
-              });
-            }}
-          >
-            Previous
-          </Button>
-        ) : (
-          ""
-        )}
-        {currentPage !== steps.length - 1 ? (
-          <Button
-            onClick={() => {
-              setCurrentPage((current) =>
-                Math.min(current + 1, steps.length - 1)
-              );
-            }}
-          >
-            Next
-          </Button>
-        ) : (
-          <Button onClick={async () => {
-            await onFinish(localStorageContext.userId)
-          }}>Finish</Button>
-        )}
-      </div>
+      <Card className="p-3">
+        {steps[currentPage]}
+        <div>
+          step {currentPage + 1} of {steps.length}
+        </div>
+        <div>
+          {currentPage !== 0 ? (
+            <Button
+              onClick={() => {
+                setCurrentPage((prev) => {
+                  return Math.max(prev - 1, 0);
+                });
+              }}
+            >
+              Previous
+            </Button>
+          ) : (
+            ""
+          )}
+          {currentPage !== steps.length - 1 ? (
+            <Button
+              onClick={() => {
+                setCurrentPage((current) =>
+                  Math.min(current + 1, steps.length - 1)
+                );
+              }}
+            >
+              Next
+            </Button>
+          ) : (
+            <Button
+              onClick={async () => {
+                await onFinish(localStorageContext.userId);
+              }}
+            >
+              Finish
+            </Button>
+          )}
+        </div>
+      </Card>
     </>
   );
 };
