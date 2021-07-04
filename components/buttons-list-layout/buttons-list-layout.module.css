@@ -1,0 +1,9 @@
+.settings-container {
+    display: grid;
+    grid-template-columns : 20% 80%
+}
+
+.settings-buttons {
+    display: flex;
+    flex-direction: column;
+}

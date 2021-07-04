@@ -1,0 +1,8 @@
+.professor-lecture-layout {
+    display: flex;
+    flex: 1;
+}
+
+.progress-bar{
+    transition: 0.3s;
+}

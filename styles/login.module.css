@@ -1,0 +1,14 @@
+.login-group {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* .login-group * {
+    width: 50%;
+} */
+
+.loginbtn {
+    width: 43%;
+}

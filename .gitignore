@@ -32,3 +32,14 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+stories
+todo.md
+public/janus_test/*
+public/janus_test/
+public/models/tiny_face_detector_model-shard1:Zone.Identifier
+public/models/tiny_face_detector_model-weights_manifest.json:Zone.Identifier
+utils/config.ts
+.env
+storybook-static/
+public/Test_PDF.pdf:Zone.Identifier

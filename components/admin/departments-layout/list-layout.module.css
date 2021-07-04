@@ -1,0 +1,9 @@
+.add-new-container {
+  display: flex;
+  width: 100%;
+  justify-content:flex-end;
+}
+
+.add-new-container .btn {
+  margin: 16px;
+}
