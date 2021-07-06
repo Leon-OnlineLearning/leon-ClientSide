@@ -13,25 +13,22 @@ export default function room() {
     // TODO make this an id and get room number from backend
     const user = useUser();
 
-
-    // const router = useRouter()
-    // debugger
-    // const { lectureId } = router.query
-
     const [lectureId,queryChecked] = useRouterQuery("lectureId")
     
     const [room, setRoom] = useState<LiveRoom>()
     useEffect(() => {
-        debugger
         if (lectureId){
-            getRoomByLectureId(lectureId as string)
-                .then(room => setRoom(room))
+            try {                
+                getRoomByLectureId(lectureId as string)
+                    .then(room => setRoom(room))
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
-    , [queryChecked])
+    , [lectureId])
 
 
-    console.log(user)
     return (<>
         {user && room &&
             <LectureManager

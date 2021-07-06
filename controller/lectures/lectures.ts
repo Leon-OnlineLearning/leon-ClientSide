@@ -22,6 +22,7 @@ export async function deleteLecture(lectureId: string) {
 }
 
 export async function getRoomByLectureId(lectureId: string) : Promise<LiveRoom>{
-  return await apiInstance.get(`/lectures/enter/${lectureId}`)
-  .then(res => res.data as LiveRoom)
+  
+    const res =  await apiInstance.get(`/lectures/enter/${lectureId}`)
+    return res.data
 }
