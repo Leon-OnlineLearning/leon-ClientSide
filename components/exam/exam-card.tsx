@@ -4,12 +4,12 @@ import { Card } from "react-bootstrap";
 interface ExamCardProps {
     id: string,
     title: string,
-    startDate: Date,
-    endDate: Date,
+    startTime: Date,
+    endTime: Date,
     mark: number
 }
 
-const ExamCard: React.FC<ExamCardProps> = ({ id, title, startDate, endDate, mark }) => {
+const ExamCard: React.FC<ExamCardProps> = ({ id, title, startTime: startTime, endTime: endDate, mark }) => {
     return (
         <Link href={`/student/examination/form_viewer/${id}`}>
             <Card className="p-3 m-3">
@@ -18,7 +18,7 @@ const ExamCard: React.FC<ExamCardProps> = ({ id, title, startDate, endDate, mark
                 </Card.Title>
                 <Card.Body>
                     <div>
-                        <strong>Starting:</strong>{startDate.toString().split(' GMT')[0]}
+                        <strong>Starting:</strong>{startTime.toString().split(' GMT')[0]}
                     </div>
                     <div>
                         <strong>Ending:</strong>{endDate.toString().split(' GMT')[0]}
