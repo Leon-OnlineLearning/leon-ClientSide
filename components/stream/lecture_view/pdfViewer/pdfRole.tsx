@@ -22,9 +22,9 @@ export function PdfRole(props: dataControlView) {
 
     // data recived -> set component state based on it
     useEffect(() => {
-        if (props.role == UserRole.Student && props.dataRecived) {
+        if (props.role == UserRole.Student && props.dataReceived) {
             try {                
-                const data_json = JSON.parse(props.dataRecived) as messageData
+                const data_json = JSON.parse(props.dataReceived) as messageData
                 if (data_json.hasOwnProperty("type")) { //make sure we can parse the message
                     if (data_json.type == "mouse") {
                         setPointerPositionX(data_json.X)
@@ -38,7 +38,7 @@ export function PdfRole(props: dataControlView) {
                 console.log(error)
             }
         }
-    }, [props.dataRecived])
+    }, [props.dataReceived])
 
 
     // send mouse data

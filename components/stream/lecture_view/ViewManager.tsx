@@ -16,7 +16,7 @@ interface callControlsView {
 
 export interface dataControlView {
     setDataToSend: (data: string) => void,
-    dataRecived: string,
+    dataReceived: string,
     role: UserRole,
 }
 
@@ -37,7 +37,7 @@ export default function ViewManager(props: callControlsView & dataControlView) {
                 </>
             }
             <p>i am lecture view</p>
-            <h1>{props.dataRecived}</h1>
+            <h1>{props.dataReceived}</h1>
             <PdfRole {...props}/>
         </>
     )

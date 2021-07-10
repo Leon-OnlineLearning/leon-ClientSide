@@ -17,14 +17,14 @@ export interface participantInfo_stream {
 
 export interface dataControl_stream {
   dataToSend: string,
-  setDataRecived: (data: string) => void
+  setDataReceived: (data: string) => void
 }
 
 
 /**
  * the main component for stream
  * this will manage the session by initiating it and pass it
- * to audio and data childs
+ * to audio and data children
  */
 export default function StreamManager(props: callControls_stream & dataControl_stream & participantInfo_stream) {
 
@@ -46,9 +46,9 @@ export default function StreamManager(props: callControls_stream & dataControl_s
 
 
 
-  // we must wait the session connection whitch implies the jan object 
+  // we must wait the session connection witch implies the jan object 
   // has been initialized otherwise jan would have null current 
-  // because of hooks asyncronouse nature
+  // because of hooks asynchronous nature
   return (
     <>
       {isJanusConnected && 
