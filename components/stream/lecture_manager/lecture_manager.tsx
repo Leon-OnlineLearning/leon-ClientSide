@@ -7,7 +7,7 @@ import User, { UserRole } from '../../../model/users/User'
 
 
 
-export default function LectureManager(props:{ userData:User, roomId :number}) {
+export default function LectureManager(props:{ userData:User, roomId :number, endRoom:()=>void}) {
 
 
     /* ------------------------------ callControls ------------------------------ */
@@ -65,6 +65,7 @@ export default function LectureManager(props:{ userData:User, roomId :number}) {
                 {...dataIO_local}
                 participants={participants}
                 role={props.userData.role}
+                endRoom={props.endRoom}
             />
 
         </>

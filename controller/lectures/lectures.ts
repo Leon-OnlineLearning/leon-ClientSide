@@ -26,3 +26,7 @@ export async function getRoomByLectureId(lectureId: string) : Promise<LiveRoom>{
     const res =  await apiInstance.get(`/lectures/enter/${lectureId}`)
     return res.data
 }
+
+export async function endRoomByLectureId(lectureId: string) : Promise<void>{
+    await apiInstance.get(`/lectures/end/${lectureId}`)
+}

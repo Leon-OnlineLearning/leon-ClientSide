@@ -79,6 +79,8 @@ export default function AudioPlugin(props: callControls_stream & { janus: Janus 
                 handleParticipants(msg, props.setParticipants);
             } else if (event === "destroyed") {
                 alert_roomDestroy();
+                router.push('/')
+                // TODO go to end lecture page
             } else if (event === "event") {
                 Janus.log(msg)
                 // no need for update they already added at join event
