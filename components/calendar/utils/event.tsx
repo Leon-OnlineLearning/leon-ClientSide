@@ -29,7 +29,7 @@ export function CalendarEvent({ events }: CalendarEventProps) {
                     {
                         events.map(
                             e => {
-                                return (<EventCard event={e}></EventCard>)
+                                return (<EventCard event={e} key={e.id}></EventCard>)
                             }
                         )
                     }

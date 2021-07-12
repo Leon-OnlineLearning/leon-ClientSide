@@ -14,11 +14,13 @@ export default function EventCard({ event: e }: EventCardProps) {
                 </Card.Title>
                 <hr></hr>
                 <Card.Text>
-                    <i className="bi bi-calendar-event"></i> From: <strong>{dateFormatter(e.startTime)}</strong> To: <strong>{dateFormatter(e.endTime)}</strong>
+                    <i className="bi bi-calendar-event"></i> 
+                    From: <strong>{dateFormatter(e.startTime)}</strong> 
+                    To: <strong>{dateFormatter(e.endTime)}</strong>
+                </Card.Text>
                     <hr></hr>
                     <strong>Description:</strong> <br />
                     {e.description}
-                </Card.Text>
             </Card.Body>
         </Card>
     )
