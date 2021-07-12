@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import LectureManager from "../../components/stream/lecture_manager/lecture_manager";
-import { getRoomByLectureId } from "../../controller/lectures/lectures";
+import { endRoomByLectureId, getRoomByLectureId } from "../../controller/lectures/lectures";
 import { useRouterQuery } from "../../hooks/useRouteQuery";
 import useUser from "../../hooks/useUser";
 import { LiveRoom } from "../../model/LiveRoom";
@@ -34,6 +34,7 @@ export default function room() {
             <LectureManager
                 userData={user}
                 roomId={room.roomId}
+                endRoom={()=>{endRoomByLectureId(lectureId)}}
             />
         }
     </>

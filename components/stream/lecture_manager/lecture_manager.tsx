@@ -7,13 +7,13 @@ import User, { UserRole } from '../../../model/users/User'
 
 
 
-export default function LectureManager(props:{ userData:User, roomId :number}) {
+export default function LectureManager(props:{ userData:User, roomId :number, endRoom:()=>void}) {
 
 
     /* ------------------------------ callControls ------------------------------ */
 
     /**
-     * isReadyToJoin -> setup is complate and ready to join a the call 
+     * isReadyToJoin -> setup is complete and ready to join a the call 
      * WARN must check this variable before doing any unmute
      * the behavior will be unexpected otherwise
     */
@@ -23,9 +23,9 @@ export default function LectureManager(props:{ userData:User, roomId :number}) {
     const [participants, setParticipants] = useState([]);
 
     
-    // control sent and recived data
+    // control sent and received data
     const [dataToSend, setDataToSend] = useState("initial message");
-    const [dataRecived, setDataRecived] = useState("");
+    const [dataReceived, setDataReceived] = useState("");
 
 
     const callStates = {
@@ -39,12 +39,12 @@ export default function LectureManager(props:{ userData:User, roomId :number}) {
 
     const dataIO_remote = {
         dataToSend : dataToSend,
-        setDataRecived : setDataRecived
+        setDataReceived : setDataReceived
     }
 
     const dataIO_local = {
         setDataToSend : setDataToSend,
-        dataRecived : dataRecived
+        dataReceived : dataReceived
     }
     return (
         <>
@@ -65,6 +65,7 @@ export default function LectureManager(props:{ userData:User, roomId :number}) {
                 {...dataIO_local}
                 participants={participants}
                 role={props.userData.role}
+                endRoom={props.endRoom}
             />
 
         </>

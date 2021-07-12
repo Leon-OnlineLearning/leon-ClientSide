@@ -26,17 +26,17 @@ export async function createExam(examData: any) {
 
 /**
  * send a chunk of data for now it is simple fetch call with post method
- * NOTE not all chuncks are playable
- * acording to https://www.w3.org/TR/mediastream-recording/#dom-mediarecorder-start
+ * NOTE not all chunks are playable
+ * according to https://www.w3.org/TR/mediastream-recording/#dom-mediarecorder-start
  * ```
  * The UA MUST record stream in such a way that the original Tracks can be
  * retrieved at playback time. When multiple Blobs are returned
- * (because of timeslice or requestData()), the individual Blobs
+ * (because of time-slice or requestData()), the individual Blobs
  *  need not be playable, but the combination of all the Blobs
  * from a completed recording MUST be playable.
  * ```
- * which turns out to mean that we need the first chnunk to
- * reconstranct file __we may need the last chunk but as i tested
+ * which turns out to mean that we need the first chunk to
+ * reconstruct file __we may need the last chunk but as i tested
  * we don't need it
  *
  * TODO handle failed requests
@@ -55,7 +55,7 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface):P
   fd.append("examId", examRecording.examId);
   // TODO add last chunk
   fd.append("lastChunk", String(examRecording.isLastChunk));
-  // TODO calculate this with dynamic resloation
+  // TODO calculate this with dynamic resolution
   fd.append("chunkStartTime", String(examRecording.startingFrom));
   fd.append("chunkEndTime", String((examRecording.endingAt)));
 
@@ -65,7 +65,7 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface):P
       method: "put",
       body: fd,
     })
-    console.debug("vedio send succefully");
+    console.debug("video sent successfully");
     return true
   }
   catch(err){

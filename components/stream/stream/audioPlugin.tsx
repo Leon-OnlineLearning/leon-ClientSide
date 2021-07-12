@@ -5,21 +5,22 @@ import { alert_msgError, alert_pluginError, alert_roomDestroy, debug_msg, log_co
 import { handleParticipants, publishMyAudioStream } from "./audioRoomUtils";
 import { participantInfo_stream } from "./stream_manager"
 import { addToList, removeFromListUsingId } from "./StateMutation";
+import router from "next/router";
 
 export interface callControls_stream {
     setIsReadyToJoin: CallableFunction,
     muteRemote: boolean,
     muteLocal: boolean,
-    setParticipants: CallableFunction
+    setParticipants: CallableFunction,
 }
 
 /**
  * sequence of operation
  *  [ without use interaction ]
  * 1. attach audio plugin
- * 2. regester in specified room 
- * 3. negoiate audio stream
- * 4. attach remote stream to audioplayer
+ * 2. register in specified room 
+ * 3. negotiate audio stream
+ * 4. attach remote stream to audio-player
  * 5. send our stream muted 
  *  [ with user interaction ]
  * play remote stream (props.muteRemote) //TODO unimplemented
@@ -42,15 +43,15 @@ export default function AudioPlugin(props: callControls_stream & { janus: Janus 
      * handle messages from the remote plugin as following
      * 
      * event --> action
-     * a joining response --> [log, setweprtcup, send own audio,set participants]
+     * a joining response --> [log, setWebrtcUp, send own audio,set participants]
      * room change --> [log,set participants] //this SHOULD NOT  happen
-     * room destroied --> [send alert] // TODO handle UI and redirect user
+     * room destroyed --> [send alert] // TODO handle UI and redirect user
      * 
      * error msg --> [log] //TODO check expected errors
      * participant left --> [log,update participants]
      * 
-     * REVIEW to read updates in any state variable such as `webrtcup` we need to
-     *  make this outside init effect otherwise it doesn't update
+     * REVIEW to read updates in any state variable such as `webrtcUp` we need to
+     *  make this outside init effect closure otherwise it doesn't update
      * as it use the one passed at onInit effect
      */
     function handleControlMsgAudio(handler : JanusJS.PluginHandle, msg: JanusJS.Message) {
@@ -79,6 +80,8 @@ export default function AudioPlugin(props: callControls_stream & { janus: Janus 
                 handleParticipants(msg, props.setParticipants);
             } else if (event === "destroyed") {
                 alert_roomDestroy();
+                router.push('/')
+                // TODO go to end lecture page
             } else if (event === "event") {
                 Janus.log(msg)
                 // no need for update they already added at join event

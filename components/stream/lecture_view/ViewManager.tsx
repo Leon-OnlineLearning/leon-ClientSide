@@ -8,15 +8,16 @@ interface callControlsView {
 
     muteLocal: boolean,
     muteRemote: boolean,
-    setMuteLocal: CallableFunction,
-    setMuteRemote: CallableFunction,
+    setMuteLocal: React.Dispatch<React.SetStateAction<boolean>>,
+    setMuteRemote: React.Dispatch<React.SetStateAction<boolean>>,
+    endRoom: ()=>void,
 
     participants: Array<any>
 }
 
 export interface dataControlView {
     setDataToSend: (data: string) => void,
-    dataRecived: string,
+    dataReceived: string,
     role: UserRole,
 }
 
@@ -32,12 +33,15 @@ export default function ViewManager(props: callControlsView & dataControlView) {
         <>
             {joining_state}
             {props.isReadyToJoin &&<>
-                <button onClick={()=>props.setMuteLocal(muteLocal => !muteLocal)}>toggleAudio
+                <button onClick={()=>props.setMuteLocal(muteLocal => !muteLocal)}>
+                    toggleAudio
                 </button><p>audio is {props.muteLocal ? "off" : "on"}</p>
+                
+                <button onClick={()=>props.endRoom()}>hangup</button>
                 </>
             }
             <p>i am lecture view</p>
-            <h1>{props.dataRecived}</h1>
+            <h1>{props.dataReceived}</h1>
             <PdfRole {...props}/>
         </>
     )

@@ -28,7 +28,7 @@ export default function DataPlugin(props:dataControl_stream &{ janus: Janus } & 
         async function getHandler(){
             let dataHandler = await joinRoom(props.janus,
                 props.room,props.userName,props.userName,
-                props.setDataRecived)
+                props.setDataReceived)
                 
             dataHandlerRef.current = dataHandler
         }
