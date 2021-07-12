@@ -50,7 +50,7 @@ describe("Models results view", () => {
             .then((resp) => resp.data)
             .catch((err) => console.error(err));
         }}
-        onRaiseModel={async (courseId, modelId) => {
+        onRaiseModel={async (modelId) => {
           return await axios
             .post(`/models/${modelId}/raise`)
             .then((resp) => resp.data)
