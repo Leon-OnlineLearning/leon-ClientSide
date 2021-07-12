@@ -19,8 +19,10 @@ export default {
 
 const Template = ({sample_question}) => {
     const [exampleQuestion, setExampleQuestion] = useState(sample_question)
+   const update = old => setExampleQuestion(old)
+    
     return <>
-        <CreateQuestion question={exampleQuestion} setQuestion={setExampleQuestion} />
+        <CreateQuestion question={exampleQuestion} updateQuestion={update} />
     </>
 };
 
