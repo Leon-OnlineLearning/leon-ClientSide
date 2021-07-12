@@ -1,4 +1,4 @@
-export type Course = {
+export default interface Course {
 
     id:  string 
     name:  string 
