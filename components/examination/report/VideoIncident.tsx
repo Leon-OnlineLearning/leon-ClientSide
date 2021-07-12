@@ -1,14 +1,12 @@
+import { IncidentInterface } from '../../../model/examination/report'
 import config from '../../../utils/config'
 
 
 
 
 
-export default function VideoIncidant(props:{
-    incident: {
-        startingFrom: number,
-        endingAt: number
-    },
+export default function VideoIncident(props:{
+    incident: IncidentInterface,
     examId: string
     userId: string
 }){
@@ -19,6 +17,7 @@ export default function VideoIncidant(props:{
     const url = `${config.serverBaseUrl}/exams/video?${query_params}`
     console.debug(url)
     return  (<>
+    <h1>incidentType : {props.incident.incidentType}</h1>
     <h1>start time : {props.incident.startingFrom}</h1>
     <h1>end time : {props.incident.endingAt}</h1>
     <br></br>

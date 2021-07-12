@@ -109,7 +109,7 @@ const AdoptiveArea = (props: propsQuestionInterface) => {
 
 const CreateCodeLang = ({selectedlang,setCodeLang}) =>{
     // TODO get this from codeMirror
-    const available_languges = ['c','python','js'];
+    const available_languages = ['c','python','js'];
     
     return  (
     <Form.Group>
@@ -117,7 +117,7 @@ const CreateCodeLang = ({selectedlang,setCodeLang}) =>{
     <Form.Control as="select" 
     onChange={e => setCodeLang(e.target.value)} 
     value={selectedlang}>
-        {available_languges.map(type_name => <option key={type_name}>{type_name}</option>)}
+        {available_languages.map(type_name => <option key={type_name}>{type_name}</option>)}
     </Form.Control>
 </Form.Group>
     )

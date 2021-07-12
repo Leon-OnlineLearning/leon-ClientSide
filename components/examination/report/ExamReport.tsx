@@ -2,11 +2,11 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import LocalStorageContext from "../../../contexts/localStorageContext";
 import { getExamReport } from "../../../controller/exam/report";
-import { IncidantInterface } from "../../../model/examination/report";
-import VideoIncidant from "./VideoIncidant";
+import { IncidentInterface } from "../../../model/examination/report";
+import VideoIncident from "./VideoIncident";
 
 export default function ExamReport({examId}) {
-    const [examReport, setExamReport] = useState<IncidantInterface[]>([])
+    const [examReport, setExamReport] = useState<IncidentInterface[]>([])
 
     const localStorageContext = useContext(LocalStorageContext)
 
@@ -16,7 +16,7 @@ export default function ExamReport({examId}) {
 
     console.log(examReport)
 
-    return <>{examReport && examReport.map((incidant, index) =>
-        <VideoIncidant key={`incident_${index}`} incident={incidant} examId={examId} userId={localStorageContext.userId}/>)}</>
+    return <>{examReport && examReport.map((incident, index) =>
+        <VideoIncident key={`incident_${index}`} incident={incident} examId={examId} userId={localStorageContext.userId}/>)}</>
 
 }
