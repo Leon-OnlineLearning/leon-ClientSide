@@ -5,7 +5,7 @@ import { Button, Spinner } from "react-bootstrap";
 interface ModelsViewProps {
   modelsFetcher: (courseId: string) => Promise<any>;
   courseId: string;
-  onRaiseModel: (modelId: string, courseId: string) => Promise<any>;
+  onRaiseModel: (modelId: string) => Promise<any>;
 }
 
 function useModelViewState() {
@@ -57,7 +57,7 @@ const ModelsView: FC<ModelsViewProps> = ({
                 <br />
                 <Button
                   onClick={async () => {
-                    await onRaiseModel(model.id, courseId);
+                    await onRaiseModel(model.id);
                   }}
                 >
                   Raise
