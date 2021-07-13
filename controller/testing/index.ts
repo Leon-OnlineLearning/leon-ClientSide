@@ -22,3 +22,20 @@ export const testExam = async (examId: string, studentId: string) => {
     studentId,
   });
 };
+
+interface TestResultContent {
+	success: boolean, 
+	content: any
+}
+
+export const getSentenceTestResult = async (courseId: string) => {
+  return await apiInstance
+    .get<TestResultContent>(`/courses/${courseId}/result/sentence`)
+    .then((res) => res.data);
+};
+
+export const getFileTestResult = async (courseId: string) => {
+  return await apiInstance
+    .get<TestResultContent>(`/courses/${courseId}/result/sentence`)
+    .then((res) => res.data);
+};
