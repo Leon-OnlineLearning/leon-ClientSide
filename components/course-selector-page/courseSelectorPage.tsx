@@ -9,7 +9,7 @@ export default function ProfessorCourseSelectorPage () {
       {userId ? (
         <ProfessorsCourseSelector
           userId={userId}
-          courseParentRoute={courseParentRoute}
+          parentRoute={courseParentRoute}
         />
       ) : (
         <Spinner animation="border" variant="primary" />

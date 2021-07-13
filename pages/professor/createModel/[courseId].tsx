@@ -9,7 +9,6 @@ export default function AddContentPage() {
   const [isWindowLoaded, setIsWindowLoaded] = useState(false);
   const [courseId, setCourseId] = useState("");
   const router = useRouter();
-  console.log("styles", styles);
 
   useEffect(() => {
     if (window) {

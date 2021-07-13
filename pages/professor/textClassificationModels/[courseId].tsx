@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import ModelsView from "../../../components/models-view/models-view";
 import {
   getModelsByCourseId,
@@ -15,8 +15,21 @@ export default function ModelViewPage() {
       setCourseId(router.query["courseId"] as string);
     }
   }, [router.isReady]);
+  const redirectToCreateNewModel = () => {
+    const pathNameParts = router.pathname.split("/");
+	const parentRoute = pathNameParts[pathNameParts.length-2];
+    // split by the parent name and get the first split
+    // this should return the full path before the parent route name including the "/"
+    const preParentRouteName = router.pathname.split(parentRoute)[0];
+    console.debug(
+      "⚠️ WARNING: you are using a dangerous method to get the preParent route. One case this is discouraged is when there is a portion of the name repeats",
+      "That's why it is not a separate function"
+    );
+    router.push(`${preParentRouteName}createModel/${courseId}`);
+  };
   return (
     <>
+      <Button onClick={redirectToCreateNewModel}>Create new model</Button>
       {courseId ? (
         <ModelsView
           modelsFetcher={getModelsByCourseId}

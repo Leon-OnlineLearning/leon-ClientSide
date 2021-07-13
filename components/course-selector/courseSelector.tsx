@@ -5,12 +5,12 @@ import { getAllCoursesByProfessor } from "../../controller/user/professor/profes
 
 interface ProfessorsCourseSelectorProps {
   userId: string;
-  courseParentRoute: string;
+  parentRoute: string;
 }
 
 const ProfessorsCourseSelector: FC<ProfessorsCourseSelectorProps> = ({
   userId,
-  courseParentRoute,
+  parentRoute,
 }) => {
   const router = useRouter();
   const [courses, setCourses] = useState([]);
@@ -22,14 +22,14 @@ const ProfessorsCourseSelector: FC<ProfessorsCourseSelectorProps> = ({
     _coursesGetter();
   }, []);
   const moveToWizard = (courseId: string) => {
-    router.push(`${courseParentRoute}/${courseId}`);
+    router.push(`${parentRoute}/${courseId}`);
   };
   return (
     <>
       {courses.length ? (
         courses.map((course) => {
           return (
-            <Card onClick={() => moveToWizard(course.id)}>
+            <Card key={course.id} onClick={() => moveToWizard(course.id)}>
               <Card.Title>{course.name}</Card.Title>
             </Card>
           );
