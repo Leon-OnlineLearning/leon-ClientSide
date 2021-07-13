@@ -1,0 +1,17 @@
+.icon-style {
+  font-size: 2em;
+}
+.card {
+  color: #434343;
+  height: 250px;
+  padding: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.card:hover {
+  color: #0d6efd;
+}

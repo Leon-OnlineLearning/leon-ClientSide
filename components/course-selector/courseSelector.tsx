@@ -29,7 +29,11 @@ const ProfessorsCourseSelector: FC<ProfessorsCourseSelectorProps> = ({
       {courses.length ? (
         courses.map((course) => {
           return (
-            <Card key={course.id} onClick={() => moveToWizard(course.id)}>
+            <Card
+              key={course.id}
+              onClick={() => moveToWizard(course.id)}
+              className="p-2"
+            >
               <Card.Title>{course.name}</Card.Title>
             </Card>
           );
