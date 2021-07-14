@@ -1,20 +1,27 @@
-import React, { useState } from "react"
+import React, { FormEvent, useState } from "react"
 import { Button, Form } from "react-bootstrap"
 import { QuestionInterface, Q_type } from "../../../../model/examination/question"
 import QuestionContainer from "../questionContainer"
-import noSsr from "../../../utilComponents/noSSR"
 import { Exam } from "../../../../model/Exam"
+import { createExam } from "../../../../controller/exam/exam"
+import { validate_end_time } from "./form_validation"
+import dynamic from "next/dynamic"
 
 const emptyQuestionTemplate: QuestionInterface = {
     questionType: Q_type.MultiChoice,
 }
 
+// IMPORTANT NOTE if not loaded as server side time will conflict in client and server.
+const Start_end_time = dynamic(() => import("./start_end_time"), {
+    ssr: false
+})
 
 
 export default function ExamForm(props) {
 
     const [questions, setQuestions] = useState<QuestionInterface[]>([emptyQuestionTemplate])
-
+    
+    
     function setQuestionByIndex(index: number) {
         return ((callBack) => {
             setQuestions(questionList => {
@@ -42,39 +49,50 @@ export default function ExamForm(props) {
 
 
 
-    function handleSubmit(event) {
+    function handleSubmit(event: FormEvent) {
         const form = event.currentTarget as HTMLFormElement;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+        form.checkValidity()
         event.preventDefault();
+        event.stopPropagation();
 
-        const json2send = { "questions": questions }
-
+        let exam_data: Exam;
+        exam_data = {} as Exam;
+        exam_data["questions"] = questions
 
         const fd = new FormData(form)
         const pairs = [...fd.entries()]
         pairs.forEach((v) => {
-            json2send[v[0]] = v[1];
+            exam_data[v[0]] = v[1];
         })
 
-        console.debug(json2send)
-        // TODO validate date is not in past
-        // setValidated(true);
-        
-        // validateTitle(title)
-        
-        
-        // TODO constract exam and submit it
-        // createExam(questions)
+
+        console.debug(exam_data)
+        // check validation
+        let isValid = true;
+        // TODO remove this validation will happen in browser
+        isValid = isValid && validate_end_time(new Date(exam_data.startTime).getTime(),
+                                               new Date(exam_data.endTime).getTime(), form.endTime)
+        try {
+            exam_data = Exam.fromJSON(exam_data as Exam)
+        } catch (error) {
+            console.log(error)
+            isValid = false
+        }
+
+        // submit to server
+        if (isValid) {
+            createExam(exam_data)
+        } else {
+            console.debug("exam not valid")
+        }
+        console.debug(exam_data)
     }
-    // TODO add ability to remove question
+    
     return (
         <>
             <div className="m-5">
                 <h1> creating exam </h1>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit} name="examForm">
                     <Form.Group controlId="validationCustom03">
                         <Form.Label>exam title</Form.Label>
                         <Form.Control
@@ -93,22 +111,7 @@ export default function ExamForm(props) {
                             max="1000" />
                     </Form.Group>
 
-                    <Form.Group controlId="validationCustom03">
-                        <Form.Label>start time</Form.Label>
-                        <Form.Control name="startTime"
-                            required
-                            type="datetime-local"
-
-                        />
-                    </Form.Group>
-
-                    <Form.Group controlId="validationCustom03">
-                        <Form.Label>end time</Form.Label>
-                        <Form.Control name="endTime" required type="datetime-local" />
-                    </Form.Group>
-
-
-                    {/* {time_input_client} */}
+                    <Start_end_time/>
 
                     {questions.map((question, index) => (
                         <QuestionContainer
@@ -135,5 +138,3 @@ export default function ExamForm(props) {
         </>
     )
 }
-
-
