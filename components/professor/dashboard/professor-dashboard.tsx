@@ -1,4 +1,4 @@
-import {logout} from "../../../controller/user/user";
+import { logout } from "../../../controller/user/user";
 import DashboardLayout from "../../dashboard-layout/dashboard-layout";
 import { SidebarElement } from "../../sidebar/sidebar";
 
@@ -10,6 +10,7 @@ export enum ProfessorDashboardSelectedPage {
   exams,
   grads,
   accountSettings,
+  models
 }
 
 export interface ProfessorDashboardProps
@@ -67,6 +68,14 @@ export function ProfessorDashboard({
               selected={selectedPage === ProfessorDashboardSelectedPage.grads}
             ></SidebarElement>
             <SidebarElement
+              href="/professor/models"
+              iconClassName={"bi-gear-wide-connected"}
+              text={"Models"}
+              selected={
+                selectedPage === ProfessorDashboardSelectedPage.models
+              }
+            ></SidebarElement>
+            <SidebarElement
               href="/professor/settings"
               iconClassName={"bi-person-circle"}
               text={"Account"}
@@ -78,7 +87,7 @@ export function ProfessorDashboard({
               href="/"
               iconClassName={"bi-arrow-left"}
               text={"Log out"}
-              onClick = {async () => await logout()}
+              onClick={async () => await logout()}
             ></SidebarElement>
           </>
         }
