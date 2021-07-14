@@ -67,7 +67,7 @@ const AddContent: FC<AddContentProps> = ({
 
   return (
     <>
-      <Card className="p-3">
+      <Card className="p-4">
         {steps[currentPage]}
         <div>
           step {currentPage + 1} of {steps.length}
@@ -152,13 +152,15 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
   const [unrelatedClassName, setUnrelatedClassName] = useState("");
   const [done, setDone] = useState(false);
   return (
-    <>
+    <article
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       <section data-testid="title-container">
-        {testing ? (
-          <h1>{`Upload your testing file`}</h1>
-        ) : (
-          <h1>{`Upload ${related ? "related" : "non-related"} content`}</h1>
-        )}
+          {testing ? (
+            <h5>{`Upload your testing file`}</h5>
+          ) : (
+            <h5>{`Upload ${related ? "related" : "non-related"} content`}</h5>
+          )}
       </section>
       <Form
         onSubmit={async (e) => {
@@ -256,7 +258,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
         <Button type="submit">Add</Button>
         {done ? <div data-testid="training-upload-files-done">done</div> : ""}
       </Form>
-    </>
+    </article>
   );
 };
 
@@ -338,7 +340,7 @@ export const SearchForTrainingFiles: FC<SearchForTrainingFilesProps> = ({
 
   return (
     <>
-      <h1>{`Search For ${related ? "related" : "non-related"} content`}</h1>
+      <h5>{`Search For ${related ? "related" : "non-related"} content`}</h5>
       <Form
         onSubmit={async (e) => {
           e.preventDefault();

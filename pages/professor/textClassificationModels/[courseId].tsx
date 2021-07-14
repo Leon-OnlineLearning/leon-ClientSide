@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import ModelsView from "../../../components/models-view/models-view";
 import {
+  ProfessorDashboard,
+  ProfessorDashboardSelectedPage,
+} from "../../../components/professor/dashboard/professor-dashboard";
+import {
   getModelsByCourseId,
   raiseModel,
 } from "../../../controller/training/modelsModifications";
@@ -17,7 +21,7 @@ export default function ModelViewPage() {
   }, [router.isReady]);
   const redirectToCreateNewModel = () => {
     const pathNameParts = router.pathname.split("/");
-	const parentRoute = pathNameParts[pathNameParts.length-2];
+    const parentRoute = pathNameParts[pathNameParts.length - 2];
     // split by the parent name and get the first split
     // this should return the full path before the parent route name including the "/"
     const preParentRouteName = router.pathname.split(parentRoute)[0];
@@ -29,16 +33,34 @@ export default function ModelViewPage() {
   };
   return (
     <>
-      <Button onClick={redirectToCreateNewModel}>Create new model</Button>
-      {courseId ? (
-        <ModelsView
-          modelsFetcher={getModelsByCourseId}
-          onRaiseModel={raiseModel}
-          courseId={courseId}
-        />
-      ) : (
-        <Spinner animation="border" variant="primary" />
-      )}
+      <ProfessorDashboard selectedPage={ProfessorDashboardSelectedPage.models}>
+        <section
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <h2>Maintain your models</h2>
+          <Button
+            style={{
+              alignSelf: "flex-end",
+              margin: "12px 0px",
+            }}
+            onClick={redirectToCreateNewModel}
+          >
+            Create new model
+          </Button>
+          {courseId ? (
+            <ModelsView
+              modelsFetcher={getModelsByCourseId}
+              onRaiseModel={raiseModel}
+              courseId={courseId}
+            />
+          ) : (
+            <Spinner animation="border" variant="primary" />
+          )}
+        </section>
+      </ProfessorDashboard>
     </>
   );
 }
