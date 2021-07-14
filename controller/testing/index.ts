@@ -8,6 +8,12 @@ export const sendSentence = async (courseId: string, sentence: string) => {
   });
 };
 
+export const sendTestFile = async (courseId: string) => {
+  return await apiInstance.post("/text-classification-models/test-files", {
+    courseId,
+  });
+};
+
 /**
  * start testing the exam, i think this should be triggered automatically after the exam ends
  * check the test-exam route at the backend for implementation

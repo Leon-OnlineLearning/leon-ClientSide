@@ -12,11 +12,12 @@ import {
   trainingNonRelatedFileUploader,
   trainingRelatedFileUploader,
 } from "../../controller/training/trainingFileUploader";
+import { sendTestFile } from "../../controller/testing";
 
 interface AddContentProps {
   courseId: string;
   sessionStorage: any;
-  onFinish: (professorId: string) => Promise<void>;
+  onFinish: (professorId: string, courseId: string) => Promise<void>;
 }
 
 const AddContent: FC<AddContentProps> = ({
@@ -99,7 +100,7 @@ const AddContent: FC<AddContentProps> = ({
           ) : (
             <Button
               onClick={async () => {
-                await onFinish(localStorageContext.userId);
+                await onFinish(localStorageContext.userId, courseId);
               }}
             >
               Finish
@@ -156,11 +157,11 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <section data-testid="title-container">
-          {testing ? (
-            <h5>{`Upload your testing file`}</h5>
-          ) : (
-            <h5>{`Upload ${related ? "related" : "non-related"} content`}</h5>
-          )}
+        {testing ? (
+          <h5>{`Upload your testing file`}</h5>
+        ) : (
+          <h5>{`Upload ${related ? "related" : "non-related"} content`}</h5>
+        )}
       </section>
       <Form
         onSubmit={async (e) => {
