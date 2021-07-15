@@ -106,7 +106,22 @@ export default function ExamForm(props) {
                             max="1000" />
                     </Form.Group>
 
-                    <Start_end_time/>
+                    {/* NOTE current year is chosen automatically
+                    until something else is requested */}
+                    {/* REVIEW what is year why not get it from start date */}
+                    {/* <Form.Group >
+                        <Form.Label>year</Form.Label>
+                        <Form.Control name="year"
+                            required
+                            type="number"
+                            defaultValue={new Date().getFullYear()}
+                            min={new Date().getFullYear()}
+                            max={new Date().getFullYear()}
+                        />
+                    </Form.Group> */}
+
+
+                    <Start_end_time />
 
                     {questions.map((question, index) => (
                         <QuestionContainer
