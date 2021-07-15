@@ -20,8 +20,7 @@ const Start_end_time = dynamic(() => import("./start_end_time"), {
 export default function ExamForm(props) {
 
     const [questions, setQuestions] = useState<QuestionInterface[]>([emptyQuestionTemplate])
-    
-    
+
     function setQuestionByIndex(index: number) {
         return ((callBack) => {
             setQuestions(questionList => {
@@ -69,25 +68,21 @@ export default function ExamForm(props) {
         console.debug(exam_data)
         // check validation
         let isValid = true;
-        // TODO remove this validation will happen in browser
-        isValid = isValid && validate_end_time(new Date(exam_data.startTime).getTime(),
-                                               new Date(exam_data.endTime).getTime(), form.endTime)
         try {
             exam_data = Exam.fromJSON(exam_data as Exam)
         } catch (error) {
             console.log(error)
+            console.debug("exam not valid")
+            console.debug(exam_data)
             isValid = false
         }
 
         // submit to server
         if (isValid) {
             createExam(exam_data)
-        } else {
-            console.debug("exam not valid")
         }
-        console.debug(exam_data)
     }
-    
+
     return (
         <>
             <div className="m-5">
