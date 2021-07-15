@@ -44,9 +44,9 @@ export default function CreateChoices(props: createChoicePropsInterface) {
                             <Form.Control type="text"
                                 placeholder={`choice ${index+1}`}
                                 value={choice}
+                                required
                                 key={'inp_choi' + index}
                                 onChange={(e) => editChoice(e.target.value, index)} />
-
                         </Col>
                         <Col>
 

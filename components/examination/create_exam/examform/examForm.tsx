@@ -88,14 +88,16 @@ export default function ExamForm(props) {
             <div className="m-5">
                 <h1> creating exam </h1>
                 <Form onSubmit={handleSubmit} name="examForm">
-                    <Form.Group controlId="validationCustom03">
+                    <Form.Group >
                         <Form.Label>exam title</Form.Label>
                         <Form.Control
                             name="title"
                             required
-                            placeholder="descriptive name of exam" />
+                            placeholder="descriptive name of exam"
+                            minLength={5}
+                        />
                     </Form.Group>
-                    <Form.Group controlId="validationCustom03">
+                    <Form.Group >
                         <Form.Label>exam_mark</Form.Label>
                         <Form.Control name="mark"
                             required
