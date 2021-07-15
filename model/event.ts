@@ -15,40 +15,13 @@ export type EventRepresentation = {
 }
 
 export class Event {
-    private _startTime: Date;
-    private _endTime: Date;
-
-    public get endTime(): Date {
-        return this._endTime;
-    }
-    public set endTime(value: Date) {
-        this._endTime = value;
-    }
-    public get startTime(): Date {
-        return this._startTime;
-    }
-    public set startTime(value: Date) {
-        this._startTime = value;
-    }
-    public get description(): string {
-        return this._description;
-    }
-    public set description(value: string) {
-        this._description = value;
-    }
-    public get title(): string {
-        return this._title;
-    }
-    public set title(value: string) {
-        this._title = value;
-    }
-    constructor(private _title: string, private _description: string, public type: EventType, public id, startTime: Date, endTime: Date) {
-        console.log(startTime, endTime)
+    constructor(public title: string, public description: string,
+        public type: EventType, public id,
+        public startTime: Date, public endTime: Date) {
+        console.debug(startTime, endTime)
         if (endTime <= startTime) {
             throw new Error("End date must be after start date");
         }
-        this.startTime = startTime;
-        this.endTime = endTime;
     }
     static fromJSON({
         title,
