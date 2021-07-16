@@ -35,7 +35,7 @@ export class Event {
         endTime: endDate,
         id,courseId,professorId
     }: EventRepresentation) {
-        return new Event(title, description, type, id, startTime, endDate,year,courseId,professorId)
+        return new Event(title, description, type, id, startTime, endDate,courseId,professorId)
     }
 
 }
