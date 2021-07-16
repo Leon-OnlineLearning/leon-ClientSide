@@ -11,14 +11,17 @@ export type EventRepresentation = {
     startTime: Date,
     type: EventType,
     endTime: Date,
-    id: string
+    id: string,
+    courseId:string,
+    professorId:string
 }
 
 export class Event {
     constructor(public title: string, public description: string,
         public type: EventType, public id,
         public startTime: Date, public endTime: Date,
-        public year: number = new Date().getFullYear()) {
+        public courseId: string,
+        public professorId: string) {
         console.debug(startTime, endTime)
         if (endTime <= startTime) {
             throw new Error("End date must be after start date");
@@ -30,9 +33,9 @@ export class Event {
         startTime: startTime,
         type,
         endTime: endDate,
-        id,
+        id,courseId,professorId
     }: EventRepresentation) {
-        return new Event(title, description, type, id, startTime, endDate)
+        return new Event(title, description, type, id, startTime, endDate,year,courseId,professorId)
     }
 
 }

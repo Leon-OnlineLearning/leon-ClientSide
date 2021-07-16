@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react"
+import React, { FormEvent, useContext, useEffect, useState } from "react"
 import { Button, Form } from "react-bootstrap"
 import { QuestionInterface, Q_type } from "../../../../model/examination/question"
 import QuestionContainer from "../questionContainer"
@@ -6,6 +6,9 @@ import { Exam } from "../../../../model/Exam"
 import { createExam } from "../../../../controller/exam/exam"
 import { validate_end_time } from "./form_validation"
 import dynamic from "next/dynamic"
+import Course from "../../../../model/course/Course"
+import LocalStorageContext from "../../../../contexts/localStorageContext"
+import { getAllCoursesByProfessor } from "../../../../controller/user/professor/professor"
 
 const emptyQuestionTemplate: QuestionInterface = {
     questionType: Q_type.MultiChoice,
@@ -83,11 +86,23 @@ export default function ExamForm(props) {
         }
     }
 
+    const localStorageContext = useContext(LocalStorageContext)
+
+
+    const [courses, setCourses] = useState<Course[]>([])
+
+    useEffect(() => { 
+        getAllCoursesByProfessor(localStorageContext.userId).then(courses => {
+            setCourses(courses)
+        });
+    },[]);
+    
     return (
         <>
             <div className="m-5">
                 <h1> creating exam </h1>
                 <Form onSubmit={handleSubmit} name="examForm">
+                    <input name="professorId" value={localStorageContext.userId} hidden />
                     <Form.Group >
                         <Form.Label>exam title</Form.Label>
                         <Form.Control
@@ -122,6 +137,19 @@ export default function ExamForm(props) {
                         />
                     </Form.Group> */}
 
+                    <Form.Group >
+                        <Form.Label>course</Form.Label>
+                        <select name="courseId"
+                            required
+                            defaultValue="1"
+                            >
+                                <option value="">--select course --</option>
+
+                                {courses && courses.map(course => <option 
+                                                key={course.id} 
+                                                value={course.id}>{course.name}</option>)}
+                        </select>
+                    </Form.Group>
 
                     <Start_end_time />
 
