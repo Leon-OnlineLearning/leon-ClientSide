@@ -1,5 +1,5 @@
-import { AnswerInterface, TextAnswer } from "../../../model/examination/answer";
-import { QuestionInterface, Q_type } from "../../../model/examination/question";
+import {  TextAnswer } from "../../../model/examination/answer";
+import {  Q_type } from "../../../model/examination/question";
 import { AnswerAreaInterface } from "./AnswerAreaInterface";
 import MultiChoice from "./multi_choice";
 import SingleChoice from './single_choice';

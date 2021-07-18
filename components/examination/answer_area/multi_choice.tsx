@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { AnswerInterface } from "../../../model/examination/answer";
-import { QuestionInterface, Q_type } from "../../../model/examination/question";
+import { TextAnswer } from "../../../model/examination/answer";
 import { AnswerAreaInterface } from './AnswerAreaInterface';
 
 
@@ -34,10 +33,7 @@ let MultiChoice: AnswerAreaInterface = ({ question, onChange }) => {
     setSelectedAnswers(new_selected_answers);
     
     // callback the onChange
-    let new_answer: AnswerInterface = {
-      questionType: question.questionType,
-      answerText: Array.from(new_selected_answers),
-    };
+    let new_answer = new TextAnswer(question, Array.from(new_selected_answers))
     onChange(new_answer);
   };
 
