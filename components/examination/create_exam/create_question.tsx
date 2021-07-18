@@ -66,7 +66,7 @@ const QuestionTypeSelection = ({question_type,onChange}) => {
 const QuestionText = ({text,setText}) => (<>
     <Form.Group>
         <Form.Label>question text</Form.Label>
-        <Form.Control as="textarea" placeholder="the question text" 
+        <Form.Control required as="textarea" placeholder="the question text" 
         value={text} 
         onChange={(e => setText(e.target.value))}/>
     </Form.Group>
@@ -74,7 +74,7 @@ const QuestionText = ({text,setText}) => (<>
 
 
 
-// this part would change acording to selected question
+// this part would change according to selected question
 const AdoptiveArea = (props: propsQuestionInterface) => {
     const selectedLang = props.question.code_lang
 

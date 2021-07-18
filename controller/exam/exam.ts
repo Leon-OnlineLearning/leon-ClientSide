@@ -18,8 +18,8 @@ export async function assignExamToCourse(examId: string, courseId: string) {
   );
 }
 
-export async function createExam(examData: any) {
-  return await axios.post(`${config.serverBaseUrl}/exams`, examData, {
+export async function createExam(examData: Exam) {
+  return await apiInstance.post(`/exams`, examData, {
     withCredentials: true,
   });
 }
