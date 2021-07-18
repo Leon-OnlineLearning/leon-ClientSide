@@ -16,12 +16,13 @@ export class Exam extends Event {
         endTime: Date,
         courseId: string,
         professorId: string,
+        duration: number,
         description?: string,
         id?,
     ) {
         super(title, description,
             type, id, startTime, endTime,
-            courseId, professorId);
+            courseId, professorId,duration);
         this.questions = questions;
         this.mark = mark;
     }
@@ -29,7 +30,7 @@ export class Exam extends Event {
     static fromJSON(exam: Exam) {
         return new Exam(exam.title, exam.questions, exam.mark,
             exam.type, exam.startTime, exam.endTime,
-            exam.courseId, exam.professorId,
+            exam.courseId, exam.professorId,exam.duration,
             exam.description, exam.id);
     }
 }

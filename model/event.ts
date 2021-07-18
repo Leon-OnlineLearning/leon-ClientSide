@@ -12,8 +12,9 @@ export type EventRepresentation = {
     type: EventType,
     endTime: Date,
     id: string,
-    courseId:string,
-    professorId:string
+    courseId: string,
+    professorId: string
+    duration: number,
 }
 
 export class Event {
@@ -21,21 +22,15 @@ export class Event {
         public type: EventType, public id,
         public startTime: Date, public endTime: Date,
         public courseId: string,
-        public professorId: string) {
+        public professorId: string, public duration: number) {
         console.debug(startTime, endTime)
         if (endTime <= startTime) {
             throw new Error("End date must be after start date");
         }
     }
-    static fromJSON({
-        title,
-        description,
-        startTime: startTime,
-        type,
-        endTime: endDate,
-        id,courseId,professorId
-    }: EventRepresentation) {
-        return new Event(title, description, type, id, startTime, endDate,courseId,professorId)
+    static fromJSON(exam: EventRepresentation) {
+        return new Event(exam.title, exam.description, exam.type, exam.id,
+            exam.startTime, exam.endTime, exam.courseId, exam.professorId, exam.duration)
     }
 
 }
