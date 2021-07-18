@@ -7,6 +7,8 @@ import config from "../../utils/config";
 import apiInstance from "../utils/api";
 import { Event } from "../../model/event";
 import { Exam } from "../../model/Exam";
+import { QuestionInterface } from "../../model/examination/question";
+import { TextAnswer } from "../../model/examination/answer";
 
 export async function assignExamToCourse(examId: string, courseId: string) {
   return await apiInstance.post(
@@ -43,7 +45,7 @@ export async function createExam(examData: Exam) {
  * TODO handle lost connection
  * TODO handle closing browser
  */
-export async function sendExamRecording(examRecording: ExamRecordingInterface):Promise<boolean> {
+export async function sendExamRecording(examRecording: ExamRecordingInterface): Promise<boolean> {
   var blob = new Blob(examRecording.recordedChunks, {
     type: "video/webm",
   });
@@ -60,7 +62,7 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface):P
   fd.append("chunkEndTime", String((examRecording.endingAt)));
 
   const url = `${config.serverBaseUrl}/exams/record`;
-  try{
+  try {
     const res = await fetch(url, {
       method: "put",
       body: fd,
@@ -68,7 +70,7 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface):P
     console.debug("video sent successfully");
     return true
   }
-  catch(err){
+  catch (err) {
     console.log(err)
     return false
   }
@@ -99,22 +101,59 @@ export async function sendRefranceVideo(
 }
 
 export async function getAllExams(studentId): Promise<Array<Exam>> {
-  
+
   // TODO throw  error that effect ui
   const res = await apiInstance.get(
-    `/exams/student/${studentId}`,  
+    `/exams/student/${studentId}`,
   )
 
   res.data.map(exam => {
     exam.startDate = new Date(exam.startTime);
-    exam.endDate = new Date( exam.endTime)} )
+    exam.endDate = new Date(exam.endTime)
+  })
   return res.data as Exam[]
 
 }
 
-export async function getExamById(examId:string) : Promise<Exam>{
+export async function getExamById(examId: string): Promise<Exam> {
   const res = await apiInstance.get(
     `/exams/${examId}`
   )
+  return res.data
+}
+
+/**
+ * Gets next question and submit answer for current one if available.
+ * @param examId 
+ * @param studentId 
+ * @param [current_answer] answer to current viewed question
+ * @returns next question 
+ */
+export async function getNextQuestion(examId: string, studentId: string, current_answer?: TextAnswer): Promise<QuestionInterface | "done"> {
+  console.log("getting next question")
+  const res = await apiInstance.post<QuestionInterface | undefined>(
+    `/exams/questions/next`,
+    {
+      examId: examId,
+      studentId: studentId,
+      answer: current_answer?.toJson(),
+    },
+  )
+  console.debug("next Question is")
+  console.debug(res.data)
+  return res.data
+}
+
+export async function getCurrentQuestion(examId: string, studentId: string): Promise<QuestionInterface | "done"> {
+  console.log("getting next question")
+  const res = await apiInstance.post<QuestionInterface | undefined>(
+    `/exams/questions/current`,
+    {
+      examId: examId,
+      studentId: studentId,
+    },
+  )
+  console.debug("current Question is")
+  console.debug(res.data)
   return res.data
 }
