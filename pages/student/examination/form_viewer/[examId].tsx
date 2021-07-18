@@ -14,12 +14,11 @@ import { TextAnswer } from '../../../../model/examination/answer';
 
 
 export default function FormViewerSequential() {
+  
   const [question, setQuestion] = useState<QuestionInterface>()
   const [answer, setAnswer] = useState<TextAnswer>()
 
-
   const localStorageContext = useContext(LocalStorageContext)
-
 
   // get exam info
   const [exam, setExam] = useState<Exam>()
@@ -81,9 +80,10 @@ export default function FormViewerSequential() {
   function onTimeFinish() {
     console.log("exam finished")
     setIsExamFinished(true)
-    // TODO send answers
   }
   // TODO only show exam when recorder is ready
+  const [recordingStarted, setRecordingStarted] = useState(false);
+
   return (
     <>
       {exam && <>
@@ -113,6 +113,7 @@ export default function FormViewerSequential() {
           onFinish={() => { router.push(`/student/examination/report/${exam.id}`) }}
           examDuration={exam.duration * 60}
           recordingStarted={recordingStarted}
+          setRecordingStarted={setRecordingStarted} 
           />
 
 
