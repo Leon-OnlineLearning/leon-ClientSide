@@ -222,7 +222,7 @@ export const UploadFiles: FC<UploadTrainingFilesProps> = ({
           <input
             hidden={!testing}
             type="file"
-            accept=".pdf,.txt"
+            accept={`${!testing ? ".pdf," : ""}.txt`}
             name="testingFile"
             data-testid="testing-upload-file"
             multiple
