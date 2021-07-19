@@ -16,5 +16,7 @@ export default function FileResult() {
       _getFileResult();
     }
   }, [router.isReady]);
-  return <>{result ?? "Test results are not ready yet!"}</>;
+  return (
+    <>{result ? JSON.stringify(result) : "Test results are not ready yet!"}</>
+  );
 }
