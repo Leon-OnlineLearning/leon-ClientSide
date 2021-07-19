@@ -25,8 +25,14 @@ export function recordForPeriod(userId: string, stream, recordingTime:number,cal
     recorder.onstart = ()=>{console.debug("recording started") }
 
     setTimeout(() => {
-        recorder.stop()
-        console.log("recoding stoped")
-        callback()
+        try {
+            recorder.stop()
+            console.log("recoding stopped")
+        } catch (error) {
+            console.error("already stopped")
+        }
+        finally {
+            callback()
+        }
     }, recordingTime * 1000)
 }

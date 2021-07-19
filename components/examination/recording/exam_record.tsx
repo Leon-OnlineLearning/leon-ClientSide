@@ -14,6 +14,8 @@ export default function Recorder(props: {
     shouldStop: boolean,
     onFinish: CallableFunction
     examDuration: number
+    recordingStarted: boolean
+    setRecordingStarted: CallableFunction
 }) {
 
     const localStorageContext = useContext(LocalStorageContext)
@@ -71,12 +73,11 @@ export default function Recorder(props: {
     }
 
     const mediaStream = useUserMedia({ audio: true, video: true });
-    const [recordingStarted, setRecordingStarted] = useState(false);
     useEffect(() => {
         if (mediaStream) {
-            if (!recordingStarted) {
+            if (!props.recordingStarted) {
                 if (mediaStream.active == false) {
-                    console.error("media stram is not active")
+                    console.error("media stream is not active")
                 }
                 /**
                  * TODO handle unsupported mimeType 
@@ -88,7 +89,7 @@ export default function Recorder(props: {
                 recorder.onerror = console.error
                 recorder.onstart = () => {
                     console.debug("recording started")
-                    setRecordingStarted(true)
+                    props.setRecordingStarted(true)
                 }
                 recorder.start(record_slice_ms)
                 recorderRef.current = recorder

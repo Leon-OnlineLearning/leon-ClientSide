@@ -1,5 +1,6 @@
 import React from "react"
-import { AnswerInterface } from "../../model/examination/answer";
+import { TextAnswer } from "../../model/examination/answer";
+
 import {QuestionInterface} from "../../model/examination/question"
 import AnswerArea from './answer_area/Answer_area';
 
@@ -8,7 +9,7 @@ export default function Question_view({
     question,onChange
   }: {
     question: QuestionInterface;
-    onChange(answer: AnswerInterface): void
+    onChange(answer: TextAnswer): void
   }) {
 
     return (

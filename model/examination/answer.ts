@@ -1,15 +1,30 @@
 import { QuestionInterface, Q_type } from "./question";
 
-export interface AnswerInterface {
-    questionType : Q_type,
-    answerText? : String[] | String,
-}
 
-export class TextAnswer implements AnswerInterface{
+export class TextAnswer{
     public questionType : Q_type;
-    public answerText: String
-    constructor(question : QuestionInterface,answerText: String){
+    public questionId: String;
+    public solutionText?: string;
+    public solutionChoices?: String[];
+    constructor(question : QuestionInterface,answerText: string|String[]){
+        this.questionId = question.id;
         this.questionType = question.questionType;
-        this.answerText = answerText;
+        if (typeof answerText === 'string'){
+            this.solutionText = answerText;
+        }
+        else {
+            this.solutionChoices = answerText;
+        }
+        console.log(typeof answerText);
     }
+
+    public toJson(){
+        return {
+            questionId: this.questionId,
+            solutionText: this.solutionText,
+            solutionChoices: this.solutionChoices
+        }
+    }
+
+
 }
