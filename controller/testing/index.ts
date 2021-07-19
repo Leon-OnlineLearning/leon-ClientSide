@@ -40,8 +40,15 @@ export const getSentenceTestResult = async (courseId: string) => {
     .then((res) => res.data);
 };
 
+/**
+ * @description manually send file request
+ * 
+ * @deprecated 
+ * @param courseId 
+ * @returns 
+ */
 export const getFileTestResult = async (courseId: string) => {
   return await apiInstance
-    .get<TestResultContent>(`/courses/${courseId}/result/sentence`)
+    .get<TestResultContent>(`/courses/${courseId}/result/file`)
     .then((res) => res.data);
 };
