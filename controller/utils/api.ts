@@ -1,4 +1,4 @@
-import axios, { AxiosAdapter, AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import config from "../../utils/config";
 import { refreshToken } from "../tokens";
 import UserInputError from "./UserInputError";
@@ -17,6 +17,8 @@ apiInstance.interceptors.response.use((response: AxiosResponse) => response,
             return apiInstance(originalRequest);
         }
         else if (response?.status === 400) {
+            // TODO check if this is invalid user
+            // router.push("/login");
             throw new UserInputError(response.data.message);
         } 
         else {
