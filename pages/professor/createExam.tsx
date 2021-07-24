@@ -1,5 +1,5 @@
 import React from "react";
-import ExamForm from "../../components/examination/create_exam/examform/examForm";
+import ExamCreateForm from "../../components/examination/create_exam/examform/examForm";
 import { ProfessorDashboard, ProfessorDashboardSelectedPage } from "../../components/professor/dashboard/professor-dashboard";
 
 
@@ -9,7 +9,7 @@ import { ProfessorDashboard, ProfessorDashboardSelectedPage } from "../../compon
 export default function createExamView() {
     return (<>
         <ProfessorDashboard selectedPage={ProfessorDashboardSelectedPage.exams}>
-        <ExamForm />
+        <ExamCreateForm />
         </ProfessorDashboard>
     </>)
 }

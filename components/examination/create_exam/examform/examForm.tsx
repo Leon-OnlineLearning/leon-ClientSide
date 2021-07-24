@@ -20,7 +20,7 @@ const Start_end_time = dynamic(() => import("./start_end_time"), {
 })
 
 
-export default function ExamForm(props) {
+export default function ExamCreateForm(props) {
 
     const [questions, setQuestions] = useState<QuestionInterface[]>([emptyQuestionTemplate])
 
