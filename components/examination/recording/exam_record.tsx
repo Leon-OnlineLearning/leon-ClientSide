@@ -7,7 +7,7 @@ import { cleanStream } from "./utils";
 
 // FIXME re-obtain the counter value after refresh
 let counter = 0;
-const record_slice_sec = 6
+const record_slice_sec = 6 //TODO get this from backend
 const record_slice_ms = record_slice_sec * 1000
 export default function Recorder(props: {
     examId: string,
