@@ -1,4 +1,4 @@
-import { sendRefranceVideo } from "../../../controller/exam/exam";
+import { sendReferenceVideo } from "../../../controller/exam/exam";
 import { download } from "../recording/utils";
 
 export function recordForPeriod(userId: string, stream, recordingTime:number,callback){
@@ -12,7 +12,7 @@ export function recordForPeriod(userId: string, stream, recordingTime:number,cal
             recordedChunks.push(event.data);
             // FIXME make sure this returns true   
             console.debug(`sending ${event.data.size}`)
-            sendRefranceVideo({
+            sendReferenceVideo({
                 userId,
                 recordedChunks: recordedChunks
             })

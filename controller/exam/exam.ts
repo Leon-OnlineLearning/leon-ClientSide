@@ -77,7 +77,7 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface): 
 
 }
 
-export async function sendRefranceVideo(
+export async function sendReferenceVideo(
   refranceRecording: RefranceRecordingInterface
 ) {
   var blob = new Blob(refranceRecording.recordedChunks, {
@@ -98,6 +98,25 @@ export async function sendRefranceVideo(
       console.debug("Promise resolved", res);
     })
     .catch(console.error);
+}
+
+export async function sendLivenessMark(studentId: string, ExamId: string, startTime: number, endTime: number): Promise<void> {
+  const url = `/exams/liveness`;
+  const data = {
+    "userId": studentId,
+    "examId": ExamId,
+    "startingTime": `${startTime}`,
+    "endingTime": `${endTime}`
+  }
+  try {
+    const res = await apiInstance.put(url, data)
+
+    console.debug("liveness mark sent successfully");
+  }
+  catch (err) {
+    console.log(err)
+  }
+
 }
 
 export async function getAllExams(studentId): Promise<Array<Exam>> {

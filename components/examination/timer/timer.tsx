@@ -1,32 +1,43 @@
-import { FC, useEffect, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useRef, useState } from 'react';
 interface TimerProps {
   timerLength: number,
-  onTimerFinish: CallableFunction
+  onTimerFinish: CallableFunction,
+  shouldFreeze: boolean
+  freeze_duration: number
+  time_secs: number
+  setTimeSecs: Dispatch<SetStateAction<number>>
 }
 
-const Timer: FC<TimerProps> = ({ timerLength, onTimerFinish }) => {
-  const [time_secs, setTime_secs] = useState(timerLength)
+const Timer: FC<TimerProps> = ({ onTimerFinish, timerLength, shouldFreeze,freeze_duration, time_secs, setTimeSecs }) => {
+
   const [time_formatted, setTime_formatted] = useState(secondsToTime(timerLength))
 
 
+  const intervalRef = useRef<NodeJS.Timeout>();
   useEffect(() => {
-    let interval = setInterval(() => {
-      setTime_secs(time => {
-        setTime_formatted(secondsToTime(time - 1))
-        const _time = Math.max(time - 1, 0)
-        if (_time === 0) {
-          clearInterval(interval);
-        }
-        return _time
-      })
-    }, 1000)
-  }, [])
+    // create interval at the start of the timer mounting
+    if (time_secs === timerLength) {
+      intervalRef.current = _create_time_interval(setTimeSecs, setTime_formatted)
+    }
+    
+    // start another interval after freeze duration
+    if (shouldFreeze) {
+      setTimeout(() => {
+        intervalRef.current = _create_time_interval(setTimeSecs, setTime_formatted)
+      },freeze_duration*1000)
+    }
+    
+    //clear the interval
+    return () => {
+      clearInterval(intervalRef.current)
+    }
+  }, [shouldFreeze])
 
-  useEffect(()=>{
-    if (time_secs == 0){
+  useEffect(() => {
+    if (time_secs == 0) {
       onTimerFinish();
     }
-  },[time_secs])
+  }, [time_secs])
   return <h1 style={{ color: 'white' }}>{`${time_formatted.h}:${time_formatted.m}:${time_formatted.s}`}</h1>
 }
 
@@ -52,4 +63,20 @@ function secondsToTime(secs: number) {
     "s": format(seconds)
   };
   return formatted_time;
+}
+
+
+function _create_time_interval(timeSetter, formatted_setter) {
+
+  let interval = setInterval(() => {
+    timeSetter(time => {
+      formatted_setter(secondsToTime(time - 1))
+      const _time = Math.max(time - 1, 0)
+      if (_time === 0) {
+        clearInterval(interval);
+      }
+      return _time
+    })
+  }, 1000)
+  return interval
 }
