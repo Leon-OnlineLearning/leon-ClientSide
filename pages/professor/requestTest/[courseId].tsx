@@ -1,4 +1,6 @@
+import { CSSProperties } from "gsap";
 import { useRouter } from "next/router";
+import { stringify } from "querystring";
 import { useState } from "react";
 import { Button, Card, FormControl, Spinner } from "react-bootstrap";
 import { getFileTestResult, sendSentence } from "../../../controller/testing";
@@ -8,10 +10,18 @@ export default function TestSentence() {
   const router = useRouter();
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [res, setRes] = useState<any>("");
+  const smallCardsStyle = {
+    padding: "4px",
+    margin: "4px",
+    display: "inline",
+  };
   const handleSending = async () => {
     setLoading(true);
     console.log("loading", loading, "sent", sent);
-    await sendSentence(router.query["courseId"] as string, sentence);
+    sendSentence(router.query["courseId"] as string, sentence).then((res) => {
+      setRes(res);
+    });
     setLoading(false);
     console.log("loading", loading, "sent", sent);
     setSent(true);
@@ -29,6 +39,7 @@ export default function TestSentence() {
         alignItems: "center",
         height: "100vh",
         backgroundImage: "linear-gradient(45deg, #0275D8 , #5BC0DE)",
+        flexDirection: "column",
       }}
     >
       <Card className="p-4">
@@ -73,7 +84,7 @@ export default function TestSentence() {
           <div
             style={{
               opacity: sent ? 1 : 0,
-			  transition: "0.3s"
+              transition: "0.3s",
             }}
           >
             <span>
@@ -82,8 +93,17 @@ export default function TestSentence() {
             Sent
           </div>
         </div>
-        Note: test takes sometime please check the result page after few minutes
+        Note: test takes sometime you can wait for it here or check the test
+        results page after few minutes <br />
       </Card>
+      <div className="p-4">
+        <Card style={smallCardsStyle}>
+          {res && `Category: ${res["predicted_category"]}`}
+        </Card>
+        <Card style={smallCardsStyle}>
+          {res && `Class: ${res["predicted_class"]}`}
+        </Card>
+      </div>
     </div>
   );
 }
