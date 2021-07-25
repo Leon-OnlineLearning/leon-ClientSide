@@ -93,6 +93,9 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
         
     },[isPrimeRecordLive,isRecordSecondLive,isRecordDone])
     
+
+    // TODO make secondary camera optional for testing
+
     // CHECK only show exam when recorder is ready
     return <>
         {canStartExam ?
