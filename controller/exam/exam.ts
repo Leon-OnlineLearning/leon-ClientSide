@@ -60,7 +60,10 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface & 
   // TODO calculate this with dynamic resolution
   fd.append("chunkStartTime", String(examRecording.startingFrom));
   fd.append("chunkEndTime", String((examRecording.endingAt)));
-
+  fd.append("test", "testfiesl")
+  if (examRecording.recordingSecret) {
+    fd.append("secret", examRecording.recordingSecret);
+  }
   
   try {
     const res = await fetch(examRecording.recorderUrl, {
