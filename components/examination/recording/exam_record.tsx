@@ -11,14 +11,16 @@ const record_slice_sec = 6 //TODO get this from backend
 const record_slice_ms = record_slice_sec * 1000
 export default function Recorder(props: {
     examId: string,
+    studentId: string
     shouldStop: boolean,
     onFinish: CallableFunction
-    examDuration: number
     recordingStarted: boolean
     setRecordingStarted: CallableFunction
+    recorderUrl: string
+    recordingSecret?: string
 }) {
 
-    const localStorageContext = useContext(LocalStorageContext)
+    
     const [remaining_chunks, setRemaining_chunks] = useState(0);
     const recorderRef = useRef(null)
 
@@ -52,21 +54,24 @@ export default function Recorder(props: {
             recordedChunks.push(event.data);
             const chunk_start = counter * record_slice_sec
             let chunk_end = chunk_start + record_slice_sec
-            if (chunk_end >= props.examDuration){
-                chunk_end = props.examDuration
-            }
+            // TODO use count up timer
+            // if (chunk_end >= props.examDuration){
+            //     chunk_end = props.examDuration
+            // }
             
             const isLastChunk = event.target.state == "inactive"
             // TODO check if we can use time code
             console.log(event.timecode)
             sendExamRecording({
                 examId: props.examId,
-                userId: localStorageContext.userId,
+                userId: props.studentId,
                 chunckIndex: counter,
                 recordedChunks: recordedChunks,
                 startingFrom: chunk_start,
                 endingAt: chunk_end,
-                isLastChunk:  isLastChunk
+                isLastChunk:  isLastChunk,
+                recorderUrl: props.recorderUrl,
+                recordingSecret: props.recordingSecret
             }).then(res => { setRemaining_chunks(rem => rem - 1) })
             counter++
         }
