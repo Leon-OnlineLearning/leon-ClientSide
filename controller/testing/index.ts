@@ -2,10 +2,12 @@ import axios from "axios";
 import apiInstance from "../utils/api";
 
 export const sendSentence = async (courseId: string, sentence: string) => {
-  return await apiInstance.post("/text-classification-models/test-sentence", {
-    courseId,
-    sentence,
-  });
+  return await apiInstance
+    .post("/text-classification-models/test-sentence", {
+      courseId,
+      sentence,
+    })
+    .then((res) => res.data);
 };
 
 export const sendTestFile = async (courseId: string) => {
@@ -30,8 +32,8 @@ export const testExam = async (examId: string, studentId: string) => {
 };
 
 interface TestResultContent {
-	success: boolean, 
-	content: any
+  success: boolean;
+  content: any;
 }
 
 export const getSentenceTestResult = async (courseId: string) => {
@@ -42,10 +44,10 @@ export const getSentenceTestResult = async (courseId: string) => {
 
 /**
  * @description manually send file request
- * 
- * @deprecated 
- * @param courseId 
- * @returns 
+ *
+ * @deprecated
+ * @param courseId
+ * @returns
  */
 export const getFileTestResult = async (courseId: string) => {
   return await apiInstance
