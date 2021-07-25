@@ -42,7 +42,7 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
         if (isRecordingStarted) {
             setInterval(() => {
                 setCountUpTime(t => t + 1)
-            }, 3000)
+            }, 1000)
         }
     }, [isRecordingStarted])
     
