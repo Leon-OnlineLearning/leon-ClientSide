@@ -77,7 +77,7 @@ export async function getLecturesToCourse(courseId: string) {
 
 export async function getLecturesStatsByCourse(courseId: string) {
   return await apiInstance
-    .get(`/course/${courseId}/stats`)
+    .get(`/courses/${courseId}/stats`)
     .then((resp) => resp.data);
 }
 
