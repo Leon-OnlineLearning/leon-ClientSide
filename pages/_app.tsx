@@ -20,7 +20,8 @@ function MyApp({ Component, pageProps }) {
   const role = localStorage.getItem('role')
 
   if (!role) {
-    if (router.pathname !== "/login" && router.pathname !== "/") {
+    if (router.pathname !== "/login" && router.pathname !== "/"
+    && !router.pathname.startsWith("/exam")) {
       // TODO a cheap trick to prevent overflow
       router.push('/login')
       return <Spinner animation="border" variant="primary" />
