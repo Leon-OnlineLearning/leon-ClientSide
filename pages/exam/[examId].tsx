@@ -5,7 +5,7 @@ import config from '../../utils/config'
 
 
 
-const recordingUrlSecondary = `${config.serverBaseUrl}/exams//record/secondary`
+const recordingUrlSecondary = `${config.serverBaseUrl}/exams2/record/secondary`
 
 export default function secondaryCam() {
     const router = useRouter()
@@ -30,7 +30,7 @@ export default function secondaryCam() {
             recorderUrl={recordingUrlSecondary}
             recordingSecret={secret as string}
         />
-        <h1>please wait checking liveness</h1>
+        {!isRecordingStarted && <h1>please wait checking liveness</h1>}
         </>
     }
     </>
