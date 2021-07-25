@@ -58,6 +58,8 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
                         props.exam.id)
                     console.debug("live_check", live_check)
                     if (live_check.primary && live_check.secondary) {
+                        setIsPrimeRecordLive(live_check.primary)
+                        setIsSecondRecordLive(live_check.secondary)
                         break;
                     }
                     setIsPrimeRecordLive(live_check.primary)
@@ -66,7 +68,7 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
                 catch(e){
                     console.error(e)
                 }
-                await sleep(1000)
+                await sleep(3000)
             }
         }
         check_loop()
@@ -77,7 +79,20 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
     const query_params_secret = `studentId=${studentId}&secret=${props.secondarySecret}`
     const secret_connection_url = `${origin_base_url}/exam/${props.exam.id}?${query_params_secret}}`
 
-    const canStartExam = isPrimeRecordLive && isRecordSecondLive && !isRecordDone
+    const [canStartExam, setCanStartExam] = useState(false)
+    useEffect(()=>{
+        
+        const isRecorderLive = isPrimeRecordLive && isRecordSecondLive //live indicated by remote
+        const isRecorderRunning = !isRecordDone  // running indicated by local
+        if (isRecorderLive && isRecorderRunning) {
+            setCanStartExam(true)
+        }
+        if (isRecordDone){
+            setCanStartExam(false)
+        }
+        
+    },[isPrimeRecordLive,isRecordSecondLive,isRecordDone])
+    
     // CHECK only show exam when recorder is ready
     return <>
         {canStartExam ?
@@ -85,7 +100,11 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
             exam={props.exam}
             setIsExamFinished={setIsExamFinished}
             count_up_time={count_up_time}/> 
-            : <Spinner animation="border" variant="primary" />}
+            : <>
+            {!isRecordDone && <Spinner animation="border" variant="primary" />}
+            </>
+            }
+
         {!isRecordSecondLive && 
         <QRCode value={secret_connection_url} size={480}/>}
         
