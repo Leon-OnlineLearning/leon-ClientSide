@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 export default function useUserMedia(requestedMedia): MediaStream {
   const [mediaStream, setMediaStream] = useState(null);
 
-  const [isMediaReqested, setIsMediaReqested] = useState(false);
+  const [isMediaRequested, setIsMediaRequested] = useState(false);
   useEffect(() => {
     async function enableStream() {
       try {
@@ -16,13 +16,15 @@ export default function useUserMedia(requestedMedia): MediaStream {
       } catch (err) {
         if (err instanceof DOMException && err.message === "Permission denied") {
           alert("We must grant camera permission to get your embedding")
-        }
+        } else {
+          console.error(err)
       }
     }
+    }
     // FIXME this will prevent getting new stream when requestedMedia change
-    if (!isMediaReqested) {
+    if (!isMediaRequested) {
       console.debug("media is requested")
-      setIsMediaReqested(true)
+      setIsMediaRequested(true)
       enableStream();
     }
     // FIXME clean is called multible times and stop track without need

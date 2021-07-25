@@ -75,6 +75,7 @@ export default function ExamForm(props:{
     }, [])
   
     // get next question and submit answer
+    // TODO add indication that next is loading
     const handleNext = () => {
         if (!answer) {
           // no answer yet

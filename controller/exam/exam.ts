@@ -45,7 +45,7 @@ export async function createExam(examData: Exam) {
  * TODO handle lost connection
  * TODO handle closing browser
  */
-export async function sendExamRecording(examRecording: ExamRecordingInterface & {recorderUrl:string,recordingSecret:string}): Promise<boolean> {
+export async function sendExamRecording(examRecording: ExamRecordingInterface & {recorderUrl:string,recordingSecret?:string}): Promise<boolean> {
   var blob = new Blob(examRecording.recordedChunks, {
     type: "video/webm",
   });
