@@ -4,7 +4,7 @@ import {ProfessorDashboard, ProfessorDashboardSelectedPage} from "../../componen
 export default function Dashboard() {
     return (
         <ProfessorDashboard selectedPage={ProfessorDashboardSelectedPage.attendance}>
-            <ProfessorStudentAttendance></ProfessorStudentAttendance>
+            <ProfessorStudentAttendance/>
         </ProfessorDashboard>
     )
 }
