@@ -45,7 +45,7 @@ export async function createExam(examData: Exam) {
  * TODO handle lost connection
  * TODO handle closing browser
  */
-export async function sendExamRecording(examRecording: ExamRecordingInterface): Promise<boolean> {
+export async function sendExamRecording(examRecording: ExamRecordingInterface & {recorderUrl:string,recordingSecret?:string}): Promise<boolean> {
   var blob = new Blob(examRecording.recordedChunks, {
     type: "video/webm",
   });
@@ -60,10 +60,13 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface): 
   // TODO calculate this with dynamic resolution
   fd.append("chunkStartTime", String(examRecording.startingFrom));
   fd.append("chunkEndTime", String((examRecording.endingAt)));
-
-  const url = `${config.serverBaseUrl}/exams/record`;
+  fd.append("test", "testfiesl")
+  if (examRecording.recordingSecret) {
+    fd.append("secret", examRecording.recordingSecret);
+  }
+  
   try {
-    const res = await fetch(url, {
+    const res = await fetch(examRecording.recorderUrl, {
       method: "put",
       body: fd,
     })
@@ -141,6 +144,14 @@ export async function getExamById(examId: string): Promise<Exam> {
   return res.data
 }
 
+export async function getSecondarySecret(examId: string, studentId: string): Promise<string> {
+  const res = await apiInstance.get(
+    `/exams/secondarySecret/${examId}/${studentId}`
+  )
+  return res.data
+}
+
+
 /**
  * Gets next question and submit answer for current one if available.
  * @param examId 
@@ -175,4 +186,11 @@ export async function getCurrentQuestion(examId: string, studentId: string): Pro
   console.debug("current Question is")
   console.debug(res.data)
   return res.data
+}
+
+
+export async function isRecordingAlive(studentId: string,examId: string){
+  const res = await apiInstance.get(`exams/${examId}/${studentId}/isLive`)
+  return res.data as {primary:boolean,secondary:boolean}
+
 }

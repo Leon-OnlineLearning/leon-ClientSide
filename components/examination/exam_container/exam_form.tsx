@@ -1,6 +1,6 @@
 
 import router from "next/router";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, SetStateAction, Dispatch } from "react";
 import { Button } from "react-bootstrap";
 import LocalStorageContext from "../../../contexts/localStorageContext";
 import { getCurrentQuestion, getNextQuestion, sendLivenessMark } from "../../../controller/exam/exam";
@@ -18,7 +18,7 @@ import ExamContainer from "./ExamContainer";
 
 // TODO get this from backend
 const livenessCheckDuration = 10 // in seconds
-const img_url = '/backend/static/sign_digits/example_3.jfif'
+const img_url = '/backend/static/sign_digits/example_5.jfif'
 
 
 
@@ -26,6 +26,12 @@ const img_url = '/backend/static/sign_digits/example_3.jfif'
  * Exams form 
  * 
  * exam events
+ * 
+ * preparation
+ * exam info appears with instructions two connect second camera
+ * start button appears when recording is stable
+ * 
+ * start questions 
  * a timer start counting down from exam duration
  * another time start counting up from zero
  * every chunk_duration a chunk is sent to backend
@@ -42,21 +48,22 @@ const img_url = '/backend/static/sign_digits/example_3.jfif'
  * @param props 
  * @returns  
  */
-export default function ExamForm  (props:{exam:Exam}) {
+export default function ExamForm(props:{
+  exam:Exam,
+  setIsExamFinished:Dispatch<SetStateAction<boolean>>,
+  count_up_time:number,
+}) {
     const [question, setQuestion] = useState<QuestionInterface>()
     const [answer, setAnswer] = useState<TextAnswer>()
   
     const localStorageContext = useContext(LocalStorageContext)
   
-    // get exam info
     const exam = props.exam
     
 
     // TODO print question number  
-  
     // TODO make this get current question
     useEffect(() => {
-      if (exam) {
         getCurrentQuestion(exam.id, localStorageContext.userId).then((data) => {
           if (data == "done") {
             // display already done message
@@ -65,12 +72,11 @@ export default function ExamForm  (props:{exam:Exam}) {
           else
             setQuestion(data)
         });
-      }
-    }, [exam])
+    }, [])
   
     // get next question and submit answer
+    // TODO add indication that next is loading
     const handleNext = () => {
-      if (exam) {
         if (!answer) {
           // no answer yet
           console.error("must choose answer")
@@ -79,7 +85,7 @@ export default function ExamForm  (props:{exam:Exam}) {
         }
         getNextQuestion(exam.id, localStorageContext.userId, answer).then((data) => {
           if (data == "done") {
-            setIsExamFinished(true)
+            props.setIsExamFinished(true)
             data = undefined
             setQuestion(undefined)
           }
@@ -96,9 +102,9 @@ export default function ExamForm  (props:{exam:Exam}) {
         }).catch((err) => {
           console.log(err)
         });
-      }
     }
   
+    // FIXME workaround to start liveness check
     const [counter, setCounter] = useState(0)
   
     const [checkLiveness, setCheckLiveness] = useState(false)
@@ -110,35 +116,28 @@ export default function ExamForm  (props:{exam:Exam}) {
       // set checkLiveness to false after time
       if (checkLiveness == true) {
         setFreezeTime(true)
-        console.log(`time sec ${count_up_time}`)
+        console.log(`time sec ${props.count_up_time}`)
         setTimeout(() => {
           setCheckLiveness(false)
           // send the time mark to backend
           sendLivenessMark(
             localStorageContext.userId,
             exam.id,
-            count_up_time,
-            count_up_time+livenessCheckDuration)
-          console.debug(`sending ${count_up_time}, ${count_up_time+livenessCheckDuration}`)
+            props.count_up_time,
+            props.count_up_time+livenessCheckDuration)
+          console.debug(`sending ${props.count_up_time}, ${props.count_up_time+livenessCheckDuration}`)
         }, 1000 * livenessCheckDuration)
       }
     }, [checkLiveness])
   
-  
-  
-  
-    // TODO auto submit when times up (ALMOST DONE see `onTimerFinish`)
-  
-    const [isExamFinished, setIsExamFinished] = useState(false);
+      
     function onTimeFinish() {
       console.log("exam finished")
       handleNext()
-      setIsExamFinished(true)
+      props.setIsExamFinished(true)
     }
     
-    // TODO only show exam when recorder is ready
-    const [recordingStarted, setRecordingStarted] = useState(false);
-  
+    
   
     const viewQuestion = question && !checkLiveness
     
@@ -146,20 +145,8 @@ export default function ExamForm  (props:{exam:Exam}) {
     const [count_down_time, setCountDownTime] = useState(exam.duration*60)
     
     
-
-    // counter 
-    const [count_up_time, setCountUpTime] = useState(0) //needed to mark liveness check
-    useEffect(() => {
-        if (recordingStarted) {
-            setInterval(() => {
-                setCountUpTime(t => t+1)
-            }, 1000)
-        }
-    },[recordingStarted])
-
     return (
       <>
-      {recordingStarted && <>
           <div className="position-sticky bg-primary d-flex justify-content-center" style={{ top: 0, zIndex: 1000 }}>
             <Timer 
             onTimerFinish={onTimeFinish} 
@@ -192,14 +179,6 @@ export default function ExamForm  (props:{exam:Exam}) {
               />
             }
           </ExamContainer>
-      </>}
-          <Recorder examId={exam.id}
-            shouldStop={isExamFinished}
-            onFinish={() => { router.push(`/student/examination/report/${exam.id}`) }}
-            examDuration={exam.duration * 60}
-            recordingStarted={recordingStarted}
-            setRecordingStarted={setRecordingStarted}
-          /> 
       </>
     )
 }
