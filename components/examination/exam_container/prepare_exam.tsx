@@ -46,6 +46,7 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
         }
     }, [isRecordingStarted])
     
+    const [pass_secondary,setPassSecondary] = useState(false)
     
     // check recovers status
     // TODO make this interval and stop exam if recorders
@@ -57,6 +58,13 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
                     const live_check = await isRecordingAlive(localStorageContext.userId,
                         props.exam.id)
                     console.debug("live_check", live_check)
+                    
+                    if (pass_secondary && live_check.primary){
+                        setIsPrimeRecordLive(live_check.primary)
+                        setIsSecondRecordLive(live_check.secondary)
+                        break;
+                    }
+                    
                     if (live_check.primary && live_check.secondary) {
                         setIsPrimeRecordLive(live_check.primary)
                         setIsSecondRecordLive(live_check.secondary)
@@ -127,6 +135,7 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
                 onClick={() => 
                     router.push(`/student/examination/report/${props.exam.id}`)}
             >Go To Report</Button>}
+        <Button onClick={()=>setPassSecondary(true)} />
     </>
 }
 
