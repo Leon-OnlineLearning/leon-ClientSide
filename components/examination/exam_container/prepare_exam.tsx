@@ -1,6 +1,6 @@
 import router from "next/router";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Spinner, Table } from "react-bootstrap";
 import LocalStorageContext from "../../../contexts/localStorageContext";
 import { isRecordingAlive } from "../../../controller/exam/exam";
 import { Exam } from "../../../model/Exam";
@@ -8,15 +8,17 @@ import Recorder from "../recording/exam_record";
 import ExamForm from "./exam_form";
 import QRCode from "qrcode.react";
 import config from "../../../utils/config";
-
+import ExamInfo from "./examInfo";
+import {CheckCircleFill} from "react-bootstrap-icons"
 
 // TODO use leon dns
-const origin_base_url = "https://192.168.18.19"
+const origin_base_url = "https://192.168.137.1"
 const recordingUrl = `${config.serverBaseUrl}/exams/record`
 
 
-export default function ExamRunner(props: { exam: Exam ,secondarySecret: string }) {
-
+export default function ExamRunner(props: { exam: Exam, secondarySecret: string }) {
+    console.debug("ExamRunner props");
+    console.debug(props.exam);
     const localStorageContext = useContext(LocalStorageContext)
 
     // the recorder is ready and running
@@ -45,34 +47,42 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
             }, 1000)
         }
     }, [isRecordingStarted])
-    
-    
+
+    const [pass_secondary, setPassSecondary] = useState(false)
+
+    const [intentionStart, setIntentionStart] = useState(false)
     // check recovers status
     // TODO make this interval and stop exam if recorders
     // are not alive
     useEffect(() => {
-        const check_loop = async () => {
-            while (true) {
-                try{
-                    const live_check = await isRecordingAlive(localStorageContext.userId,
-                        props.exam.id)
-                    console.debug("live_check", live_check)
-                    if (live_check.primary && live_check.secondary) {
-                        setIsPrimeRecordLive(live_check.primary)
-                        setIsSecondRecordLive(live_check.secondary)
-                        break;
-                    }
+        let intervalId = setInterval(async () => {
+            try {
+                const live_check = await isRecordingAlive(localStorageContext.userId,
+                    props.exam.id)
+                console.debug("live_check", live_check)
+
+                console.debug("pass secondary", pass_secondary)
+                if (pass_secondary && live_check.primary) {
                     setIsPrimeRecordLive(live_check.primary)
                     setIsSecondRecordLive(live_check.secondary)
+                    clearInterval(intervalId)
                 }
-                catch(e){
-                    console.error(e)
+
+                if (live_check.primary && live_check.secondary) {
+                    setIsPrimeRecordLive(live_check.primary)
+                    setIsSecondRecordLive(live_check.secondary)
+                    clearInterval(intervalId)
                 }
-                await sleep(3000)
+                setIsPrimeRecordLive(live_check.primary)
+                setIsSecondRecordLive(live_check.secondary)
             }
-        }
-        check_loop()
-    },[])
+            catch (e) {
+                console.error(e)
+            }
+        }, 3000)
+
+        return () => { clearInterval(intervalId) }
+    }, [pass_secondary])
 
 
     const studentId = localStorageContext.userId
@@ -80,37 +90,91 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
     const secret_connection_url = `${origin_base_url}/exam/${props.exam.id}?${query_params_secret}}`
 
     const [canStartExam, setCanStartExam] = useState(false)
-    useEffect(()=>{
-        
+    useEffect(() => {
+
         const isRecorderLive = isPrimeRecordLive && isRecordSecondLive //live indicated by remote
         const isRecorderRunning = !isRecordDone  // running indicated by local
+        // TODO remove me
+        if (pass_secondary && isPrimeRecordLive) {
+            setCanStartExam(true)
+        }
+
         if (isRecorderLive && isRecorderRunning) {
             setCanStartExam(true)
         }
-        if (isRecordDone){
+        if (isRecordDone) {
             setCanStartExam(false)
         }
-        
-    },[isPrimeRecordLive,isRecordSecondLive,isRecordDone])
-    
+
+    }, [isPrimeRecordLive, isRecordSecondLive, isRecordDone, pass_secondary])
+
 
     // TODO make secondary camera optional for testing
-
+    // console.log(props.exam)
     // CHECK only show exam when recorder is ready
     return <>
-        {canStartExam ?
-        <ExamForm
-            exam={props.exam}
-            setIsExamFinished={setIsExamFinished}
-            count_up_time={count_up_time}/> 
-            : <>
-            {!isRecordDone && <Spinner animation="border" variant="primary" />}
-            </>
-            }
 
-        {!isRecordSecondLive && 
-        <QRCode value={secret_connection_url} size={480}/>}
-        
+        {(intentionStart&&canStartExam)  &&
+            <ExamForm
+                exam={props.exam}
+                setIsExamFinished={setIsExamFinished}
+                count_up_time={count_up_time} />}
+
+
+        {!intentionStart &&
+            <>
+                <div
+                    className="bg-primary d-flex justify-content-center"
+                    style={{ top: 0, zIndex: 1000 }}
+                >
+                    <h1 style={{ color: "white" }}>preparing exam ...</h1>
+                </div>
+
+
+                <div className="m-5">
+
+                    <ExamInfo exam={props.exam} />
+
+                    <h3>scan qr with the phone</h3>
+                    <div className="my-3">
+
+                        <QRCode value={secret_connection_url} size={520} />
+                    </div>
+
+                    <Button onClick={() => setPassSecondary(true)}> skip secondary </Button>
+
+                    <hr/>
+                    <Table striped bordered hover width="80%">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {isPrimeRecordLive ? <CheckCircleFill size="2.1em" />
+                                    
+                                    :
+                                        <Spinner animation="border" />}
+                                </td>
+                                <td> main camera live </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {isRecordSecondLive ? <CheckCircleFill size="2.1em" />
+                                    :
+                                        <Spinner animation="border" />}
+                                </td>
+                                <td>
+                                    secondary camera live
+                                </td>
+                            </tr>
+                        </tbody>
+                    </Table>
+                    <hr />
+
+
+                    <Button disabled={!canStartExam} onClick={() => setIntentionStart(true)}>start exam</Button>
+                </div>
+            </>
+        }
+
         <Recorder examId={props.exam.id}
             shouldStop={isExamFinished}
             onFinish={() => {
@@ -122,14 +186,15 @@ export default function ExamRunner(props: { exam: Exam ,secondarySecret: string 
             studentId={localStorageContext.userId}
         />
         {
-            isRecordDone && 
-            <Button 
-                onClick={() => 
+            isRecordDone &&
+            <Button
+                onClick={() =>
                     router.push(`/student/examination/report/${props.exam.id}`)}
             >Go To Report</Button>}
+
     </>
 }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}

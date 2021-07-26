@@ -104,5 +104,5 @@ export default function Recorder(props: {
     }, [mediaStream])
 
 
-    return <p>remaining chunks {String(remaining_chunks)}</p>
+    return <>{props.shouldStop && <p>remaining chunks {String(remaining_chunks)}</p> }</>
 }

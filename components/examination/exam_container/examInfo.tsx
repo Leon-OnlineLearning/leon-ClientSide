@@ -1,44 +1,32 @@
+import moment from "moment";
 import Link from "next/link";
 import React from "react";
+import { Table } from "react-bootstrap";
+import { Exam } from "../../../model/Exam";
 
-function ExamInfo(props: { id: string }) {
-    return (
-      <>
-        <div
-          className="position-sticky bg-primary d-flex justify-content-center"
-          style={{ top: 0, zIndex: 1000 }}
-        >
-          <h1 style={{ color: "white" }}>exam info</h1>
-        </div>
-        <div
-          className="d-flex justify-content-center my-5"
-          style={{ width: "100%", height: "60vh", alignItems: "center" }}
-        >
-          <div>
-            <table className="table">
-              <tr>
-                <td>exam duration</td>
-                <td>08:20</td>
-              </tr>
-              <tr>
-                <td>course</td>
-                <td>the name </td>
-              </tr>
-              <tr>
-                <td>professor</td>
-                <td>someone</td>
-              </tr>
-            </table>
-            <Link href="/examination/authentication/1" >
-              <a className="d-flex justify-content-center">
-                <button className="btn btn-primary ">
-                  start authentication
-                </button>
-              </a>
-            </Link>
-          </div>
-        </div>
-      </>
-    );
-  }
-  
+export default function ExamInfo(props: { exam: Exam }) {
+  return (
+    <>
+      <Table striped bordered hover width="80%">
+        <tbody>
+          <tr>
+            <td>title</td>
+            <td>{props.exam.title}</td>
+          </tr>
+          <tr>
+            <td>start time</td>
+            <td>{moment(props.exam.startTime).format("YYYY-MM-DD HH:mm:ss")}</td>
+          </tr>
+          <tr>
+            <td>duration</td>
+            <td>{props.exam.duration} minutes</td>
+          </tr>
+          <tr>
+            <td>max mark</td>
+            <td>{props.exam.mark}</td>
+          </tr>
+        </tbody>
+      </Table>
+    </>
+  );
+}
