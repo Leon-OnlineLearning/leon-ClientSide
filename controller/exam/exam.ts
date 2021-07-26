@@ -45,7 +45,7 @@ export async function createExam(examData: Exam) {
  * TODO handle lost connection
  * TODO handle closing browser
  */
-export async function sendExamRecording(examRecording: ExamRecordingInterface & {recorderUrl:string,recordingSecret?:string}): Promise<boolean> {
+export async function sendExamRecording(examRecording: ExamRecordingInterface & {recorderUrl:string,recordingSecret?:string,setIsExamFinished?:CallableFunction}): Promise<boolean> {
   var blob = new Blob(examRecording.recordedChunks, {
     type: "video/webm",
   });
@@ -69,7 +69,16 @@ export async function sendExamRecording(examRecording: ExamRecordingInterface & 
     const res = await fetch(examRecording.recorderUrl, {
       method: "put",
       body: fd,
+    // const res = await apiInstance.put(examRecording.recorderUrl,fd);
     })
+    
+    const data =await res.json()
+    
+    if (data.examDone == true)
+    {
+      console.debug("exam is finished")
+      examRecording.setIsExamFinished(true);
+    }
     console.debug("video sent successfully");
     return true
   }

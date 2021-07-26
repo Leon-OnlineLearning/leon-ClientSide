@@ -11,7 +11,7 @@ export default function secondaryCam() {
     const router = useRouter()
     const { examId, studentId, secret } = router.query
 
-    const isExamFinished = false
+    const [isExamFinished, setIsExamFinished] = useState(false)
 
     const [isRecordDone, setIsRecordDone] = useState(false)
     const [isRecordingStarted, setIsRecordingStarted] = useState(false)
@@ -29,8 +29,10 @@ export default function secondaryCam() {
             setRecordingStarted={setIsRecordingStarted}
             recorderUrl={recordingUrlSecondary}
             recordingSecret={secret as string}
+            setIsExamFinished={setIsExamFinished}
         />
         {!isRecordingStarted && <h1>please wait checking liveness</h1>}
+        {isRecordDone && <h1>done close this tab </h1>}
         </>
     }
     </>

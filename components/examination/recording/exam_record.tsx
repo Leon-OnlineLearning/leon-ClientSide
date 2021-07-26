@@ -18,6 +18,7 @@ export default function Recorder(props: {
     setRecordingStarted: CallableFunction
     recorderUrl: string
     recordingSecret?: string
+    setIsExamFinished?: CallableFunction
 }) {
 
     
@@ -71,7 +72,8 @@ export default function Recorder(props: {
                 endingAt: chunk_end,
                 isLastChunk:  isLastChunk,
                 recorderUrl: props.recorderUrl,
-                recordingSecret: props.recordingSecret
+                recordingSecret: props.recordingSecret,
+                setIsExamFinished: props.setIsExamFinished
             }).then(res => { setRemaining_chunks(rem => rem - 1) })
             counter++
         }

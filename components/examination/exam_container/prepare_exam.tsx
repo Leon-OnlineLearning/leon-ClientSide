@@ -141,7 +141,7 @@ export default function ExamRunner(props: { exam: Exam, secondarySecret: string 
                         <QRCode value={secret_connection_url} size={520} />
                     </div>
 
-                    <Button onClick={() => setPassSecondary(true)}> skip secondary </Button>
+                    <Button hidden onClick={() => setPassSecondary(true)}> skip secondary </Button>
 
                     <hr/>
                     <Table striped bordered hover width="80%">
