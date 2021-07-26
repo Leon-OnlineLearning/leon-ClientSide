@@ -1,15 +1,16 @@
 export enum EventType {
-    ASSIGNMENT = "Assignment",
-    QUIZ = "Quiz",
-    LECTURE = "Lecture",
-    TEST = "Test"
+    ASSIGNMENT = "assignment",
+    QUIZ = "quiz",
+    LECTURE = "lecture",
+    TEST = "test"
 }
 
 export type EventRepresentation = {
     title: string,
     description: string,
     startTime: Date,
-    type: EventType,
+    type?: EventType,
+    eventType?: EventType, // fixing the type temporarily
     endTime: Date,
     id: string,
     courseId: string,
@@ -19,7 +20,7 @@ export type EventRepresentation = {
 
 export class Event {
     constructor(public title: string, public description: string,
-        public type: EventType, public id,
+        public eventType: EventType, public id,
         public startTime: Date, public endTime: Date,
         public courseId: string,
         public professorId: string, public duration: number) {
