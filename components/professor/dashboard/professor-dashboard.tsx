@@ -55,12 +55,12 @@ export function ProfessorDashboard({
               text={"Exams"}
               selected={selectedPage === ProfessorDashboardSelectedPage.exams}
             ></SidebarElement>
-            <SidebarElement
+            {/* <SidebarElement
               href="/professor/grades"
               iconClassName={"bi-percent"}
               text={"Grades"}
               selected={selectedPage === ProfessorDashboardSelectedPage.grads}
-            ></SidebarElement>
+            ></SidebarElement> */}
             <SidebarElement
               href="/professor/models"
               iconClassName={"bi-gear-wide-connected"}
