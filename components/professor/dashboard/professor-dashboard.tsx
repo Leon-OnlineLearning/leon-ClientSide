@@ -50,12 +50,6 @@ export function ProfessorDashboard({
               }
             ></SidebarElement>
             <SidebarElement
-              href="/professor/chat"
-              iconClassName={"bi-chat-text-fill"}
-              text={"Chat"}
-              selected={selectedPage === ProfessorDashboardSelectedPage.chat}
-            ></SidebarElement>
-            <SidebarElement
               href="/professor/exams"
               iconClassName={"bi-card-checklist"}
               text={"Exams"}
