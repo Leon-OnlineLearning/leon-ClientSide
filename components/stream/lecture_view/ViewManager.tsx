@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 import { UserRole } from '../../../model/users/User'
 import { PdfRole } from './pdfViewer/pdfRole'
 
@@ -33,15 +34,17 @@ export default function ViewManager(props: callControlsView & dataControlView) {
         <>
             {joining_state}
             {props.isReadyToJoin &&<>
-                <button onClick={()=>props.setMuteLocal(muteLocal => !muteLocal)}>
+                <Button onClick={()=>props.setMuteLocal(muteLocal => !muteLocal)}>
                     toggleAudio
-                </button><p>audio is {props.muteLocal ? "off" : "on"}</p>
+                </Button>
+                <hr />
+                <p>audio is {props.muteLocal ? "off" : "on"}</p>
                 
-                <button onClick={()=>props.endRoom()}>hangup</button>
+                <Button variant="danger" onClick={()=>props.endRoom()}>hangup</Button>
                 </>
             }
-            <p>i am lecture view</p>
-            <h1>{props.dataReceived}</h1>
+            {/* <p>i am lecture view</p> */}
+            {/* <h1>{props.dataReceived}</h1> */}
             <PdfRole {...props}/>
         </>
     )
