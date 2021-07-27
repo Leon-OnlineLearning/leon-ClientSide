@@ -13,25 +13,25 @@ import {Notification} from "../../model/notification"
 export default function Dashboard() {
     const [showAddEvent, setShowAddEvent] = useState(false)
     //TODO for testing only
-    const notifications : Array<Notification> = [
-        { title: "someone did sosmething", date: new Date()},
-        { title: "someone did oather thing", date: new Date(2021, 0, 15)},
-        { title: "someone did otheddr thing", date: new Date(2021, 0, 4)},
-        { title: "someone did somsadething", date: new Date()},
-        { title: "someone did otddher thing", date: new Date(2021, 0, 15)},
-        { title: "someone did othser thing", date: new Date(2021, 0, 4)},
-        { title: "someone did somesthing", date: new Date()},
-        { title: "someone did otherasdasd thing", date: new Date(2021, 0, 15)},
-        { title: "someone did wother thing", date: new Date(2021, 0, 4)},
-    ]
+    // const notifications : Array<Notification> = [
+    //     { title: "someone did sosmething", date: new Date()},
+    //     { title: "someone did oather thing", date: new Date(2021, 0, 15)},
+    //     { title: "someone did otheddr thing", date: new Date(2021, 0, 4)},
+    //     { title: "someone did somsadething", date: new Date()},
+    //     { title: "someone did otddher thing", date: new Date(2021, 0, 15)},
+    //     { title: "someone did othser thing", date: new Date(2021, 0, 4)},
+    //     { title: "someone did somesthing", date: new Date()},
+    //     { title: "someone did otherasdasd thing", date: new Date(2021, 0, 15)},
+    //     { title: "someone did wother thing", date: new Date(2021, 0, 4)},
+    // ]
     return (
         <>
             <StudentDashboard selectedPage={StudentDashboardSelectedPage.home}>
                 <div className={`${styles["calendar-layout"]}`}>
-                    <Calendar getEvents={getEvents} style={{ width: "70%" }}></Calendar>
-                    <div className={`${styles['notifications-pane']}`}>
+                    <Calendar getEvents={getEvents} style={{ width: "100%" }}></Calendar>
+                    {/* <div className={`${styles['notifications-pane']}`}>
                         <Notifications notifications={notifications}></Notifications>
-                    </div>
+                    </div> */}
                 </div>
                 <Modal show={showAddEvent} onHide={() => setShowAddEvent(false)}>
                     <Modal.Title className="m-3">Create new event</Modal.Title>
